@@ -18,9 +18,13 @@
   <span>
     Center letter: <textarea placeholder="A" rows=2 cols=3 id="jsbee-center-letter"></textarea>
   </span>
+</div>
+<div>
   <span>
     Others: <textarea placeholder="BCDEFG" rows=2 cols=26 id="jsbee-other-letters"></textarea>
   </span>
+</div>
+<div>
   <span>
     Word list:
     <select id="jsbee-word-list-dropdown">
@@ -29,9 +33,11 @@
     </select>
   </span>
 </div>
-
-<p/>
-<button class="maroon" id="jsbee-clear-button"> Clear </button>
+<div>
+  <span>
+    <button class="maroon" id="jsbee-clear-button"> Clear </button>
+  </span>
+</div>
 
 <p/>
 <div>
@@ -44799,7 +44805,7 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
 
   clearButton.addEventListener('click', function(event) {
     maybeLog("CLEAR BUTTON WAS CLICKED")
-    clearInputs()
+    clearAll()
   });
 
   wordListDropdown.addEventListener("change", function() {
@@ -44833,9 +44839,10 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
     }
   }
 
-  function clearInputs() {
+  function clearAll() {
     centerLetterElement.value = ""
     otherLettersElement.value = ""
+    outputElement.textContent = ""
   }
 
   function formatLetters(letters) {
