@@ -14,30 +14,43 @@
 <!-- ================================================================ -->
 <h1><span class="boxed-text">jsbee</span></h1>
 
-<div>
-  <span>
-    Center letter: <textarea placeholder="A" rows=2 cols=3 id="jsbee-center-letter"></textarea>
-  </span>
-</div>
-<div>
-  <span>
-    Others: <textarea placeholder="BCDEFG" rows=2 cols=26 id="jsbee-other-letters"></textarea>
-  </span>
-</div>
-<div>
-  <span>
+<table>
+<tr>
+  <td>
+    Required letter(s):
+  </td>
+  <td>
+    <textarea placeholder="A" rows=2 cols=3 id="jsbee-required-letters"></textarea>
+  </td>
+</tr>
+<tr>
+  <td>
+    Other letters:
+  </td>
+  <td>
+    <textarea placeholder="BCDEFG" rows=2 cols=26 id="jsbee-other-letters"></textarea>
+  </td>
+</tr>
+<tr>
+  <td>
     Word list:
+  </td>
+  <td>
     <select id="jsbee-word-list-dropdown">
       <option value="usual-suspects.txt">Usual suspects</option>
       <option value="long-list.txt">Long list</option>
     </select>
-  </span>
-</div>
-<div>
-  <span>
+  </td>
+</tr>
+<tr>
+  <td>
+    &nbsp;
+  </td>
+  <td>
     <button class="maroon" id="jsbee-clear-button"> Clear </button>
-  </span>
-</div>
+  </td>
+</tr>
+</table>
 
 <p/>
 <div>
@@ -44775,9 +44788,8 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
 
   // ================================================================
   // TODO:
-  // * Auto-insert focus in center-letter box
+  // * Auto-insert focus in required-letters box
   // * Log-levels
-  // * Let the center letter only accept a single letter, with replace
   // * Vary min/max word lengths (defaults 4 and Inf)
   // * Improve (relative) font sizes
   // * Start-up self-test
@@ -44785,7 +44797,7 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
 
   // ----------------------------------------------------------------
   // ELEMENTS
-  const centerLetterElement  = document.getElementById('jsbee-center-letter');
+  const requiredLettersElement  = document.getElementById('jsbee-required-letters');
   const otherLettersElement  = document.getElementById('jsbee-other-letters');
   const wordListDropdown = document.getElementById("jsbee-word-list-dropdown");
   const clearButton = document.getElementById('jsbee-clear-button')
@@ -44793,8 +44805,8 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
 
   // ----------------------------------------------------------------
   // EVENT LISTENERS
-  centerLetterElement.addEventListener('input', function(event) {
-    maybeLog("CENTER-LETTER INPUT: <<", event.target.value, ">>")
+  requiredLettersElement.addEventListener('input', function(event) {
+    maybeLog("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
     showMatches()
   });
 
@@ -44825,10 +44837,10 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
   // APPLICATION LOGIC
 
   function showMatches() {
-    centerText = centerLetterElement.value
-    othersText = otherLettersElement.value
+    requiredLetters = requiredLettersElement.value
+    otherLetters = otherLettersElement.value
 
-    matches = getMatchesFromWordList(centerText, othersText, minMatchLength, maxMatchLength, wordListData)
+    matches = getMatchesFromWordList(requiredLetters, otherLetters, minMatchLength, maxMatchLength, wordListData)
 
     maybeLog(matches)
 
@@ -44840,7 +44852,7 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
   }
 
   function clearAll() {
-    centerLetterElement.value = ""
+    requiredLettersElement.value = ""
     otherLettersElement.value = ""
     outputElement.textContent = ""
   }
@@ -44908,12 +44920,10 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
 </html>
 
 <!--
-fetch("http://localhost/foo.txt")
-  .then(response => response.text())
-  .then((data) => {
-    console.log(data)
-  })
+url = 'https://johnkerl.org/jsbee/usual-suspects.txt'
+function foo(x) {
+  console.log(x)
+}
+fetch(url).then((response) => response.text().then(foo));
 
-> x.toLowerCase()
-> x[0].toLowerCase()
 -->
