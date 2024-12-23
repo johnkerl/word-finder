@@ -67,78 +67,66 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
 <!-- ================================================================ -->
 <script>
 
-  // ================================================================
-  // TODO:
-  // * Auto-insert focus in required-letters box
-  // * Log-levels
-  // * Vary min/max word lengths (defaults 4 and Inf)
-  // * Improve (relative) font sizes
-  // * Start-up self-test
-  // ================================================================
-
-  wordListData = null;
-
   // ----------------------------------------------------------------
-  // DATA FETCHING
-  function setWordList(url) {
-    console.log("URL", url)
-    fetch(url).then((response) => response.text().then((text) => wordListData = text.split("\n")));
+  // LOGGING
+
+  function logAt0(state, ...args) {
+    logAt(state, 0, ...args)
   }
 
-  // ----------------------------------------------------------------
-  // APPLICATION STATE
-  verbose = false;
-  minMatchLength = 4;
-  maxMatchLength = null;
-  wordListData = setWordList('./usual-suspects.txt')
+  function logAt1(state, ...args) {
+    logAt(state, 1, ...args)
+  }
 
-  // ----------------------------------------------------------------
-  // ELEMENTS
-  const requiredLettersElement  = document.getElementById('jsbee-required-letters');
-  const otherLettersElement  = document.getElementById('jsbee-other-letters');
-  const wordListDropdown = document.getElementById("jsbee-word-list-dropdown");
-  const clearButton = document.getElementById('jsbee-clear-button')
-  const outputElement = document.getElementById('jsbee-output');
+  function logAt2(state, ...args) {
+    logAt(state, 2, ...args)
+  }
 
-  // ----------------------------------------------------------------
-  // EVENT LISTENERS
-  requiredLettersElement.addEventListener('input', function(event) {
-    maybeLog("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
-    showMatches()
-  });
-
-  otherLettersElement.addEventListener('input', function(event) {
-    maybeLog("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
-    showMatches()
-  });
-
-  clearButton.addEventListener('click', function(event) {
-    maybeLog("CLEAR BUTTON WAS CLICKED")
-    clearAll()
-  });
-
-  wordListDropdown.addEventListener("change", function() {
-    url = wordListDropdown.value
-    maybeLog("SELECTED WORD LIST: <<", url, ">>");
-    setWordList(url)
-    showMatches()
-  });
-
-  maybeLog("WORD LIST DATA", wordListData)
+  function logAt(state, level, ...args) {
+    if (state.logLevel >= level) {
+      console.log(...args)
+    }
+  }
 
   // ----------------------------------------------------------------
   // APPLICATION LOGIC
 
-  function showMatches() {
+  function setWordList(state, url) {
+    logAt0("FETCHING WORD LIST FROM URL:", url)
+    state.wordListURL = url;
+    fetch(url).then((response) => response.text().then((text) => {
+      state.wordList = text.split("\n")
+      // Must be called from this callback, since this is async
+      showMatches(state)
+    }));
+  }
+
+  function checkWordList(state) {
+    if (state.wordListURL == null) {
+      outputElement.textContent = "No word list set"
+      return false
+    }
+    if (state.wordList == null) {
+      outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
+      return false
+    }
+    return true
+  }
+
+  function showMatches(state) {
+    if (!checkWordList(state)) {
+      return
+    }
+
     requiredLetters = requiredLettersElement.value
     otherLetters = otherLettersElement.value
 
-    matches = getMatchesFromWordList(requiredLetters, otherLetters, minMatchLength, maxMatchLength, wordListData)
+    matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
 
-    maybeLog(matches)
+    logAt2(state, matches)
 
     if (matches.length == 0) {
-      outputElement.textContent = "(No matches)"
+      outputElement.textContent = "(no matches)"
     } else {
       outputElement.textContent = matches.join(' ')
     }
@@ -150,62 +138,107 @@ Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/
     outputElement.textContent = ""
   }
 
-  function formatLetters(letters) {
-    return letters.join(' ').toUpperCase()
-  }
-
-  function maybeLog(text, ...args) {
-    if (verbose) {
-      console.log(text, ...args)
-    }
-  }
-
-  function getMatchesFromWordList(requiredLetters, optionalLetters, minMatchLength, maxMatchLength, wordList) {
-    maybeLog("MATCHER ENTER")
-    maybeLog("requiredLetters ", requiredLetters)
-    maybeLog("optionalLetters", optionalLetters)
-    maybeLog("wordList", wordList)
+  function getMatchesFromWordList(state, requiredLetters, optionalLetters) {
+    logAt1(state, "MATCHER ENTER")
+    logAt1(state, "requiredLetters ", requiredLetters)
+    logAt1(state, "optionalLetters", optionalLetters)
+    logAt2(state, "wordList", state.wordList)
 
     requiredLetters = requiredLetters.toLowerCase()
     optionalLetters = optionalLetters.toLowerCase()
     matches = []
-    wordList.forEach((word) => {
-      maybeLog("WORD <<", word, ">>")
-      if (wordMatches(requiredLetters, optionalLetters, minMatchLength, maxMatchLength, word)) {
-        maybeLog("MATCH", word)
+    state.wordList.forEach((word) => {
+      logAt2(state, "WORD <<", word, ">>")
+      if (wordMatches(state, requiredLetters, optionalLetters, word)) {
+        logAt2(state, "MATCH", word)
         matches.push(word)
       }
     })
     return matches
   }
 
-  function wordMatches(requiredLetters, optionalLetters, minMatchLength, maxMatchLength, word) {
+  function wordMatches(state, requiredLetters, optionalLetters, word) {
     let allLetters = requiredLetters + optionalLetters;
-    if (minMatchLength != null && word.length < minMatchLength) {
-      maybeLog("-- match out 1: word", word, "with length", word.length, "less than min", minMatchLength)
+    if (state.minMatchLength != null && word.length < state.minMatchLength) {
+      logAt2(state, "-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
       return false
     }
-    if (maxMatchLength != null && word.length > maxMatchLength) {
-      maybeLog("-- match out 2: word", word, "with length", word.length, "more than max", minMatchLength)
+    if (state.maxMatchLength != null && word.length > state.maxMatchLength) {
+      logAt2(state, "-- match out 2: word", word, "with length", word.length, "more than max", state.maxMatchLength)
       return false
     }
     for (let i = 0; i < requiredLetters.length; i++) {
       requiredLetter = requiredLetters[i]
       if (word.indexOf(requiredLetter) < 0) {
-        maybeLog("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
+        logAt2(state, "-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
         return false
       }
     }
     for (let i = 0; i < word.length; i++) {
       let letter = word[i]
       if (allLetters.indexOf(letter) < 0) {
-        maybeLog("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
+        logAt2(state, "-- match out 4: word", word, "missing letter", letter, "from", allLetters)
         return false
       }
     }
-    maybeLog("-- match:", word)
+    logAt2(state, "-- match:", word)
     return true
   }
+
+  // ================================================================
+  // TODO:
+  // * Auto-set focus in required-letters box
+  // * Widgets to min/max word lengths (defaults 4 and Inf)
+  // * Improve (relative) font sizes
+  // * Start-up self-test
+  // ================================================================
+
+  // ----------------------------------------------------------------
+  // ELEMENTS
+
+  const requiredLettersElement = document.getElementById('jsbee-required-letters');
+  const otherLettersElement    = document.getElementById('jsbee-other-letters');
+  const wordListDropdown       = document.getElementById("jsbee-word-list-dropdown");
+  const clearButton            = document.getElementById('jsbee-clear-button')
+  const outputElement          = document.getElementById('jsbee-output');
+
+  // ----------------------------------------------------------------
+  // EVENT LISTENERS
+
+  requiredLettersElement.addEventListener('input', function(event) {
+    logAt1(state, "REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+    showMatches(state)
+  });
+
+  otherLettersElement.addEventListener('input', function(event) {
+    logAt1(state, "OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+    showMatches(state)
+  });
+
+  clearButton.addEventListener('click', function(event) {
+    logAt1(state, "CLEAR BUTTON WAS CLICKED")
+    clearAll()
+  });
+
+  wordListDropdown.addEventListener("change", function() {
+    url = wordListDropdown.value
+    logAt1(state, "SELECTED WORD LIST: <<", url, ">>");
+    setWordList(state, url)
+    showMatches(state)
+  });
+
+  // ----------------------------------------------------------------
+  // APPLICATION STATE
+
+  state = {
+    "logLevel": 0, // 0,1,2
+    "minMatchLength": 4,
+    "maxMatchLength": null,
+    "wordListURL": './usual-suspects.txt',
+    "wordList": null,
+  }
+
+  setWordList(state, wordListDropdown.value)
 
 </script>
 <!-- ================================================================ -->
