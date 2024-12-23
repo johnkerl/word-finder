@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+<meta name="description" content="jsbee" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- mobile-friendly -->
+<title>jsbee</title>
+<link rel="stylesheet" type="text/css" href="./sample.css">
+</head>
+
+<body>
+
+<!-- ================================================================ -->
+<h1><span class="boxed-text">jsbee</span></h1>
+
+<p/> Enter text to see if it&rsquo;s a <a href="https://en.wikipedia.org/wiki/Pangram">pangram</a>:
+
+<p/>
+
+<div>
+<textarea placeholder="The quick brown fox jumped over the lazy dogs" rows=5 cols=100 id="jsbee-input">
+</textarea>
+<div>
+
+<p/>
+
+<div>
+  Letters present:
+  <span id="jsbee-present-output"> </span>
+</div>
+<div>
+  Letters absent:
+  <span id="jsbee-absent-output"> </span>
+</div>
+
+<p/>
+
+<button class="maroon" id="alpha-button"> Alphabetize </button>
+<button class="maroon" id="freq-button"> Arrange by frequency </button>
+<button class="maroon" id="scramble-button"> Scramble </button>
+
+<!-- ================================================================ -->
+<hr/>
+
+<p>
+Source: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
+</p>
+
+<!-- ================================================================ -->
+<script src="./jsbee.js"></script>
+<script>
+
+  const pangramChecker = new PangramChecker();
+
+  const inputElement         = document.getElementById('jsbee-input');
+  const presentOutputElement = document.getElementById('jsbee-present-output');
+  const absentOutputElement  = document.getElementById('jsbee-absent-output');
+  
+  const alphaButton          = document.getElementById('alpha-button')
+  const freqButton           = document.getElementById('freq-button')
+  const scrambleButton       = document.getElementById('scramble-button')
+
+  inputElement.addEventListener('input',   function(event) { showCounts(event) });
+  alphaButton.addEventListener('click',    function(event) { alphabetize(event) });
+  freqButton.addEventListener('click',     function(event) { arrangeByFrequency(event) });
+  scrambleButton.addEventListener('click', function(event) { scramble(event) });
+
+  // Initial render:
+  // * Show the present/absent lists -- all present, no absent, if the text hasn't been entered yet
+  // * Or, if there was a page reload with text in the textarea, acknowledge it
+  update(inputElement.value)
+
+  function showCounts(event) {
+    update(event.target.value)
+  }
+
+  function alphabetize(event) {
+    pangramChecker.alphabetize();
+    update(inputElement.value);
+  }
+
+  function arrangeByFrequency(event) {
+    pangramChecker.arrangeByFrequency();
+    update(inputElement.value);
+  }
+
+  function scramble(event) {
+    pangramChecker.scramble();
+    update(inputElement.value);
+  }
+
+  function update(text) {
+    const counts = pangramChecker.getCounts(text)
+    presentOutputElement.textContent = formatLetters(counts.present)
+    if (counts.absent.length == 0) {
+    absentOutputElement.textContent = "none -- hurray!"
+    } else {
+      absentOutputElement.textContent = formatLetters(counts.absent)
+    }
+  }
+
+  function formatLetters(letters) {
+    return letters.join(' ').toUpperCase()
+  }
+
+</script>
+<!-- ================================================================ -->
+</body>
+</html>
