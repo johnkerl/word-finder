@@ -50,10 +50,10 @@ cacao
 cacti
 caddie
 caddied
-calla
-callaloo
 caiman
 cairn
+calla
+callaloo
 cami
 cancan
 canid
@@ -102,8 +102,8 @@ gooey
 google
 googol
 gotta
-hake
 haka
+hake
 halal
 hamachi
 haram

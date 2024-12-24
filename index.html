@@ -147,6 +147,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
 
     matches = matches.map(match => match.toUpperCase())
+    matches = matches.sort()
 
     logAt2(state, matches)
 
