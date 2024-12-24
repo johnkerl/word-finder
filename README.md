@@ -1,6 +1,6 @@
 # jsbee
 
-This is a quick little JavaScript app for (last-hope-desperation!!) peeking into pangram puzzles including the NYT Spelling Bee.
+This is a quick little JavaScript app for (last-hope-desperation!!) peeking into anagram and constrained-anagram puzzles including the NYT Spelling Bee.
 
 ## Features
 
@@ -32,10 +32,10 @@ Constrain the word length:
 
 ![example-3](./examples/example-3.png)
 
-Make all letters required --- this means any match must match _all_ of the letters:
+Make all letters required --- this means any match must include _all_ of the letters:
 
 ![example-4](./examples/example-4.png)
 
-Make all letters non-required --- this means any match must match _any combination_ of the letters:
+Make all letters non-required --- this means any match must include _any subset_ of the letters:
 
 ![example-5](./examples/example-5.png)
