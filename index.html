@@ -28,7 +28,7 @@
     Other letters:
   </td>
   <td>
-    <textarea placeholder="BCDEFG" rows=1 cols=10 id="jsbee-other-letters"></textarea>
+    <textarea placeholder="BCDEFG" rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
 </tr>
 
@@ -146,6 +146,8 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
     matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
 
+    matches = matches.map(match => match.toUpperCase())
+
     logAt2(state, matches)
 
     if (requiredLetters.length == 0 && otherLetters.length == 0) {
@@ -234,11 +236,13 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   requiredLettersElement.addEventListener("input", function(event) {
     logAt1(state, "REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+    requiredLettersElement.value = event.target.value.toUpperCase()
     showMatches(state)
   })
 
   otherLettersElement.addEventListener("input", function(event) {
     logAt1(state, "OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+    otherLettersElement.value = event.target.value.toUpperCase()
     showMatches(state)
   })
 
