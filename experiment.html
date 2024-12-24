@@ -66,7 +66,7 @@
 </tr>
 <tr>
   <td>
-    <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16" defaultValue="4" value="4"/>
+    <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
   </td>
   <td>
     <button class="maroon" id="jsbee-reset-min-match-length-button"> Reset </button>
@@ -77,7 +77,7 @@
 </tr>
 <tr>
   <td>
-    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16" defaultValue="4" value="16"/>
+    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
   </td>
   <td>
     <button class="maroon" id="jsbee-reset-max-match-length-button"> Reset </button>
@@ -357,16 +357,16 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   resetMinMatchLengthButton.addEventListener("click", function(event) {
     let self = resetMinMatchLengthButton
     logAt1(state, "RESET-MIN-MATCH-LENGTH BUTTON WAS CLICKED")
-    self.value = self.defaultValue
-    state.minMatchLength = Number(self.defaultValue)
+    minMatchLengthElement.value =  state.defaultMinMatchLength
+    state.minMatchLength = state.defaultMinMatchLength
     showMatches(state)
   })
 
   resetMaxMatchLengthButton.addEventListener("click", function(event) {
     let self = resetMaxMatchLengthButton
-    logAt1(state, "RESET-MIN-MATCH-LENGTH BUTTON WAS CLICKED")
-    self.value = self.defaultValue
-    state.maxMatchLength = Number(self.defaultValue)
+    logAt1(state, "RESET-MAX-MATCH-LENGTH BUTTON WAS CLICKED")
+    maxMatchLengthElement.value =  state.defaultMaxMatchLength
+    state.maxMatchLength = state.defaultMaxMatchLength
     showMatches(state)
   })
 
@@ -389,12 +389,16 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   state = {
     "logLevel": 1, // 0,1,2,3
+    "defaultMinMatchLength": 4,
+    "defaultMaxMatchLength": 16,
     "minMatchLength": Number(minMatchLengthElement.value),
     "maxMatchLength": Number(maxMatchLengthElement.value),
     "wordListURL": null,
     "wordList": null,
   }
 
+  minMatchLengthElement.value = state.defaultMinMatchLength
+  maxMatchLengthElement.value = state.defaultMaxMatchLength
   setWordList(state, wordListDropdown.value)
   requiredLettersElement.focus()
 
