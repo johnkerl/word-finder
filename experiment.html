@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+<meta name="description" content="jsbee" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- mobile-friendly -->
+<title>jsbee</title>
+<link rel="stylesheet" type="text/css" href="./sample.css">
+</head>
+
+<body>
+
+<!-- ================================================================ -->
+<h1><span class="boxed-text">jsbee</span></h1>
+
+<table>
+<tr>
+  <td>
+    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
+  </td>
+  <td>
+    <button class="maroon" id="jsbee-reset-required-letters-button"> Reset </button>
+  </td>
+  <td>
+    Required letter(s)
+  </td>
+</tr>
+<tr>
+  <td>
+    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
+  </td>
+  <td>
+    <button class="maroon" id="jsbee-reset-other-letters-button"> Reset </button>
+  </td>
+  <td>
+    Other letters
+  </td>
+</tr>
+
+<tr>
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
+  </td>
+  <td>
+    &nbsp;
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <select id="jsbee-word-list-dropdown">
+      <option value="./usual-suspects.txt">Usual suspects</option>
+      <option value="./long-list.txt">Long list</option>
+    </select>
+  </td>
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    Word list
+  </td>
+</tr>
+<tr>
+  <td>
+    <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16" defaultValue="4" value="4"/>
+  </td>
+  <td>
+    <button class="maroon" id="jsbee-reset-min-match-length-button"> Reset </button>
+  </td>
+  <td>
+    <label for="jsbee-min-match-length">Minimum word length</label>
+  </td>
+</tr>
+<tr>
+  <td>
+    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16" defaultValue="4" value="16"/>
+  </td>
+  <td>
+    <button class="maroon" id="jsbee-reset-max-match-length-button"> Reset </button>
+  </td>
+  <td>
+    <label for="jsbee-max-match-length">Maximum word length</label>
+  </td>
+</tr>
+
+</table>
+
+<p/>
+<div>
+  <span id="jsbee-output"> </span>
+</div>
+
+<!-- ================================================================ -->
+<hr/>
+
+<p>
+Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
+</p>
+
+<!-- ================================================================ -->
+<script>
+
+  // ----------------------------------------------------------------
+  // LOGGING
+
+  function logAt0(state, ...args) {
+    logAt(state, 0, ...args)
+  }
+
+  function logAt1(state, ...args) {
+    logAt(state, 1, ...args)
+  }
+
+  function logAt2(state, ...args) {
+    logAt(state, 2, ...args)
+  }
+
+  function logAt3(state, ...args) {
+    logAt(state, 3, ...args)
+  }
+
+  function logAt(state, level, ...args) {
+    if (state.logLevel >= level) {
+      console.log(...args)
+    }
+  }
+
+  // ----------------------------------------------------------------
+  // UTILITIES
+
+  function isInteger(text) {
+    // TODO: this accepts '3.4' and should not
+    return !isNaN(parseInt(text))
+  }
+
+  // ----------------------------------------------------------------
+  // APPLICATION LOGIC
+
+  function setWordList(state, url) {
+    logAt0("FETCHING WORD LIST FROM URL:", url)
+    state.wordListURL = url
+    fetch(url).then((response) => response.text().then((text) => {
+      state.wordList = text.split("\n")
+      // Must be called from this callback, since this is async
+      showMatches(state)
+    }))
+  }
+
+  function checkWordList(state) {
+    if (state.wordListURL == null) {
+      outputElement.textContent = "No word list set"
+      return false
+    }
+    if (state.wordList == null) {
+      outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
+      return false
+    }
+    return true
+  }
+
+  function showMatches(state) {
+    if (!checkWordList(state)) {
+      return
+    }
+
+    requiredLetters = requiredLettersElement.value
+    otherLetters = otherLettersElement.value
+
+    matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
+
+    matches = matches.map(match => match.toUpperCase())
+
+    logAt2(state, matches)
+
+    if (requiredLetters.length == 0 && otherLetters.length == 0) {
+      outputElement.textContent = ""
+    } else if (matches.length == 0) {
+      outputElement.textContent = "(no matches)"
+    } else {
+      outputElement.textContent = matches.join(" ")
+    }
+  }
+
+  function setAllOthers() {
+    console.log("STATE2", state)
+    requiredLettersElement.value = ""
+    otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    outputElement.textContent = ""
+  }
+
+  function getMatchesFromWordList(state, requiredLetters, optionalLetters) {
+    logAt1(state, "MATCHER ENTER")
+    logAt1(state, "requiredLetters ", requiredLetters)
+    logAt1(state, "optionalLetters", optionalLetters)
+    logAt1(state, "wordList.length", state.wordList.length)
+    logAt3(state, "wordList", state.wordList)
+
+    requiredLetters = requiredLetters.toLowerCase()
+    optionalLetters = optionalLetters.toLowerCase()
+    matches = []
+    state.wordList.forEach((word) => {
+      logAt2(state, "WORD <<", word, ">>")
+      if (wordMatches(state, requiredLetters, optionalLetters, word)) {
+        logAt2(state, "MATCH", word)
+        matches.push(word)
+      }
+    })
+    return matches
+  }
+
+  function wordMatches(state, requiredLetters, optionalLetters, word) {
+    let allLetters = requiredLetters + optionalLetters
+    if (state.minMatchLength != null && word.length < state.minMatchLength) {
+      logAt2(state, "-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
+      return false
+    }
+    if (state.maxMatchLength != null && word.length > state.maxMatchLength) {
+      logAt2(state, "-- match out 2: word", word, "with length", word.length, "more than max", state.maxMatchLength)
+      return false
+    }
+    for (let i = 0; i < requiredLetters.length; i++) {
+      requiredLetter = requiredLetters[i]
+      if (word.indexOf(requiredLetter) < 0) {
+        logAt2(state, "-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
+        return false
+      }
+    }
+    for (let i = 0; i < word.length; i++) {
+      let letter = word[i]
+      if (allLetters.indexOf(letter) < 0) {
+        logAt2(state, "-- match out 4: word", word, "missing letter", letter, "from", allLetters)
+        return false
+      }
+    }
+    logAt2(state, "-- match:", word)
+    return true
+  }
+
+  // ================================================================
+  // TODO:
+  // * Auto-set focus in required-letters box
+  // * Improve (relative) font sizes
+  // * Start-up self-test
+  // ================================================================
+
+  // ----------------------------------------------------------------
+  // ELEMENTS
+
+  const requiredLettersElement     = document.getElementById("jsbee-required-letters")
+  const otherLettersElement        = document.getElementById("jsbee-other-letters")
+  const wordListDropdown           = document.getElementById("jsbee-word-list-dropdown")
+  const minMatchLengthElement      = document.getElementById("jsbee-min-match-length")
+  const maxMatchLengthElement      = document.getElementById("jsbee-max-match-length")
+  const resetRequiredLettersButton = document.getElementById("jsbee-reset-required-letters-button")
+  const resetOtherLettersButton    = document.getElementById("jsbee-reset-other-letters-button")
+  const allOthersButton            = document.getElementById("jsbee-all-others-button")
+  const resetMinMatchLengthButton  = document.getElementById("jsbee-reset-min-match-length-button")
+  const resetMaxMatchLengthButton  = document.getElementById("jsbee-reset-max-match-length-button")
+  const outputElement              = document.getElementById("jsbee-output")
+
+  // ----------------------------------------------------------------
+  // EVENT LISTENERS
+
+  requiredLettersElement.addEventListener("input", function(event) {
+    logAt1(state, "REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+    requiredLettersElement.value = event.target.value.toUpperCase()
+    showMatches(state)
+  })
+
+  otherLettersElement.addEventListener("input", function(event) {
+    logAt1(state, "OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+    otherLettersElement.value = event.target.value.toUpperCase()
+    showMatches(state)
+  })
+
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
+  minMatchLengthElement.addEventListener("change", function(event) {
+    let self  = minMatchLengthElement
+    logAt1(state, "MIN LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+
+    // The up-and-down sliders won't let the user choose outside the widget's min/max.
+    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+    if (!isInteger(event.target.value)) {
+      self.value = self.defaultValue
+      state.minMatchLength = self.value
+      showMatches(state)
+      return;
+    }
+    let requestedValue = Number(event.target.value)
+
+    // Check self-bounds
+    if (requestedValue < self.min) {
+      state.minMatchLength = self.min
+      self.value = self.min
+    } else if (requestedValue > self.max) {
+      state.minMatchLength = self.max
+      self.value = self.max
+
+    // Check other-bounds
+    } else if (requestedValue > state.maxMatchLength) {
+      self.value = state.maxMatchLength
+
+    } else {
+      state.minMatchLength = requestedValue
+    }
+    showMatches(state)
+  })
+
+  maxMatchLengthElement.addEventListener("change", function(event) {
+    let self  = maxMatchLengthElement
+    logAt1(state, "MAX LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+
+    // The up-and-down sliders won't let the user choose outside the widget's min/max.
+    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+    if (!isInteger(event.target.value)) {
+      self.value = self.defaultValue
+      state.maxMatchLength = self.value
+      showMatches(state)
+      return;
+    }
+    let requestedValue = Number(event.target.value)
+
+    // Check self-bounds
+    if (requestedValue < self.min) {
+      state.maxMatchLength = self.min
+      self.value = self.min
+    } else if (requestedValue > self.max) {
+      state.maxMatchLength = self.max
+      self.value = self.max
+
+    // Check other-bounds
+    } else if (requestedValue < state.minMatchLength) {
+      self.value = state.minMatchLength
+
+    } else {
+      state.maxMatchLength = requestedValue
+    }
+    showMatches(state)
+  })
+
+  resetRequiredLettersButton.addEventListener("click", function(event) {
+    logAt1(state, "RESET-REQUIRED-LETTERS BUTTON WAS CLICKED")
+    requiredLettersElement.value = ""
+    showMatches(state)
+  })
+
+  resetOtherLettersButton.addEventListener("click", function(event) {
+    logAt1(state, "RESET-OTHER-LETTERS BUTTON WAS CLICKED")
+    otherLettersElement.value = ""
+    showMatches(state)
+  })
+
+  resetMinMatchLengthButton.addEventListener("click", function(event) {
+    let self = resetMinMatchLengthButton
+    logAt1(state, "RESET-MIN-MATCH-LENGTH BUTTON WAS CLICKED")
+    self.value = self.defaultValue
+    state.minMatchLength = Number(self.defaultValue)
+    showMatches(state)
+  })
+
+  resetMaxMatchLengthButton.addEventListener("click", function(event) {
+    let self = resetMaxMatchLengthButton
+    logAt1(state, "RESET-MIN-MATCH-LENGTH BUTTON WAS CLICKED")
+    self.value = self.defaultValue
+    state.maxMatchLength = Number(self.defaultValue)
+    showMatches(state)
+  })
+
+  allOthersButton.addEventListener("click", function(event) {
+    logAt1(state, "ALL-OTHERS BUTTON WAS CLICKED")
+    console.log("STATE1", state)
+    setAllOthers()
+    showMatches(state)
+  })
+
+  wordListDropdown.addEventListener("change", function() {
+    url = wordListDropdown.value
+    logAt1(state, "SELECTED WORD LIST: <<", url, ">>")
+    setWordList(state, url)
+    showMatches(state)
+  })
+
+  // ----------------------------------------------------------------
+  // APPLICATION STATE
+
+  state = {
+    "logLevel": 1, // 0,1,2,3
+    "minMatchLength": Number(minMatchLengthElement.value),
+    "maxMatchLength": Number(maxMatchLengthElement.value),
+    "wordListURL": null,
+    "wordList": null,
+  }
+
+  setWordList(state, wordListDropdown.value)
+  requiredLettersElement.focus()
+
+</script>
+<!-- ================================================================ -->
+</body>
+</html>
