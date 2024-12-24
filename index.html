@@ -20,6 +20,9 @@
     <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
   </td>
   <td>
+    <button class="maroon" id="jsbee-clear-required-letters-button"> Clear </button>
+  </td>
+  <td>
     Required letter(s)
   </td>
 </tr>
@@ -28,16 +31,23 @@
     <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
   <td>
+    <button class="maroon" id="jsbee-clear-other-letters-button"> Clear </button>
+  </td>
+  <td>
     Other letters
   </td>
 </tr>
 
 <tr>
   <td>
-    <button class="maroon" id="jsbee-clear-button"> Clear </button>
+    &nbsp;
   </td>
   <td>
+    <button class="maroon" id="jsbee-example-button"> Example </button>
     <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
+  </td>
+  <td>
+    &nbsp;
   </td>
 </tr>
 
@@ -49,23 +59,22 @@
     </select>
   </td>
   <td>
+    &nbsp;
+  </td>
+  <td>
     Word list
   </td>
 </tr>
 <tr>
   <td>
-    <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16" value="4"/>
+    <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
+    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
   </td>
   <td>
-    <label for="jsbee-min-match-length">Minimum word length</label>
-  </td>
-</tr>
-<tr>
-  <td>
-    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16" value="16"/>
+    <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button>
   </td>
   <td>
-    <label for="jsbee-max-match-length">Maximum word length</label>
+    <label for="jsbee-min-match-length">Minimum and maximum word lengths</label>
   </td>
 </tr>
 
@@ -167,16 +176,15 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     }
   }
 
-  function clearAll() {
+  function setAllOthers() {
     requiredLettersElement.value = ""
-    otherLettersElement.value = ""
+    otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     outputElement.textContent = ""
   }
 
-  function setAllOthers() {
-    console.log("STATE2", state)
-    requiredLettersElement.value = ""
-    otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  function setExample() {
+    requiredLettersElement.value = "E"
+    otherLettersElement.value = "XAMPLS"
     outputElement.textContent = ""
   }
 
@@ -238,14 +246,17 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // ----------------------------------------------------------------
   // ELEMENTS
 
-  const requiredLettersElement = document.getElementById("jsbee-required-letters")
-  const otherLettersElement    = document.getElementById("jsbee-other-letters")
-  const wordListDropdown       = document.getElementById("jsbee-word-list-dropdown")
-  const minMatchLengthElement  = document.getElementById("jsbee-min-match-length")
-  const maxMatchLengthElement  = document.getElementById("jsbee-max-match-length")
-  const clearButton            = document.getElementById("jsbee-clear-button")
-  const allOthersButton        = document.getElementById("jsbee-all-others-button")
-  const outputElement          = document.getElementById("jsbee-output")
+  const requiredLettersElement     = document.getElementById("jsbee-required-letters")
+  const otherLettersElement        = document.getElementById("jsbee-other-letters")
+  const wordListDropdown           = document.getElementById("jsbee-word-list-dropdown")
+  const minMatchLengthElement      = document.getElementById("jsbee-min-match-length")
+  const maxMatchLengthElement      = document.getElementById("jsbee-max-match-length")
+  const clearRequiredLettersButton = document.getElementById("jsbee-clear-required-letters-button")
+  const clearOtherLettersButton    = document.getElementById("jsbee-clear-other-letters-button")
+  const allOthersButton            = document.getElementById("jsbee-all-others-button")
+  const exampleButton              = document.getElementById("jsbee-example-button")
+  const resetMatchLengthsButton    = document.getElementById("jsbee-reset-match-lengths-button")
+  const outputElement              = document.getElementById("jsbee-output")
 
   // ----------------------------------------------------------------
   // EVENT LISTENERS
@@ -327,15 +338,38 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     showMatches(state)
   })
 
-  clearButton.addEventListener("click", function(event) {
-    logAt1(state, "CLEAR BUTTON WAS CLICKED")
-    clearAll()
+  clearRequiredLettersButton.addEventListener("click", function(event) {
+    logAt1(state, "CLEAR-REQUIRED-LETTERS BUTTON WAS CLICKED")
+    requiredLettersElement.value = ""
+    showMatches(state)
+  })
+
+  clearOtherLettersButton.addEventListener("click", function(event) {
+    logAt1(state, "CLEAR-OTHER-LETTERS BUTTON WAS CLICKED")
+    otherLettersElement.value = ""
+    showMatches(state)
+  })
+
+  resetMatchLengthsButton.addEventListener("click", function(event) {
+    logAt1(state, "RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+    minMatchLengthElement.value =  state.defaultMinMatchLength
+    maxMatchLengthElement.value =  state.defaultMaxMatchLength
+    state.minMatchLength = state.defaultMinMatchLength
+    state.maxMatchLength = state.defaultMaxMatchLength
+    showMatches(state)
   })
 
   allOthersButton.addEventListener("click", function(event) {
     logAt1(state, "ALL-OTHERS BUTTON WAS CLICKED")
     console.log("STATE1", state)
     setAllOthers()
+    showMatches(state)
+  })
+
+  exampleButton.addEventListener("click", function(event) {
+    logAt1(state, "EXAMPLE BUTTON WAS CLICKED")
+    console.log("STATE1", state)
+    setExample()
     showMatches(state)
   })
 
@@ -350,13 +384,19 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // APPLICATION STATE
 
   state = {
-    "logLevel": 0, // 0,1,2,3
+    "logLevel": 1, // 0,1,2,3
+    "defaultMinMatchLength": 4,
+    "defaultMaxMatchLength": 16,
     "minMatchLength": Number(minMatchLengthElement.value),
     "maxMatchLength": Number(maxMatchLengthElement.value),
     "wordListURL": null,
     "wordList": null,
   }
 
+  minMatchLengthElement.value = state.defaultMinMatchLength
+  maxMatchLengthElement.value = state.defaultMaxMatchLength
+  state.minMatchLength = state.defaultMinMatchLength
+  state.maxMatchLength = state.defaultMaxMatchLength
   setWordList(state, wordListDropdown.value)
   requiredLettersElement.focus()
 
