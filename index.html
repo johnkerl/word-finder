@@ -17,55 +17,55 @@
 <table>
 <tr>
   <td>
-    Required letter(s):
+    <textarea placeholder="A" rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
   </td>
   <td>
-    <textarea placeholder="A" rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
+    Required letter(s)
   </td>
 </tr>
 <tr>
-  <td>
-    Other letters:
-  </td>
   <td>
     <textarea placeholder="BCDEFG" rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
+  <td>
+    Other letters
+  </td>
 </tr>
 
 <tr>
-  <td>
-    &nbsp;
-  </td>
   <td>
     <button class="maroon" id="jsbee-clear-button"> Clear </button>
   </td>
+  <td>
+    &nbsp;
+  </td>
 </tr>
 
 <tr>
-  <td>
-    Word list:
-  </td>
   <td>
     <select id="jsbee-word-list-dropdown">
       <option value="./usual-suspects.txt">Usual suspects</option>
       <option value="./long-list.txt">Long list</option>
     </select>
   </td>
+  <td>
+    Word list
+  </td>
 </tr>
 <tr>
-  <td>
-    <label for="jsbee-min-match-length">Minimum word length:</label>
-  </td>
   <td>
     <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16" value="4"/>
   </td>
+  <td>
+    <label for="jsbee-min-match-length">Minimum word length</label>
+  </td>
 </tr>
 <tr>
   <td>
-    <label for="jsbee-max-match-length">Maximum word length:</label>
+    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16" value="16"/>
   </td>
   <td>
-    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16" value="16"/>
+    <label for="jsbee-max-match-length">Maximum word length</label>
   </td>
 </tr>
 
