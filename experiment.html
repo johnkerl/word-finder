@@ -20,7 +20,7 @@
     <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
   </td>
   <td>
-    <button class="maroon" id="jsbee-reset-required-letters-button"> Reset </button>
+    <button class="maroon" id="jsbee-clear-required-letters-button"> Clear </button>
   </td>
   <td>
     Required letter(s)
@@ -31,7 +31,7 @@
     <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
   <td>
-    <button class="maroon" id="jsbee-reset-other-letters-button"> Reset </button>
+    <button class="maroon" id="jsbee-clear-other-letters-button"> Clear </button>
   </td>
   <td>
     Other letters
@@ -43,8 +43,8 @@
     &nbsp;
   </td>
   <td>
-    <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
     <button class="maroon" id="jsbee-example-button"> Example </button>
+    <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
   </td>
   <td>
     &nbsp;
@@ -68,23 +68,13 @@
 <tr>
   <td>
     <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
-  </td>
-  <td>
-    <button class="maroon" id="jsbee-reset-min-match-length-button"> Reset </button>
-  </td>
-  <td>
-    <label for="jsbee-min-match-length">Minimum word length</label>
-  </td>
-</tr>
-<tr>
-  <td>
     <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
   </td>
   <td>
-    <button class="maroon" id="jsbee-reset-max-match-length-button"> Reset </button>
+    <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button>
   </td>
   <td>
-    <label for="jsbee-max-match-length">Maximum word length</label>
+    <label for="jsbee-min-match-length">Minimum and maximum word lengths</label>
   </td>
 </tr>
 
@@ -261,12 +251,11 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const wordListDropdown           = document.getElementById("jsbee-word-list-dropdown")
   const minMatchLengthElement      = document.getElementById("jsbee-min-match-length")
   const maxMatchLengthElement      = document.getElementById("jsbee-max-match-length")
-  const resetRequiredLettersButton = document.getElementById("jsbee-reset-required-letters-button")
-  const resetOtherLettersButton    = document.getElementById("jsbee-reset-other-letters-button")
+  const clearRequiredLettersButton = document.getElementById("jsbee-clear-required-letters-button")
+  const clearOtherLettersButton    = document.getElementById("jsbee-clear-other-letters-button")
   const allOthersButton            = document.getElementById("jsbee-all-others-button")
   const exampleButton              = document.getElementById("jsbee-example-button")
-  const resetMinMatchLengthButton  = document.getElementById("jsbee-reset-min-match-length-button")
-  const resetMaxMatchLengthButton  = document.getElementById("jsbee-reset-max-match-length-button")
+  const resetMatchLengthsButton    = document.getElementById("jsbee-reset-match-lengths-button")
   const outputElement              = document.getElementById("jsbee-output")
 
   // ----------------------------------------------------------------
@@ -349,28 +338,23 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     showMatches(state)
   })
 
-  resetRequiredLettersButton.addEventListener("click", function(event) {
-    logAt1(state, "RESET-REQUIRED-LETTERS BUTTON WAS CLICKED")
+  clearRequiredLettersButton.addEventListener("click", function(event) {
+    logAt1(state, "CLEAR-REQUIRED-LETTERS BUTTON WAS CLICKED")
     requiredLettersElement.value = ""
     showMatches(state)
   })
 
-  resetOtherLettersButton.addEventListener("click", function(event) {
-    logAt1(state, "RESET-OTHER-LETTERS BUTTON WAS CLICKED")
+  clearOtherLettersButton.addEventListener("click", function(event) {
+    logAt1(state, "CLEAR-OTHER-LETTERS BUTTON WAS CLICKED")
     otherLettersElement.value = ""
     showMatches(state)
   })
 
-  resetMinMatchLengthButton.addEventListener("click", function(event) {
-    logAt1(state, "RESET-MIN-MATCH-LENGTH BUTTON WAS CLICKED")
+  resetMatchLengthsButton.addEventListener("click", function(event) {
+    logAt1(state, "RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
     minMatchLengthElement.value =  state.defaultMinMatchLength
-    state.minMatchLength = state.defaultMinMatchLength
-    showMatches(state)
-  })
-
-  resetMaxMatchLengthButton.addEventListener("click", function(event) {
-    logAt1(state, "RESET-MAX-MATCH-LENGTH BUTTON WAS CLICKED")
     maxMatchLengthElement.value =  state.defaultMaxMatchLength
+    state.minMatchLength = state.defaultMinMatchLength
     state.maxMatchLength = state.defaultMaxMatchLength
     showMatches(state)
   })
