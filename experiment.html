@@ -355,7 +355,6 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   })
 
   resetMinMatchLengthButton.addEventListener("click", function(event) {
-    let self = resetMinMatchLengthButton
     logAt1(state, "RESET-MIN-MATCH-LENGTH BUTTON WAS CLICKED")
     minMatchLengthElement.value =  state.defaultMinMatchLength
     state.minMatchLength = state.defaultMinMatchLength
@@ -363,7 +362,6 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   })
 
   resetMaxMatchLengthButton.addEventListener("click", function(event) {
-    let self = resetMaxMatchLengthButton
     logAt1(state, "RESET-MAX-MATCH-LENGTH BUTTON WAS CLICKED")
     maxMatchLengthElement.value =  state.defaultMaxMatchLength
     state.maxMatchLength = state.defaultMaxMatchLength
@@ -399,6 +397,8 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   minMatchLengthElement.value = state.defaultMinMatchLength
   maxMatchLengthElement.value = state.defaultMaxMatchLength
+  state.minMatchLength = state.defaultMinMatchLength
+  state.maxMatchLength = state.defaultMaxMatchLength
   setWordList(state, wordListDropdown.value)
   requiredLettersElement.focus()
 
