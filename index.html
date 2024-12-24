@@ -112,6 +112,14 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   }
 
   // ----------------------------------------------------------------
+  // UTILITIES
+
+  function isInteger(text) {
+    // TODO: this accepts '3.4' and should not
+    return !isNaN(parseInt(text))
+  }
+
+  // ----------------------------------------------------------------
   // APPLICATION LOGIC
 
   function setWordList(state, url) {
@@ -147,7 +155,6 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
 
     matches = matches.map(match => match.toUpperCase())
-    matches = matches.sort()
 
     logAt2(state, matches)
 
@@ -249,16 +256,66 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
   minMatchLengthElement.addEventListener("change", function(event) {
-    let newMinMatchLength = Number(event.target.value)
-    logAt1(state, "MIN LENGTH WAS CHANGED", newMinMatchLength)
-    state.minMatchLength = event.target.value
+    let self  = minMatchLengthElement
+    logAt1(state, "MIN LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+
+    // The up-and-down sliders won't let the user choose outside the widget's min/max.
+    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+    if (!isInteger(event.target.value)) {
+      self.value = self.defaultValue
+      state.minMatchLength = self.value
+      showMatches(state)
+      return;
+    }
+    let requestedValue = Number(event.target.value)
+
+    // Check self-bounds
+    if (requestedValue < self.min) {
+      state.minMatchLength = self.min
+      self.value = self.min
+    } else if (requestedValue > self.max) {
+      state.minMatchLength = self.max
+      self.value = self.max
+
+    // Check other-bounds
+    } else if (requestedValue > state.maxMatchLength) {
+      self.value = state.maxMatchLength
+
+    } else {
+      state.minMatchLength = requestedValue
+    }
     showMatches(state)
   })
 
   maxMatchLengthElement.addEventListener("change", function(event) {
-    let newMaxMatchLength = Number(event.target.value)
-    logAt1(state, "MAX LENGTH WAS CHANGED", newMaxMatchLength)
-    state.maxMatchLength = event.target.value
+    let self  = maxMatchLengthElement
+    logAt1(state, "MAX LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+
+    // The up-and-down sliders won't let the user choose outside the widget's min/max.
+    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+    if (!isInteger(event.target.value)) {
+      self.value = self.defaultValue
+      state.maxMatchLength = self.value
+      showMatches(state)
+      return;
+    }
+    let requestedValue = Number(event.target.value)
+
+    // Check self-bounds
+    if (requestedValue < self.min) {
+      state.maxMatchLength = self.min
+      self.value = self.min
+    } else if (requestedValue > self.max) {
+      state.maxMatchLength = self.max
+      self.value = self.max
+
+    // Check other-bounds
+    } else if (requestedValue < state.minMatchLength) {
+      self.value = state.minMatchLength
+
+    } else {
+      state.maxMatchLength = requestedValue
+    }
     showMatches(state)
   })
 
@@ -279,9 +336,9 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   state = {
     "logLevel": 0, // 0,1,2,3
-    "minMatchLength": 4,
-    "maxMatchLength": null,
-    "wordListURL": "./usual-suspects.txt",
+    "minMatchLength": Number(minMatchLengthElement.value),
+    "maxMatchLength": Number(maxMatchLengthElement.value),
+    "wordListURL": null,
     "wordList": null,
   }
 
