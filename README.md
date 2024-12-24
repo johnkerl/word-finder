@@ -2,7 +2,7 @@
 
 A quick little JavaScript app for (last-hope-desperation!!) peeking into pangram puzzles including the NYT Spelling Bee.
 
-Features:
+## Features
 
 * Enter 0 or more required letters. (For the NYT Spelling Bee, there is one center letter.)
 * Enter 0 or more other letters. (For the NYT Spelling Bee, there are six other letters.)
@@ -11,4 +11,28 @@ Features:
   * "Usual suspects" is a short, curated list of once-bitten-twice-shy values from previous Bees.
   * "Long list" is a long list (almost 200K words), not all of which are in the NYT Spelling Bee. That is, this can show words that the NYT Spelling Bee doesn't accept.
 
-Hosted app: [https://johnkerl.org/jsbee](https://johnkerl.org/jsbee).
+## Hosted app
+
+[https://johnkerl.org/jsbee](https://johnkerl.org/jsbee).
+
+## Examples
+
+Specify one required or "center" letter, and others, using the short list:
+
+![example-1](./examples/example-1.png)
+
+Search in the long list:
+
+![example-2](./examples/example-2.png)
+
+Constrain the word length:
+
+![example-3](./examples/example-3.png)
+
+Make all letters required --- this means any match must match _all_ of the letters:
+
+![example-4](./examples/example-4.png)
+
+Make all letters required --- this means any match must match _any_ of the letters:
+
+![example-5](./examples/example-5.png)
