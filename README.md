@@ -33,6 +33,6 @@ Make all letters required --- this means any match must match _all_ of the lette
 
 ![example-4](./examples/example-4.png)
 
-Make all letters required --- this means any match must match _any_ of the letters:
+Make all letters non-required --- this means any match must match _any combination_ of the letters:
 
 ![example-5](./examples/example-5.png)
