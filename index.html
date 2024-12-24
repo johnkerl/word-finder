@@ -17,7 +17,7 @@
 <table>
 <tr>
   <td>
-    <textarea placeholder="A" rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
+    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
   </td>
   <td>
     Required letter(s)
@@ -25,7 +25,7 @@
 </tr>
 <tr>
   <td>
-    <textarea placeholder="BCDEFG" rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
+    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
   <td>
     Other letters
@@ -37,7 +37,7 @@
     <button class="maroon" id="jsbee-clear-button"> Clear </button>
   </td>
   <td>
-    &nbsp;
+    <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
   </td>
 </tr>
 
@@ -173,6 +173,13 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     outputElement.textContent = ""
   }
 
+  function setAllOthers() {
+    console.log("STATE2", state)
+    requiredLettersElement.value = ""
+    otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    outputElement.textContent = ""
+  }
+
   function getMatchesFromWordList(state, requiredLetters, optionalLetters) {
     logAt1(state, "MATCHER ENTER")
     logAt1(state, "requiredLetters ", requiredLetters)
@@ -237,6 +244,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const minMatchLengthElement  = document.getElementById("jsbee-min-match-length")
   const maxMatchLengthElement  = document.getElementById("jsbee-max-match-length")
   const clearButton            = document.getElementById("jsbee-clear-button")
+  const allOthersButton        = document.getElementById("jsbee-all-others-button")
   const outputElement          = document.getElementById("jsbee-output")
 
   // ----------------------------------------------------------------
@@ -322,6 +330,13 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   clearButton.addEventListener("click", function(event) {
     logAt1(state, "CLEAR BUTTON WAS CLICKED")
     clearAll()
+  })
+
+  allOthersButton.addEventListener("click", function(event) {
+    logAt1(state, "ALL-OTHERS BUTTON WAS CLICKED")
+    console.log("STATE1", state)
+    setAllOthers()
+    showMatches(state)
   })
 
   wordListDropdown.addEventListener("change", function() {
