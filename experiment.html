@@ -44,6 +44,7 @@
   </td>
   <td>
     <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
+    <button class="maroon" id="jsbee-example-button"> Example </button>
   </td>
   <td>
     &nbsp;
@@ -186,9 +187,14 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   }
 
   function setAllOthers() {
-    console.log("STATE2", state)
     requiredLettersElement.value = ""
     otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    outputElement.textContent = ""
+  }
+
+  function setExample() {
+    requiredLettersElement.value = "E"
+    otherLettersElement.value = "XAMPLS"
     outputElement.textContent = ""
   }
 
@@ -258,6 +264,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const resetRequiredLettersButton = document.getElementById("jsbee-reset-required-letters-button")
   const resetOtherLettersButton    = document.getElementById("jsbee-reset-other-letters-button")
   const allOthersButton            = document.getElementById("jsbee-all-others-button")
+  const exampleButton              = document.getElementById("jsbee-example-button")
   const resetMinMatchLengthButton  = document.getElementById("jsbee-reset-min-match-length-button")
   const resetMaxMatchLengthButton  = document.getElementById("jsbee-reset-max-match-length-button")
   const outputElement              = document.getElementById("jsbee-output")
@@ -372,6 +379,13 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     logAt1(state, "ALL-OTHERS BUTTON WAS CLICKED")
     console.log("STATE1", state)
     setAllOthers()
+    showMatches(state)
+  })
+
+  exampleButton.addEventListener("click", function(event) {
+    logAt1(state, "EXAMPLE BUTTON WAS CLICKED")
+    console.log("STATE1", state)
+    setExample()
     showMatches(state)
   })
 
