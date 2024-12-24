@@ -20,7 +20,7 @@
     Required letter(s):
   </td>
   <td>
-    <textarea placeholder="A" rows=1 cols=3 id="jsbee-required-letters"></textarea>
+    <textarea placeholder="A" rows=1 cols=10 id="jsbee-required-letters"></textarea>
   </td>
 </tr>
 <tr>
@@ -28,9 +28,19 @@
     Other letters:
   </td>
   <td>
-    <textarea placeholder="BCDEFG" rows=1 cols=26 id="jsbee-other-letters"></textarea>
+    <textarea placeholder="BCDEFG" rows=1 cols=10 id="jsbee-other-letters"></textarea>
   </td>
 </tr>
+
+<tr>
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    <button class="maroon" id="jsbee-clear-button"> Clear </button>
+  </td>
+</tr>
+
 <tr>
   <td>
     Word list:
@@ -44,12 +54,21 @@
 </tr>
 <tr>
   <td>
-    &nbsp;
+    <label for="jsbee-min-match-length">Minimum word length:</label>
   </td>
   <td>
-    <button class="maroon" id="jsbee-clear-button"> Clear </button>
+    <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16" value="4"/>
   </td>
 </tr>
+<tr>
+  <td>
+    <label for="jsbee-max-match-length">Maximum word length:</label>
+  </td>
+  <td>
+    <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16" value="16"/>
+  </td>
+</tr>
+
 </table>
 
 <p/>
@@ -82,6 +101,10 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     logAt(state, 2, ...args)
   }
 
+  function logAt3(state, ...args) {
+    logAt(state, 3, ...args)
+  }
+
   function logAt(state, level, ...args) {
     if (state.logLevel >= level) {
       console.log(...args)
@@ -93,12 +116,12 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   function setWordList(state, url) {
     logAt0("FETCHING WORD LIST FROM URL:", url)
-    state.wordListURL = url;
+    state.wordListURL = url
     fetch(url).then((response) => response.text().then((text) => {
       state.wordList = text.split("\n")
       // Must be called from this callback, since this is async
       showMatches(state)
-    }));
+    }))
   }
 
   function checkWordList(state) {
@@ -130,7 +153,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     } else if (matches.length == 0) {
       outputElement.textContent = "(no matches)"
     } else {
-      outputElement.textContent = matches.join(' ')
+      outputElement.textContent = matches.join(" ")
     }
   }
 
@@ -144,7 +167,8 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     logAt1(state, "MATCHER ENTER")
     logAt1(state, "requiredLetters ", requiredLetters)
     logAt1(state, "optionalLetters", optionalLetters)
-    logAt2(state, "wordList", state.wordList)
+    logAt1(state, "wordList.length", state.wordList.length)
+    logAt3(state, "wordList", state.wordList)
 
     requiredLetters = requiredLetters.toLowerCase()
     optionalLetters = optionalLetters.toLowerCase()
@@ -160,7 +184,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   }
 
   function wordMatches(state, requiredLetters, optionalLetters, word) {
-    let allLetters = requiredLetters + optionalLetters;
+    let allLetters = requiredLetters + optionalLetters
     if (state.minMatchLength != null && word.length < state.minMatchLength) {
       logAt2(state, "-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
       return false
@@ -190,7 +214,6 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // ================================================================
   // TODO:
   // * Auto-set focus in required-letters box
-  // * Widgets to min/max word lengths (defaults 4 and Inf)
   // * Improve (relative) font sizes
   // * Start-up self-test
   // ================================================================
@@ -198,45 +221,62 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // ----------------------------------------------------------------
   // ELEMENTS
 
-  const requiredLettersElement = document.getElementById('jsbee-required-letters');
-  const otherLettersElement    = document.getElementById('jsbee-other-letters');
-  const wordListDropdown       = document.getElementById("jsbee-word-list-dropdown");
-  const clearButton            = document.getElementById('jsbee-clear-button')
-  const outputElement          = document.getElementById('jsbee-output');
+  const requiredLettersElement = document.getElementById("jsbee-required-letters")
+  const otherLettersElement    = document.getElementById("jsbee-other-letters")
+  const wordListDropdown       = document.getElementById("jsbee-word-list-dropdown")
+  const minMatchLengthElement  = document.getElementById("jsbee-min-match-length")
+  const maxMatchLengthElement  = document.getElementById("jsbee-max-match-length")
+  const clearButton            = document.getElementById("jsbee-clear-button")
+  const outputElement          = document.getElementById("jsbee-output")
 
   // ----------------------------------------------------------------
   // EVENT LISTENERS
 
-  requiredLettersElement.addEventListener('input', function(event) {
+  requiredLettersElement.addEventListener("input", function(event) {
     logAt1(state, "REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
     showMatches(state)
-  });
+  })
 
-  otherLettersElement.addEventListener('input', function(event) {
+  otherLettersElement.addEventListener("input", function(event) {
     logAt1(state, "OTHER-LETTERS INPUT: <<", event.target.value, ">>")
     showMatches(state)
-  });
+  })
 
-  clearButton.addEventListener('click', function(event) {
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
+  minMatchLengthElement.addEventListener("change", function(event) {
+    let newMinMatchLength = Number(event.target.value)
+    logAt1(state, "MIN LENGTH WAS CHANGED", newMinMatchLength)
+    state.minMatchLength = event.target.value
+    showMatches(state)
+  })
+
+  maxMatchLengthElement.addEventListener("change", function(event) {
+    let newMaxMatchLength = Number(event.target.value)
+    logAt1(state, "MAX LENGTH WAS CHANGED", newMaxMatchLength)
+    state.maxMatchLength = event.target.value
+    showMatches(state)
+  })
+
+  clearButton.addEventListener("click", function(event) {
     logAt1(state, "CLEAR BUTTON WAS CLICKED")
     clearAll()
-  });
+  })
 
   wordListDropdown.addEventListener("change", function() {
     url = wordListDropdown.value
-    logAt1(state, "SELECTED WORD LIST: <<", url, ">>");
+    logAt1(state, "SELECTED WORD LIST: <<", url, ">>")
     setWordList(state, url)
     showMatches(state)
-  });
+  })
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
   state = {
-    "logLevel": 0, // 0,1,2
+    "logLevel": 0, // 0,1,2,3
     "minMatchLength": 4,
     "maxMatchLength": null,
-    "wordListURL": './usual-suspects.txt',
+    "wordListURL": "./usual-suspects.txt",
     "wordList": null,
   }
 
