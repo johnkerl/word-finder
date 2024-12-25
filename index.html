@@ -84,7 +84,13 @@
 
 <p/>
 <div>
-  <span id="jsbee-output"> </span>
+  <button class="maroon" id="jsbee-output-show-hide-button"> Hide results </button>
+</div>
+<div>
+  <span id="jsbee-output-count" style="display:none"> </span>
+</div>
+<div>
+  <span id="jsbee-output" style="display:block"> </span>
 </div>
 
 <!-- ================================================================ -->
@@ -100,23 +106,23 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // ----------------------------------------------------------------
   // LOGGING
 
-  function logAt0(state, ...args) {
-    logAt(state, 0, ...args)
+  function logAt0(...args) {
+    logAt(0, ...args)
   }
 
-  function logAt1(state, ...args) {
-    logAt(state, 1, ...args)
+  function logAt1(...args) {
+    logAt(1, ...args)
   }
 
-  function logAt2(state, ...args) {
-    logAt(state, 2, ...args)
+  function logAt2(...args) {
+    logAt(2, ...args)
   }
 
-  function logAt3(state, ...args) {
-    logAt(state, 3, ...args)
+  function logAt3(...args) {
+    logAt(3, ...args)
   }
 
-  function logAt(state, level, ...args) {
+  function logAt(level, ...args) {
     if (state.logLevel >= level) {
       console.log(...args)
     }
@@ -167,31 +173,33 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
     matches = matches.map(match => match.toUpperCase())
 
-    logAt2(state, matches)
+    logAt2(matches)
+
+    outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
 
     if (requiredLetters.length == 0 && otherLetters.length == 0) {
       outputElement.textContent = ""
     } else if (matches.length == 0) {
-      outputElement.textContent = "(no matches)"
+      outputElement.textContent = "(No matches)"
     } else {
       outputElement.textContent = matches.join(" ")
     }
   }
 
   function getMatchesFromWordList(state, requiredLetters, optionalLetters) {
-    logAt1(state, "MATCHER ENTER")
-    logAt1(state, "requiredLetters ", requiredLetters)
-    logAt1(state, "optionalLetters", optionalLetters)
-    logAt1(state, "wordList.length", state.wordList.length)
-    logAt3(state, "wordList", state.wordList)
+    logAt1("MATCHER ENTER")
+    logAt1("requiredLetters ", requiredLetters)
+    logAt1("optionalLetters", optionalLetters)
+    logAt1("wordList.length", state.wordList.length)
+    logAt3("wordList", state.wordList)
 
     requiredLetters = requiredLetters.toLowerCase()
     optionalLetters = optionalLetters.toLowerCase()
     matches = []
     state.wordList.forEach((word) => {
-      logAt2(state, "WORD <<", word, ">>")
+      logAt2("WORD <<", word, ">>")
       if (wordMatches(state, requiredLetters, optionalLetters, word)) {
-        logAt2(state, "MATCH", word)
+        logAt2("MATCH", word)
         matches.push(word)
       }
     })
@@ -201,28 +209,28 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   function wordMatches(state, requiredLetters, optionalLetters, word) {
     let allLetters = requiredLetters + optionalLetters
     if (state.minMatchLength != null && word.length < state.minMatchLength) {
-      logAt2(state, "-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
+      logAt2("-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
       return false
     }
     if (state.maxMatchLength != null && word.length > state.maxMatchLength) {
-      logAt2(state, "-- match out 2: word", word, "with length", word.length, "more than max", state.maxMatchLength)
+      logAt2("-- match out 2: word", word, "with length", word.length, "more than max", state.maxMatchLength)
       return false
     }
     for (let i = 0; i < requiredLetters.length; i++) {
       requiredLetter = requiredLetters[i]
       if (word.indexOf(requiredLetter) < 0) {
-        logAt2(state, "-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
+        logAt2("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
         return false
       }
     }
     for (let i = 0; i < word.length; i++) {
       let letter = word[i]
       if (allLetters.indexOf(letter) < 0) {
-        logAt2(state, "-- match out 4: word", word, "missing letter", letter, "from", allLetters)
+        logAt2("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
         return false
       }
     }
-    logAt2(state, "-- match:", word)
+    logAt2("-- match:", word)
     return true
   }
 
@@ -251,19 +259,21 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const allOthersButton            = document.getElementById("jsbee-all-others-button")
   const exampleButton              = document.getElementById("jsbee-example-button")
   const resetMatchLengthsButton    = document.getElementById("jsbee-reset-match-lengths-button")
+  const outputShowHideButton       = document.getElementById("jsbee-output-show-hide-button")
+  const outputCountElement         = document.getElementById("jsbee-output-count")
   const outputElement              = document.getElementById("jsbee-output")
 
   // ----------------------------------------------------------------
   // EVENT LISTENERS
 
   requiredLettersElement.addEventListener("input", function(event) {
-    logAt1(state, "REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+    logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
     requiredLettersElement.value = event.target.value.toUpperCase()
     showMatches(state)
   })
 
   otherLettersElement.addEventListener("input", function(event) {
-    logAt1(state, "OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+    logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
     otherLettersElement.value = event.target.value.toUpperCase()
     showMatches(state)
   })
@@ -271,7 +281,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
   minMatchLengthElement.addEventListener("change", function(event) {
     let self  = minMatchLengthElement
-    logAt1(state, "MIN LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+    logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
 
     // The up-and-down sliders won't let the user choose outside the widget's min/max.
     // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
@@ -303,7 +313,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
   maxMatchLengthElement.addEventListener("change", function(event) {
     let self  = maxMatchLengthElement
-    logAt1(state, "MAX LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+    logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
 
     // The up-and-down sliders won't let the user choose outside the widget's min/max.
     // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
@@ -334,19 +344,31 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   })
 
   clearRequiredLettersButton.addEventListener("click", function(event) {
-    logAt1(state, "CLEAR-REQUIRED-LETTERS BUTTON WAS CLICKED")
+    logAt1("CLEAR-REQUIRED-LETTERS BUTTON WAS CLICKED")
     requiredLettersElement.value = ""
     showMatches(state)
   })
 
   clearOtherLettersButton.addEventListener("click", function(event) {
-    logAt1(state, "CLEAR-OTHER-LETTERS BUTTON WAS CLICKED")
+    logAt1("CLEAR-OTHER-LETTERS BUTTON WAS CLICKED")
     otherLettersElement.value = ""
     showMatches(state)
   })
 
+  allOthersButton.addEventListener("click", function(event) {
+    logAt1("ALL-OTHERS BUTTON WAS CLICKED")
+    setAllOthers()
+    showMatches(state)
+  })
+
+  exampleButton.addEventListener("click", function(event) {
+    logAt1("EXAMPLE BUTTON WAS CLICKED")
+    setExample()
+    showMatches(state)
+  })
+
   resetMatchLengthsButton.addEventListener("click", function(event) {
-    logAt1(state, "RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+    logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
     minMatchLengthElement.value =  state.defaultMinMatchLength
     maxMatchLengthElement.value =  state.defaultMaxMatchLength
     state.minMatchLength = state.defaultMinMatchLength
@@ -354,21 +376,25 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     showMatches(state)
   })
 
-  allOthersButton.addEventListener("click", function(event) {
-    logAt1(state, "ALL-OTHERS BUTTON WAS CLICKED")
-    setAllOthers()
-    showMatches(state)
-  })
-
-  exampleButton.addEventListener("click", function(event) {
-    logAt1(state, "EXAMPLE BUTTON WAS CLICKED")
-    setExample()
-    showMatches(state)
+  outputShowHideButton.addEventListener("click", function(event) {
+    let self = outputShowHideButton
+    logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
+    if (state.outputHidden) {
+      state.outputHidden = false
+      self.textContent = "Hide results"
+      outputCountElement.style.display = "none"
+      outputElement.style.display = "block"
+    } else {
+      state.outputHidden = true
+      self.textContent = "Show results"
+      outputCountElement.style.display = "block"
+      outputElement.style.display = "none"
+    }
   })
 
   wordListDropdown.addEventListener("change", function() {
     url = wordListDropdown.value
-    logAt1(state, "SELECTED WORD LIST: <<", url, ">>")
+    logAt1("SELECTED WORD LIST: <<", url, ">>")
     setWordList(state, url)
     showMatches(state)
   })
@@ -384,6 +410,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     "maxMatchLength": Number(maxMatchLengthElement.value),
     "wordListURL": null,
     "wordList": null,
+    "outputHidden": false,
   }
 
   minMatchLengthElement.value = state.defaultMinMatchLength
