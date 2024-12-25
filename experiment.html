@@ -108,7 +108,7 @@
     <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
   </td>
   <td>
-    <button class="maroon" id="jsbee-clear-required-letters-button"> Clear </button>
+    <button class="maroon" id="jsbee-clear-letters-button"> Clear </button>
   </td>
   <td>
     Required letter(s)
@@ -119,10 +119,10 @@
     <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
   <td>
-    <button class="maroon" id="jsbee-clear-other-letters-button"> Clear </button>
+    <button class="maroon" id="jsbee-example-button"> Example </button>
   </td>
   <td>
-    Other letters
+    Other letter(s)
   </td>
 </tr>
 
@@ -131,8 +131,7 @@
     &nbsp;
   </td>
   <td>
-    <button class="maroon" id="jsbee-example-button"> Example </button>
-    <button class="maroon" id="jsbee-all-others-button"> A-Z others </button>
+    <button class="maroon" id="jsbee-all-others-button">A-Z</button>
   </td>
   <td>
     &nbsp;
@@ -337,19 +336,37 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // ----------------------------------------------------------------
   // ELEMENTS
 
-  const requiredLettersElement     = document.getElementById("jsbee-required-letters")
-  const otherLettersElement        = document.getElementById("jsbee-other-letters")
-  const wordListDropdown           = document.getElementById("jsbee-word-list-dropdown")
-  const minMatchLengthElement      = document.getElementById("jsbee-min-match-length")
-  const maxMatchLengthElement      = document.getElementById("jsbee-max-match-length")
-  const clearRequiredLettersButton = document.getElementById("jsbee-clear-required-letters-button")
-  const clearOtherLettersButton    = document.getElementById("jsbee-clear-other-letters-button")
-  const allOthersButton            = document.getElementById("jsbee-all-others-button")
-  const exampleButton              = document.getElementById("jsbee-example-button")
-  const resetMatchLengthsButton    = document.getElementById("jsbee-reset-match-lengths-button")
-  const outputShowHideButton       = document.getElementById("jsbee-output-show-hide-button")
-  const outputCountElement         = document.getElementById("jsbee-output-count")
-  const outputElement              = document.getElementById("jsbee-output")
+  const requiredLettersElement  = document.getElementById("jsbee-required-letters")
+  const otherLettersElement     = document.getElementById("jsbee-other-letters")
+  const wordListDropdown        = document.getElementById("jsbee-word-list-dropdown")
+  const minMatchLengthElement   = document.getElementById("jsbee-min-match-length")
+  const maxMatchLengthElement   = document.getElementById("jsbee-max-match-length")
+  const clearLettersButton      = document.getElementById("jsbee-clear-letters-button")
+  const allOthersButton         = document.getElementById("jsbee-all-others-button")
+  const exampleButton           = document.getElementById("jsbee-example-button")
+  const resetMatchLengthsButton = document.getElementById("jsbee-reset-match-lengths-button")
+  const outputShowHideButton    = document.getElementById("jsbee-output-show-hide-button")
+  const outputCountElement      = document.getElementById("jsbee-output-count")
+  const outputElement           = document.getElementById("jsbee-output")
+
+  // Dev notes: I've used React before and it's poweful. Sometimes for fun
+  // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
+  // "in the middle".
+  //
+  // That said, JS libraries like React do simplify things. Factors as of this writing:
+  //
+  // * Some initial state (such as visibilities) is spread between HTML and JS init logic.
+  // * The min-match-length and max-match-length buttons, individually, have
+  //   identical logic for when the user types in non-numeric things. This
+  //   could be put into a class.
+  // * The min-match-length and max-match-length buttons, as a pair, have a
+  //   cross-check: the left's value cannot exceed the right's.
+  // * There is some controller/controllee coupling, e.g. which button resets
+  //   which other widgets' values.
+  // * There is duplication of information (and referential-integrity work)
+  //   between the `state` object and widget state.
+  //
+  // Food for thought. This has been a quick holiday project; nothing more.
 
   // ----------------------------------------------------------------
   // EVENT LISTENERS
@@ -431,14 +448,9 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     showMatches(state)
   })
 
-  clearRequiredLettersButton.addEventListener("click", function(event) {
-    logAt1("CLEAR-REQUIRED-LETTERS BUTTON WAS CLICKED")
+  clearLettersButton.addEventListener("click", function(event) {
+    logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
     requiredLettersElement.value = ""
-    showMatches(state)
-  })
-
-  clearOtherLettersButton.addEventListener("click", function(event) {
-    logAt1("CLEAR-OTHER-LETTERS BUTTON WAS CLICKED")
     otherLettersElement.value = ""
     showMatches(state)
   })
