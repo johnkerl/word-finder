@@ -105,10 +105,10 @@
 <table>
 <tr>
   <td>
-    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
+    <button class="maroon" id="jsbee-clear-letters-button"> Clear </button>
   </td>
   <td>
-    <button class="maroon" id="jsbee-clear-letters-button"> Clear </button>
+    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-required-letters"></textarea>
   </td>
   <td>
     Required letter(s)
@@ -116,10 +116,10 @@
 </tr>
 <tr>
   <td>
-    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
+    <button class="maroon" id="jsbee-example-button"> Example </button>
   </td>
   <td>
-    <button class="maroon" id="jsbee-example-button"> Example </button>
+    <textarea placeholder="..." rows=1 cols=10 autocapitalize="characters" id="jsbee-other-letters"></textarea>
   </td>
   <td>
     Other letter(s)
@@ -128,10 +128,10 @@
 
 <tr>
   <td>
-    &nbsp;
+    <button class="maroon" id="jsbee-all-others-button">A-Z</button>
   </td>
   <td>
-    <button class="maroon" id="jsbee-all-others-button">A-Z</button>
+    &nbsp;
   </td>
   <td>
     &nbsp;
@@ -140,13 +140,13 @@
 
 <tr>
   <td>
+    &nbsp;
+  </td>
+  <td>
     <select id="jsbee-word-list-dropdown">
       <option value="./usual-suspects.txt">Usual suspects</option>
       <option value="./long-list.txt">Long list</option>
     </select>
-  </td>
-  <td>
-    &nbsp;
   </td>
   <td>
     Word list
@@ -154,13 +154,13 @@
 </tr>
 <tr>
   <td>
+    <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button>
+  </td>
+  <td>
     <span>
       <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
       <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
     </span>
-  </td>
-  <td>
-    <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button>
   </td>
   <td>
     <label for="jsbee-min-match-length">Minimum and maximum word lengths</label>
@@ -349,7 +349,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const outputCountElement      = document.getElementById("jsbee-output-count")
   const outputElement           = document.getElementById("jsbee-output")
 
-  // Dev notes: I've used React before and it's poweful. Sometimes for fun
+  // Dev notes: I've used React before and it's powerful. Sometimes for fun
   // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
   // "in the middle".
   //
