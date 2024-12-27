@@ -108,7 +108,7 @@
     <button class="maroon" id="jsbee-clear-letters-button"> Clear </button>
   </td>
   <td>
-    <input type=text placeholder="..." cols=10 autocapitalize="characters" id="jsbee-required-letters"></input>
+    <input type=text tabindex=1 placeholder="..." cols=10 autocapitalize="characters" id="jsbee-required-letters"></input>
   </td>
   <td>
     Required letter(s)
@@ -119,7 +119,7 @@
     <button class="maroon" id="jsbee-example-button"> Example </button>
   </td>
   <td>
-    <input type=text placeholder="..." cols=10 autocapitalize="characters" id="jsbee-other-letters"></input>
+    <input type=text tabindex=2 placeholder="..." cols=10 autocapitalize="characters" id="jsbee-other-letters"></input>
   </td>
   <td>
     Other letter(s)
@@ -143,7 +143,7 @@
     &nbsp;
   </td>
   <td>
-    <select id="jsbee-word-list-dropdown">
+    <select tabindex=3 id="jsbee-word-list-dropdown">
       <option value="./usual-suspects.txt">Usual suspects</option>
       <option value="./long-list.txt">Long list</option>
     </select>
@@ -158,8 +158,8 @@
   </td>
   <td>
     <span>
-      <input type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
-      <input type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
+      <input tabindex=4 type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
+      <input tabindex=5 type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
     </span>
   </td>
   <td>
@@ -257,11 +257,8 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     otherLetters = otherLettersElement.value
 
     matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
-
     matches = matches.map(match => match.toUpperCase())
-
     matches = matches.sort()
-
     logAt2(matches)
 
     outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
