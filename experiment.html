@@ -297,21 +297,17 @@
   // ----------------------------------------------------------------
   // ELEMENTS
 
-  // TODO: move to root-app class
+  // TODO: in progress of moving to root-app class
   const requiredLettersElement  = document.getElementById("jsbee-required-letters")
   const otherLettersElement     = document.getElementById("jsbee-other-letters")
   const wordListDropdown        = document.getElementById("jsbee-word-list-dropdown")
   const minMatchLengthElement   = document.getElementById("jsbee-min-match-length")
   const maxMatchLengthElement   = document.getElementById("jsbee-max-match-length")
   const clearLettersButton      = document.getElementById("jsbee-clear-letters-button")
-  const allOthersButton         = document.getElementById("jsbee-all-others-button")
-  const exampleButton           = document.getElementById("jsbee-example-button")
   const resetMatchLengthsButton = document.getElementById("jsbee-reset-match-lengths-button")
   const outputShowHideButton    = document.getElementById("jsbee-output-show-hide-button")
   const outputCountElement      = document.getElementById("jsbee-output-count")
   const outputElement           = document.getElementById("jsbee-output")
-  const lightDarkModeElement    = document.getElementById("jsbee-light-dark-mode-toggle")
-  const lightDarkModeLabel      = document.getElementById("jsbee-light-dark-mode-label")
 
   // Dev notes: I've used React before and it's powerful. Sometimes for fun
   // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
@@ -419,18 +415,6 @@
     app.showMatches()
   })
 
-  allOthersButton.addEventListener("click", function(event) {
-    logAt1("ALL-OTHERS BUTTON WAS CLICKED")
-    app.setAllOthers()
-    app.showMatches()
-  })
-
-  exampleButton.addEventListener("click", function(event) {
-    logAt1("EXAMPLE BUTTON WAS CLICKED")
-    app.setExample()
-    app.showMatches()
-  })
-
   resetMatchLengthsButton.addEventListener("click", function(event) {
     logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
     minMatchLengthElement.value =  app.state.defaultMinMatchLength
@@ -463,14 +447,6 @@
     app.showMatches()
   })
 
-  lightDarkModeElement.addEventListener("change", function(e) {
-    if (lightDarkModeElement.checked) {
-      app.setDarkMode()
-    } else {
-      app.setLightMode()
-    }
-  })
-
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
@@ -488,15 +464,49 @@
         "outputHidden": false,
         "localStorageModeKey": document.URL + ":jsbee-dark-mode-enabled",
       }
+
+      this.elements = {
+        "exampleButton":       document.getElementById("jsbee-example-button"),
+        "allOthersButton":     document.getElementById("jsbee-all-others-button"),
+        "lightDarkModeElement":document.getElementById("jsbee-light-dark-mode-toggle"),
+        "lightDarkModeLabel":  document.getElementById("jsbee-light-dark-mode-label"),
+      }
+
+      this.elements.exampleButton.addEventListener("click", function(event) {
+        logAt1("EXAMPLE BUTTON WAS CLICKED")
+        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
+        // Need a way to have the element get a ref to the app.
+        app.setExample()
+        app.showMatches()
+      })
+
+      this.elements.allOthersButton.addEventListener("click", function(event) {
+        logAt1("ALL-OTHERS BUTTON WAS CLICKED")
+        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
+        // Need a way to have the element get a ref to the app.
+        app.setAllOthers()
+        app.showMatches()
+      })
+
+      this.elements.lightDarkModeElement.addEventListener("change", function(e) {
+        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
+        // Need a way to have the element get a ref to the app.
+        if (this.checked) {
+          app.setDarkMode()
+        } else {
+          app.setLightMode()
+        }
+      })
+
     }
 
     restore() {
       if (localStorage.getItem(this.state.localStorageModeKey) == "true") {
         this.setDarkMode()
-        lightDarkModeElement.checked = true
+        this.elements.lightDarkModeElement.checked = true
       } else {
         this.setLightMode()
-        lightDarkModeElement.checked = false
+        this.elements.lightDarkModeElement.checked = false
       }
     }
 
@@ -609,14 +619,14 @@
     setLightMode() {
       document.body.style.color = "black"
       document.body.style.backgroundColor = "white"
-      lightDarkModeLabel.textContent = "Switch to dark mode"
+      this.elements.lightDarkModeLabel.textContent = "Switch to dark mode"
       localStorage.setItem(this.state.localStorageModeKey, "false")
     }
 
     setDarkMode() {
       document.body.style.color = "white"
       document.body.style.backgroundColor = "black"
-      lightDarkModeLabel.textContent = "Switch to light mode"
+      this.elements.lightDarkModeLabel.textContent = "Switch to light mode"
       localStorage.setItem(this.state.localStorageModeKey, "true")
     }
   }
