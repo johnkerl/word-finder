@@ -224,19 +224,10 @@
 
 <div>
   <label class="switch">
-    <input type="checkbox" id="jsbee-light-dark-mode-toggle">
+    <input type="checkbox" id="jsbee-light-mode-dark-mode-toggle">
     <span class="slider round"></span>
   </label>
-  <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
-</div>
-<p/>
-
-<div>
-  <label class="switch">
-    <input type="checkbox" id="jsbee-light-dark-mode-toggle-2">
-    <span class="slider round"></span>
-  </label>
-  <span id="jsbee-light-dark-mode-label-2"> Switch to dark mode 2 </span>
+  <span id="jsbee-light-mode-dark-mode-label"> Bug if you see this </span>
 </div>
 <p/>
 
@@ -260,33 +251,95 @@
   // TODO: move to a separate .js file
 
   class Slider {
-    constructor(sliderElementID, labelElementID, isCheckedLabel, isUncheckedLabel, toCheckedCallback, toUncheckedCallback) {
+    constructor(
+      sliderElementID,
+      labelElementID,
+      isUncheckedLabel,
+      isCheckedLabel,
+      toUncheckedCallback,
+      toCheckedCallback,
+    ) {
+
       // Browser-model element by composition
+      // * Underlying unchecked = slider left = light mode
+      // * Underlying checked   = slider left = dark  mode
       this.underlyingSlider = document.getElementById(sliderElementID)
       this.underlyingLabel  = document.getElementById(labelElementID)
+      // This lets underlying-level callbacks invoke our methods
       this.underlyingSlider.parent = this
-      this.underlyingLabel.parent  = this
 
-      this.isCheckedLabel      = isCheckedLabel
       this.isUncheckedLabel    = isUncheckedLabel
-      this.toCheckedCallback   = toCheckedCallback
+      this.isCheckedLabel      = isCheckedLabel
       this.toUncheckedCallback = toUncheckedCallback
+      this.toCheckedCallback   = toCheckedCallback
 
       this.underlyingSlider.addEventListener("change", function(e) {
         let obj = this.parent // Map from browser-level up to class-level
-
-        if (this.checked) {
-          obj.toUncheckedCallback(e)
-          obj.underlyingLabel.textContent = obj.isUncheckedLabel
+        if (this.checked) { // Here, this is the underlying, and this.checked is the new state
+          obj.toChecked(e)
         } else {
-          obj.toCheckedCallback(e)
-          obj.underlyingLabel.textContent = obj.isCheckedLabel
+          obj.toUnchecked(e)
         }
       })
     }
+
+    // Set the browser-level elements we control
+    toUnchecked(e) {
+      this.toUncheckedCallback(e)
+      this.underlyingLabel.textContent = this.isUncheckedLabel
+      this.underlyingSlider.checked = false
+    }
+    toChecked(e) {
+      this.toCheckedCallback(e)
+      this.underlyingLabel.textContent = this.isCheckedLabel
+      this.underlyingSlider.checked = true
+    }
   }
 
-  class LightDarkModeSlider extends Slider {
+  class PersistentSlider extends Slider {
+    // Uses local storage to remember the state of the slider
+
+    constructor(
+      sliderElementID,
+      labelElementID,
+      isUncheckedLabel,
+      isCheckedLabel,
+      toUncheckedCallback,
+      toCheckedCallback,
+    ) {
+
+      super(
+        sliderElementID,
+        labelElementID,
+        isUncheckedLabel,
+        isCheckedLabel,
+        toUncheckedCallback,
+        toCheckedCallback,
+      )
+
+      this.localStorageKey = document.URL + ":" + sliderElementID + ":checked"
+
+      // Restore previous state upon construction
+      if (localStorage.getItem(this.localStorageKey) == "true") {
+        this.toChecked(null)
+      } else {
+        this.toUnchecked(null)
+      }
+    }
+
+    // Remember last-set state
+    toUnchecked(e) {
+      super.toUnchecked(e)
+      localStorage.setItem(this.localStorageKey, "false")
+    }
+    toChecked(e) {
+      super.toChecked(e)
+      localStorage.setItem(this.localStorageKey, "true")
+    }
+  }
+
+  class LightDarkModeSlider extends PersistentSlider {
+    // Lightly decorates PersistentSlider by adding labels
     constructor(sliderElementID, labelElementID, lightenCallback, darkenCallback) {
       super(
         sliderElementID,
@@ -294,7 +347,8 @@
         "Switch to dark mode",
         "Switch to light mode",
         lightenCallback,
-        darkenCallback)
+        darkenCallback,
+      )
     }
   }
 
@@ -314,7 +368,6 @@
         "wordListURL": null,
         "wordList": null,
         "outputHidden": false,
-        "localStorageModeKey": document.URL + ":jsbee-dark-mode-enabled",
       }
 
       this.setElementsAndCallbacks()
@@ -326,7 +379,6 @@
       this.state.maxMatchLength = this.state.defaultMaxMatchLength
       this.setWordList(this.elements.wordListDropdown.value)
 
-      this.restore()
       this.elements.requiredLettersElement.focus()
 
     }
@@ -351,17 +403,16 @@
         "outputCountElement":      document.getElementById("jsbee-output-count"),
         "outputElement":           document.getElementById("jsbee-output"),
 
-        "lightDarkModeElement":    document.getElementById("jsbee-light-dark-mode-toggle"),
-        "lightDarkModeLabel":      document.getElementById("jsbee-light-dark-mode-label"),
-
-        "lightDarkModeElement2": new LightDarkModeSlider(
-          "jsbee-light-dark-mode-toggle-2",
-          "jsbee-light-dark-mode-label-2",
+        "lightDarkModeElement": new LightDarkModeSlider(
+          "jsbee-light-mode-dark-mode-toggle",
+          "jsbee-light-mode-dark-mode-label",
           () => {
-            document.body.style.backgroundColor = "green"
+            document.body.style.backgroundColor = "white"
+            document.body.style.color = "black"
           },
           () => {
-            document.body.style.backgroundColor = "red"
+            document.body.style.backgroundColor = "black"
+            document.body.style.color = "white"
           },
         )
       }
@@ -494,26 +545,6 @@
         }
       })
 
-      this.elements.lightDarkModeElement.addEventListener("change", function(e) {
-        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
-        // Need a way to have the element get a ref to the app.
-        if (this.checked) {
-          app.setDarkMode()
-        } else {
-          app.setLightMode()
-        }
-      })
-
-    }
-
-    restore() {
-      if (localStorage.getItem(this.state.localStorageModeKey) == "true") {
-        this.setDarkMode()
-        this.elements.lightDarkModeElement.checked = true
-      } else {
-        this.setLightMode()
-        this.elements.lightDarkModeElement.checked = false
-      }
     }
 
     checkWordList() {
@@ -620,20 +651,6 @@
       this.elements.requiredLettersElement.value = "E"
       this.elements.otherLettersElement.value = "XAMPLS"
       this.elements.outputElement.textContent = ""
-    }
-
-    setLightMode() {
-      document.body.style.color = "black"
-      document.body.style.backgroundColor = "white"
-      this.elements.lightDarkModeLabel.textContent = "Switch to dark mode"
-      localStorage.setItem(this.state.localStorageModeKey, "false")
-    }
-
-    setDarkMode() {
-      document.body.style.color = "white"
-      document.body.style.backgroundColor = "black"
-      this.elements.lightDarkModeLabel.textContent = "Switch to light mode"
-      localStorage.setItem(this.state.localStorageModeKey, "true")
     }
 
     // ----------------------------------------------------------------
