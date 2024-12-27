@@ -295,159 +295,6 @@
   }
 
   // ----------------------------------------------------------------
-  // ELEMENTS
-
-  // TODO: in progress of moving to root-app class
-  const requiredLettersElement  = document.getElementById("jsbee-required-letters")
-  const otherLettersElement     = document.getElementById("jsbee-other-letters")
-  const wordListDropdown        = document.getElementById("jsbee-word-list-dropdown")
-  const minMatchLengthElement   = document.getElementById("jsbee-min-match-length")
-  const maxMatchLengthElement   = document.getElementById("jsbee-max-match-length")
-  const clearLettersButton      = document.getElementById("jsbee-clear-letters-button")
-  const resetMatchLengthsButton = document.getElementById("jsbee-reset-match-lengths-button")
-  const outputShowHideButton    = document.getElementById("jsbee-output-show-hide-button")
-  const outputCountElement      = document.getElementById("jsbee-output-count")
-  const outputElement           = document.getElementById("jsbee-output")
-
-  // Dev notes: I've used React before and it's powerful. Sometimes for fun
-  // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
-  // "in the middle".
-  //
-  // That said, JS libraries like React do simplify things. Factors as of this writing:
-  //
-  // * Some initial state (such as visibilities) is spread between HTML and JS init logic.
-  // * The min-match-length and max-match-length buttons, individually, have
-  //   identical logic for when the user types in non-numeric things. This
-  //   could be put into a class.
-  // * The min-match-length and max-match-length buttons, as a pair, have a
-  //   cross-check: the left's value cannot exceed the right's.
-  // * There is some controller/controllee coupling, e.g. which button resets
-  //   which other widgets' values.
-  // * There is duplication of information (and referential-integrity work)
-  //   between the `state` object and widget state.
-  //
-  // Food for thought. This has been a quick holiday project; nothing more.
-
-  // ----------------------------------------------------------------
-  // EVENT LISTENERS
-
-  requiredLettersElement.addEventListener("input", function(event) {
-    logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
-    requiredLettersElement.value = event.target.value.toUpperCase()
-    app.showMatches()
-  })
-
-  otherLettersElement.addEventListener("input", function(event) {
-    logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
-    otherLettersElement.value = event.target.value.toUpperCase()
-    app.showMatches()
-  })
-
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
-  minMatchLengthElement.addEventListener("change", function(event) {
-    let self  = minMatchLengthElement
-    logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
-
-    // The up-and-down sliders won't let the user choose outside the widget's min/max.
-    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
-    if (!isInteger(event.target.value)) {
-      self.value = self.defaultValue
-      app.state.minMatchLength = self.value
-      app.showMatches()
-      return;
-    }
-    let requestedValue = Number(event.target.value)
-
-    // Check self-bounds
-    if (requestedValue < self.min) {
-      app.state.minMatchLength = self.min
-      self.value = self.min
-    } else if (requestedValue > self.max) {
-      app.state.minMatchLength = self.max
-      self.value = self.max
-
-    // Check other-bounds
-    } else if (requestedValue > app.state.maxMatchLength) {
-      self.value = app.state.maxMatchLength
-
-    } else {
-      app.state.minMatchLength = requestedValue
-    }
-    app.showMatches()
-  })
-
-  maxMatchLengthElement.addEventListener("change", function(event) {
-    let self  = maxMatchLengthElement
-    logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
-
-    // The up-and-down sliders won't let the user choose outside the widget's min/max.
-    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
-    if (!isInteger(event.target.value)) {
-      self.value = self.defaultValue
-      app.state.maxMatchLength = self.value
-      app.showMatches()
-      return;
-    }
-    let requestedValue = Number(event.target.value)
-
-    // Check self-bounds
-    if (requestedValue < self.min) {
-      app.state.maxMatchLength = self.min
-      self.value = self.min
-    } else if (requestedValue > self.max) {
-      app.state.maxMatchLength = self.max
-      self.value = self.max
-
-    // Check other-bounds
-    } else if (requestedValue < app.state.minMatchLength) {
-      self.value = app.state.minMatchLength
-
-    } else {
-      app.state.maxMatchLength = requestedValue
-    }
-    app.showMatches()
-  })
-
-  clearLettersButton.addEventListener("click", function(event) {
-    logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
-    requiredLettersElement.value = ""
-    otherLettersElement.value = ""
-    app.showMatches()
-  })
-
-  resetMatchLengthsButton.addEventListener("click", function(event) {
-    logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-    minMatchLengthElement.value =  app.state.defaultMinMatchLength
-    maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
-    app.state.minMatchLength = app.state.defaultMinMatchLength
-    app.state.maxMatchLength = app.state.defaultMaxMatchLength
-    app.showMatches()
-  })
-
-  outputShowHideButton.addEventListener("click", function(event) {
-    let self = outputShowHideButton
-    logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
-    if (app.state.outputHidden) {
-      app.state.outputHidden = false
-      self.textContent = "Hide results"
-      outputCountElement.style.display = "none"
-      outputElement.style.display = "block"
-    } else {
-      app.state.outputHidden = true
-      self.textContent = "Show results"
-      outputCountElement.style.display = "block"
-      outputElement.style.display = "none"
-    }
-  })
-
-  wordListDropdown.addEventListener("change", function() {
-    let url = wordListDropdown.value
-    logAt1("SELECTED WORD LIST: <<", url, ">>")
-    app.setWordList(url)
-    app.showMatches()
-  })
-
-  // ----------------------------------------------------------------
   // APPLICATION STATE
 
   class JSBeeApp {
@@ -457,8 +304,8 @@
         "logLevel": 0, // 0,1,2,3
         "defaultMinMatchLength": 4,
         "defaultMaxMatchLength": 16,
-        "minMatchLength": Number(minMatchLengthElement.value),
-        "maxMatchLength": Number(maxMatchLengthElement.value),
+        "minMatchLength": 4, // TODO Number(minMatchLengthElement.value),
+        "maxMatchLength": 16, // TODO Number(maxMatchLengthElement.value),
         "wordListURL": null,
         "wordList": null,
         "outputHidden": false,
@@ -466,11 +313,109 @@
       }
 
       this.elements = {
-        "exampleButton":       document.getElementById("jsbee-example-button"),
-        "allOthersButton":     document.getElementById("jsbee-all-others-button"),
-        "lightDarkModeElement":document.getElementById("jsbee-light-dark-mode-toggle"),
-        "lightDarkModeLabel":  document.getElementById("jsbee-light-dark-mode-label"),
+
+        "requiredLettersElement":  document.getElementById("jsbee-required-letters"),
+        "otherLettersElement":     document.getElementById("jsbee-other-letters"),
+
+        "wordListDropdown":        document.getElementById("jsbee-word-list-dropdown"),
+
+        "minMatchLengthElement":   document.getElementById("jsbee-min-match-length"),
+        "maxMatchLengthElement":   document.getElementById("jsbee-max-match-length"),
+
+        "clearLettersButton":      document.getElementById("jsbee-clear-letters-button"),
+        "exampleButton":           document.getElementById("jsbee-example-button"),
+        "allOthersButton":         document.getElementById("jsbee-all-others-button"),
+        "resetMatchLengthsButton": document.getElementById("jsbee-reset-match-lengths-button"),
+
+        "outputShowHideButton":    document.getElementById("jsbee-output-show-hide-button"),
+        "outputCountElement":      document.getElementById("jsbee-output-count"),
+        "outputElement":           document.getElementById("jsbee-output"),
+
+        "lightDarkModeElement":    document.getElementById("jsbee-light-dark-mode-toggle"),
+        "lightDarkModeLabel":      document.getElementById("jsbee-light-dark-mode-label"),
       }
+
+
+      this.elements.requiredLettersElement.addEventListener("input", function(event) {
+        logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+        this.value = event.target.value.toUpperCase()
+        app.showMatches()
+      })
+
+      this.elements.otherLettersElement.addEventListener("input", function(event) {
+        logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+        this.value = event.target.value.toUpperCase()
+        app.showMatches()
+      })
+
+      this.elements.wordListDropdown.addEventListener("change", function() {
+        let url = this.value
+        logAt1("SELECTED WORD LIST: <<", url, ">>")
+        app.setWordList(url)
+        app.showMatches()
+      })
+
+      this.elements.minMatchLengthElement.addEventListener("change", function(event) {
+        logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
+
+        // The up-and-down sliders won't let the user choose outside the widget's min/max.
+        // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+        if (!isInteger(event.target.value)) {
+          this.value = this.defaultValue
+          app.state.minMatchLength = this.value
+          app.showMatches()
+          return;
+        }
+        let requestedValue = Number(event.target.value)
+
+        // Check self-bounds
+        if (requestedValue < this.min) {
+          app.state.minMatchLength = this.min
+          this.value = this.min
+        } else if (requestedValue > this.max) {
+          app.state.minMatchLength = this.max
+          this.value = this.max
+
+        // Check other-bounds
+        } else if (requestedValue > app.state.maxMatchLength) {
+          this.value = app.state.maxMatchLength
+
+        } else {
+          app.state.minMatchLength = requestedValue
+        }
+        app.showMatches()
+      })
+
+      this.elements.maxMatchLengthElement.addEventListener("change", function(event) {
+        logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
+
+        // The up-and-down sliders won't let the user choose outside the widget's min/max.
+        // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+        if (!isInteger(event.target.value)) {
+          this.value = this.defaultValue
+          app.state.maxMatchLength = this.value
+          app.showMatches()
+          return;
+        }
+        let requestedValue = Number(event.target.value)
+
+        // Check self-bounds
+        if (requestedValue < this.min) {
+          app.state.maxMatchLength = this.min
+          this.value = this.min
+        } else if (requestedValue > this.max) {
+          app.state.maxMatchLength = this.max
+          this.value = this.max
+
+        // Check other-bounds
+        } else if (requestedValue < app.state.minMatchLength) {
+          this.value = app.state.minMatchLength
+
+        } else {
+          app.state.maxMatchLength = requestedValue
+        }
+        app.showMatches()
+      })
 
       this.elements.exampleButton.addEventListener("click", function(event) {
         logAt1("EXAMPLE BUTTON WAS CLICKED")
@@ -498,6 +443,37 @@
         }
       })
 
+      this.elements.clearLettersButton.addEventListener("click", function(event) {
+        logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
+        app.elements.requiredLettersElement.value = ""
+        app.elements.otherLettersElement.value = ""
+        app.showMatches()
+      })
+    
+      this.elements.resetMatchLengthsButton.addEventListener("click", function(event) {
+        logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+        minMatchLengthElement.value =  app.state.defaultMinMatchLength
+        maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
+        app.state.minMatchLength = app.state.defaultMinMatchLength
+        app.state.maxMatchLength = app.state.defaultMaxMatchLength
+        app.showMatches()
+      })
+    
+      this.elements.outputShowHideButton.addEventListener("click", function(event) {
+        logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
+        if (app.state.outputHidden) {
+          app.state.outputHidden = false
+          this.textContent = "Hide results"
+          app.elements.outputCountElement.style.display = "none"
+          app.elements.outputElement.style.display = "block"
+        } else {
+          app.state.outputHidden = true
+          this.textContent = "Show results"
+          app.elements.outputCountElement.style.display = "block"
+          app.elements.outputElement.style.display = "none"
+        }
+      })
+
     }
 
     restore() {
@@ -512,11 +488,11 @@
 
     checkWordList() {
       if (this.state.wordListURL == null) {
-        outputElement.textContent = "No word list set"
+        this.elements.outputElement.textContent = "No word list set"
         return false
       }
       if (this.state.wordList == null) {
-        outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
+        this.elements.outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
         return false
       }
       return true
@@ -537,22 +513,22 @@
         return
       }
 
-      let requiredLetters = requiredLettersElement.value
-      let otherLetters = otherLettersElement.value
+      let requiredLetters = this.elements.requiredLettersElement.value
+      let otherLetters = this.elements.otherLettersElement.value
 
       let matches = this.getMatchesFromWordList(requiredLetters, otherLetters)
       matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       logAt2(matches)
 
-      outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
+      this.elements.outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
 
       if (requiredLetters.length == 0 && otherLetters.length == 0) {
-        outputElement.textContent = ""
+        this.elements.outputElement.textContent = ""
       } else if (matches.length == 0) {
-        outputElement.textContent = "(No matches)"
+        this.elements.outputElement.textContent = "(No matches)"
       } else {
-        outputElement.textContent = matches.join(" ")
+        this.elements.outputElement.textContent = matches.join(" ")
       }
     }
 
@@ -605,15 +581,15 @@
     }
 
     setAllOthers() {
-      requiredLettersElement.value = ""
-      otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      outputElement.textContent = ""
+      this.elements.requiredLettersElement.value = ""
+      this.elements.otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      this.elements.outputElement.textContent = ""
     }
 
     setExample() {
-      requiredLettersElement.value = "E"
-      otherLettersElement.value = "XAMPLS"
-      outputElement.textContent = ""
+      this.elements.requiredLettersElement.value = "E"
+      this.elements.otherLettersElement.value = "XAMPLS"
+      this.elements.outputElement.textContent = ""
     }
 
     setLightMode() {
@@ -634,16 +610,16 @@
   // ----------------------------------------------------------------
   const app = new JSBeeApp()
 
-  minMatchLengthElement.value = app.state.defaultMinMatchLength
-  maxMatchLengthElement.value = app.state.defaultMaxMatchLength
+  app.elements.minMatchLengthElement.value = app.state.defaultMinMatchLength
+  app.elements.maxMatchLengthElement.value = app.state.defaultMaxMatchLength
 
   app.state.minMatchLength = app.state.defaultMinMatchLength
   app.state.maxMatchLength = app.state.defaultMaxMatchLength
-  app.setWordList(wordListDropdown.value)
+  app.setWordList(app.elements.wordListDropdown.value)
 
+  // TODO: move to constructor
   app.restore()
-
-  requiredLettersElement.focus()
+  app.elements.requiredLettersElement.focus()
 
 </script>
 <!-- ================================================================ -->
