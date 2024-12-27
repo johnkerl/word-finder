@@ -247,20 +247,36 @@
   // APPLICATION STATE
 
   class JSBeeApp {
-    // TODO: DOM root?
+
     constructor() {
+
       this.state = {
         "logLevel": 0, // 0,1,2,3
         "defaultMinMatchLength": 4,
         "defaultMaxMatchLength": 16,
-        "minMatchLength": 4, // TODO Number(minMatchLengthElement.value),
-        "maxMatchLength": 16, // TODO Number(maxMatchLengthElement.value),
+        "minMatchLength": 4,
+        "maxMatchLength": 16,
         "wordListURL": null,
         "wordList": null,
         "outputHidden": false,
         "localStorageModeKey": document.URL + ":jsbee-dark-mode-enabled",
       }
 
+      this.setElementsAndCallbacks()
+
+      this.elements.minMatchLengthElement.value = this.state.defaultMinMatchLength
+      this.elements.maxMatchLengthElement.value = this.state.defaultMaxMatchLength
+
+      this.state.minMatchLength = this.state.defaultMinMatchLength
+      this.state.maxMatchLength = this.state.defaultMaxMatchLength
+      this.setWordList(this.elements.wordListDropdown.value)
+
+      this.restore()
+      this.elements.requiredLettersElement.focus()
+
+    }
+
+    setElementsAndCallbacks() {
       this.elements = {
 
         "requiredLettersElement":  document.getElementById("jsbee-required-letters"),
@@ -283,7 +299,6 @@
         "lightDarkModeElement":    document.getElementById("jsbee-light-dark-mode-toggle"),
         "lightDarkModeLabel":      document.getElementById("jsbee-light-dark-mode-label"),
       }
-
 
       this.elements.requiredLettersElement.addEventListener("input", function(event) {
         app.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
@@ -401,8 +416,8 @@
     
       this.elements.resetMatchLengthsButton.addEventListener("click", function(event) {
         app.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-        minMatchLengthElement.value =  app.state.defaultMinMatchLength
-        maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
+        app.elements.minMatchLengthElement.value =  app.state.defaultMinMatchLength
+        app.elements.maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
         app.state.minMatchLength = app.state.defaultMinMatchLength
         app.state.maxMatchLength = app.state.defaultMaxMatchLength
         app.showMatches()
@@ -422,16 +437,6 @@
           app.elements.outputElement.style.display = "none"
         }
       })
-
-      this.elements.minMatchLengthElement.value = this.state.defaultMinMatchLength
-      this.elements.maxMatchLengthElement.value = this.state.defaultMaxMatchLength
-
-      this.state.minMatchLength = this.state.defaultMinMatchLength
-      this.state.maxMatchLength = this.state.defaultMaxMatchLength
-      this.setWordList(this.elements.wordListDropdown.value)
-
-      this.restore()
-      this.elements.requiredLettersElement.focus()
 
     }
 
