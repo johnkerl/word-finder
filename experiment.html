@@ -293,129 +293,6 @@
   }
 
   // ----------------------------------------------------------------
-  // APPLICATION LOGIC
-
-  function setWordList(url) {
-    logAt0("FETCHING WORD LIST FROM URL:", url)
-    app.state.wordListURL = url
-    fetch(url).then((response) => response.text().then((text) => {
-      app.state.wordList = text.split("\n")
-      // Must be called from this callback, since this is async
-      showMatches(app)
-    }))
-  }
-
-  function checkWordList() {
-    if (app.state.wordListURL == null) {
-      outputElement.textContent = "No word list set"
-      return false
-    }
-    if (app.state.wordList == null) {
-      outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
-      return false
-    }
-    return true
-  }
-
-  function showMatches(app) {
-    if (!checkWordList(app.state)) {
-      return
-    }
-
-    let requiredLetters = requiredLettersElement.value
-    let otherLetters = otherLettersElement.value
-
-    let matches = getMatchesFromWordList(requiredLetters, otherLetters)
-    matches = matches.map(match => match.toUpperCase())
-    matches = matches.sort()
-    logAt2(matches)
-
-    outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
-
-    if (requiredLetters.length == 0 && otherLetters.length == 0) {
-      outputElement.textContent = ""
-    } else if (matches.length == 0) {
-      outputElement.textContent = "(No matches)"
-    } else {
-      outputElement.textContent = matches.join(" ")
-    }
-  }
-
-  function getMatchesFromWordList(requiredLetters, optionalLetters) {
-    logAt1("MATCHER ENTER")
-    logAt1("requiredLetters ", requiredLetters)
-    logAt1("optionalLetters", optionalLetters)
-    logAt1("wordList.length", app.state.wordList.length)
-    logAt3("wordList", app.state.wordList)
-
-    requiredLetters = requiredLetters.toLowerCase()
-    optionalLetters = optionalLetters.toLowerCase()
-    let matches = []
-    app.state.wordList.forEach((word) => {
-      logAt3("WORD <<", word, ">>")
-      if (wordMatches(requiredLetters, optionalLetters, word)) {
-        logAt2("MATCH", word)
-        matches.push(word)
-      }
-    })
-    return matches
-  }
-
-  function wordMatches(requiredLetters, optionalLetters, word) {
-    let allLetters = requiredLetters + optionalLetters
-    if (app.state.minMatchLength != null && word.length < app.state.minMatchLength) {
-      logAt3("-- match out 1: word", word, "with length", word.length, "less than min", app.state.minMatchLength)
-      return false
-    }
-    if (app.state.maxMatchLength != null && word.length > app.state.maxMatchLength) {
-      logAt3("-- match out 2: word", word, "with length", word.length, "more than max", app.state.maxMatchLength)
-      return false
-    }
-    for (let i = 0; i < requiredLetters.length; i++) {
-      let requiredLetter = requiredLetters[i]
-      if (word.indexOf(requiredLetter) < 0) {
-        logAt3("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
-        return false
-      }
-    }
-    for (let i = 0; i < word.length; i++) {
-      let letter = word[i]
-      if (allLetters.indexOf(letter) < 0) {
-        logAt3("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
-        return false
-      }
-    }
-    logAt2("-- match:", word)
-    return true
-  }
-
-  function setAllOthers() {
-    requiredLettersElement.value = ""
-    otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    outputElement.textContent = ""
-  }
-
-  function setExample() {
-    requiredLettersElement.value = "E"
-    otherLettersElement.value = "XAMPLS"
-    outputElement.textContent = ""
-  }
-
-  function setLightMode() {
-    document.body.style.color = "black"
-    document.body.style.backgroundColor = "white"
-    lightDarkModeLabel.textContent = "Switch to dark mode"
-    localStorage.setItem("jsbee-dark-mode-enabled", "false")
-  }
-
-  function setDarkMode() {
-    document.body.style.color = "white"
-    document.body.style.backgroundColor = "black"
-    lightDarkModeLabel.textContent = "Switch to light mode"
-    localStorage.setItem("jsbee-dark-mode-enabled", "true")
-  }
-
-  // ----------------------------------------------------------------
   // ELEMENTS
 
   const requiredLettersElement  = document.getElementById("jsbee-required-letters")
@@ -458,13 +335,13 @@
   requiredLettersElement.addEventListener("input", function(event) {
     logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
     requiredLettersElement.value = event.target.value.toUpperCase()
-    showMatches(app)
+    app.showMatches()
   })
 
   otherLettersElement.addEventListener("input", function(event) {
     logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
     otherLettersElement.value = event.target.value.toUpperCase()
-    showMatches(app)
+    app.showMatches()
   })
 
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
@@ -477,7 +354,7 @@
     if (!isInteger(event.target.value)) {
       self.value = self.defaultValue
       app.state.minMatchLength = self.value
-      showMatches(app)
+      app.showMatches()
       return;
     }
     let requestedValue = Number(event.target.value)
@@ -497,7 +374,7 @@
     } else {
       app.state.minMatchLength = requestedValue
     }
-    showMatches(app)
+    app.showMatches()
   })
 
   maxMatchLengthElement.addEventListener("change", function(event) {
@@ -509,7 +386,7 @@
     if (!isInteger(event.target.value)) {
       self.value = self.defaultValue
       app.state.maxMatchLength = self.value
-      showMatches(app)
+      app.showMatches()
       return;
     }
     let requestedValue = Number(event.target.value)
@@ -529,26 +406,26 @@
     } else {
       app.state.maxMatchLength = requestedValue
     }
-    showMatches(app)
+    app.showMatches()
   })
 
   clearLettersButton.addEventListener("click", function(event) {
     logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
     requiredLettersElement.value = ""
     otherLettersElement.value = ""
-    showMatches(app)
+    app.showMatches()
   })
 
   allOthersButton.addEventListener("click", function(event) {
     logAt1("ALL-OTHERS BUTTON WAS CLICKED")
-    setAllOthers()
-    showMatches(app)
+    app.setAllOthers()
+    app.showMatches()
   })
 
   exampleButton.addEventListener("click", function(event) {
     logAt1("EXAMPLE BUTTON WAS CLICKED")
-    setExample()
-    showMatches(app)
+    app.setExample()
+    app.showMatches()
   })
 
   resetMatchLengthsButton.addEventListener("click", function(event) {
@@ -557,7 +434,7 @@
     maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
     app.state.minMatchLength = app.state.defaultMinMatchLength
     app.state.maxMatchLength = app.state.defaultMaxMatchLength
-    showMatches(app)
+    app.showMatches()
   })
 
   outputShowHideButton.addEventListener("click", function(event) {
@@ -579,15 +456,15 @@
   wordListDropdown.addEventListener("change", function() {
     let url = wordListDropdown.value
     logAt1("SELECTED WORD LIST: <<", url, ">>")
-    setWordList(url)
-    showMatches(app)
+    app.setWordList(url)
+    app.showMatches()
   })
 
   lightDarkModeElement.addEventListener("change", function(e) {
     if (lightDarkModeElement.checked) {
-      setDarkMode()
+      app.setDarkMode()
     } else {
-      setLightMode()
+      app.setLightMode()
     }
   })
 
@@ -598,7 +475,7 @@
     // TODO: DOM root?
     constructor() {
       this.state = {
-        "logLevel": 1, // 0,1,2,3
+        "logLevel": 0, // 0,1,2,3
         "defaultMinMatchLength": 4,
         "defaultMaxMatchLength": 16,
         "minMatchLength": Number(minMatchLengthElement.value),
@@ -608,22 +485,150 @@
         "outputHidden": false,
       }
     }
+
+    setUp() {
+      if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
+        this.setDarkMode()
+        lightDarkModeElement.checked = true
+      } else {
+        this.setLightMode()
+        lightDarkModeElement.checked = false
+      }
+    }
+
+    checkWordList() {
+      if (this.state.wordListURL == null) {
+        outputElement.textContent = "No word list set"
+        return false
+      }
+      if (this.state.wordList == null) {
+        outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
+        return false
+      }
+      return true
+    }
+
+    setWordList(url) {
+      logAt0("FETCHING WORD LIST FROM URL:", url)
+      this.state.wordListURL = url
+      fetch(url).then((response) => response.text().then((text) => {
+        this.state.wordList = text.split("\n")
+        // Must be called from this callback, since this is async
+        this.showMatches()
+      }))
+    }
+
+    showMatches() {
+      if (!this.checkWordList()) {
+        return
+      }
+
+      let requiredLetters = requiredLettersElement.value
+      let otherLetters = otherLettersElement.value
+
+      let matches = this.getMatchesFromWordList(requiredLetters, otherLetters)
+      matches = matches.map(match => match.toUpperCase())
+      matches = matches.sort()
+      logAt2(matches)
+
+      outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
+
+      if (requiredLetters.length == 0 && otherLetters.length == 0) {
+        outputElement.textContent = ""
+      } else if (matches.length == 0) {
+        outputElement.textContent = "(No matches)"
+      } else {
+        outputElement.textContent = matches.join(" ")
+      }
+    }
+
+    getMatchesFromWordList(requiredLetters, optionalLetters) {
+      logAt1("MATCHER ENTER")
+      logAt1("requiredLetters ", requiredLetters)
+      logAt1("optionalLetters", optionalLetters)
+      logAt1("wordList.length", this.state.wordList.length)
+      logAt3("wordList", this.state.wordList)
+
+      requiredLetters = requiredLetters.toLowerCase()
+      optionalLetters = optionalLetters.toLowerCase()
+      let matches = []
+      this.state.wordList.forEach((word) => {
+        logAt3("WORD <<", word, ">>")
+        if (this.wordMatches(requiredLetters, optionalLetters, word)) {
+          logAt2("MATCH", word)
+          matches.push(word)
+        }
+      })
+      return matches
+    }
+
+    wordMatches(requiredLetters, optionalLetters, word) {
+      let allLetters = requiredLetters + optionalLetters
+      if (this.state.minMatchLength != null && word.length < this.state.minMatchLength) {
+        logAt3("-- match out 1: word", word, "with length", word.length, "less than min", this.state.minMatchLength)
+        return false
+      }
+      if (this.state.maxMatchLength != null && word.length > this.state.maxMatchLength) {
+        logAt3("-- match out 2: word", word, "with length", word.length, "more than max", this.state.maxMatchLength)
+        return false
+      }
+      for (let i = 0; i < requiredLetters.length; i++) {
+        let requiredLetter = requiredLetters[i]
+        if (word.indexOf(requiredLetter) < 0) {
+          logAt3("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
+          return false
+        }
+      }
+      for (let i = 0; i < word.length; i++) {
+        let letter = word[i]
+        if (allLetters.indexOf(letter) < 0) {
+          logAt3("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
+          return false
+        }
+      }
+      logAt2("-- match:", word)
+      return true
+    }
+
+    setAllOthers() {
+      requiredLettersElement.value = ""
+      otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      outputElement.textContent = ""
+    }
+
+    setExample() {
+      requiredLettersElement.value = "E"
+      otherLettersElement.value = "XAMPLS"
+      outputElement.textContent = ""
+    }
+
+    setLightMode() {
+      document.body.style.color = "black"
+      document.body.style.backgroundColor = "white"
+      lightDarkModeLabel.textContent = "Switch to dark mode"
+      localStorage.setItem("jsbee-dark-mode-enabled", "false")
+    }
+
+    setDarkMode() {
+      document.body.style.color = "white"
+      document.body.style.backgroundColor = "black"
+      lightDarkModeLabel.textContent = "Switch to light mode"
+      localStorage.setItem("jsbee-dark-mode-enabled", "true")
+    }
   }
 
+  // ----------------------------------------------------------------
   const app = new JSBeeApp()
 
   minMatchLengthElement.value = app.state.defaultMinMatchLength
   maxMatchLengthElement.value = app.state.defaultMaxMatchLength
+
   app.state.minMatchLength = app.state.defaultMinMatchLength
   app.state.maxMatchLength = app.state.defaultMaxMatchLength
-  setWordList(wordListDropdown.value)
-  if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
-    setDarkMode()
-    lightDarkModeElement.checked = true
-  } else {
-    setLightMode()
-    lightDarkModeElement.checked = false
-  }
+  app.setWordList(wordListDropdown.value)
+
+  app.setUp()
+
   requiredLettersElement.focus()
 
 </script>
