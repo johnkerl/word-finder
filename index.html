@@ -93,6 +93,58 @@
     color: black;
   }
 
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 17px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
 </style>
 
 </head>
@@ -183,9 +235,18 @@
 <!-- ================================================================ -->
 <hr/>
 
-<p>
+<div>
 Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
-</p>
+</div>
+<p/>
+
+<div>
+  <label class="switch">
+    <input type="checkbox" id="jsbee-light-dark-mode-toggle">
+    <span class="slider round"></span>
+  </label>
+    <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
+</div>
 
 <!-- ================================================================ -->
 <script>
@@ -332,6 +393,20 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     outputElement.textContent = ""
   }
 
+  function setLightMode() {
+    document.body.style.color = "black"
+    document.body.style.backgroundColor = "white"
+    lightDarkModeLabel.textContent = "Switch to dark mode"
+    localStorage.setItem("jsbee-dark-mode-enabled", "false")
+  }
+
+  function setDarkMode() {
+    document.body.style.color = "white"
+    document.body.style.backgroundColor = "black"
+    lightDarkModeLabel.textContent = "Switch to light mode"
+    localStorage.setItem("jsbee-dark-mode-enabled", "true")
+  }
+
   // ----------------------------------------------------------------
   // ELEMENTS
 
@@ -347,6 +422,8 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const outputShowHideButton    = document.getElementById("jsbee-output-show-hide-button")
   const outputCountElement      = document.getElementById("jsbee-output-count")
   const outputElement           = document.getElementById("jsbee-output")
+  const lightDarkModeElement    = document.getElementById("jsbee-light-dark-mode-toggle")
+  const lightDarkModeLabel      = document.getElementById("jsbee-light-dark-mode-label")
 
   // Dev notes: I've used React before and it's powerful. Sometimes for fun
   // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
@@ -498,6 +575,14 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     showMatches(state)
   })
 
+  lightDarkModeElement.addEventListener("change", function(e) {
+    if (lightDarkModeElement.checked) {
+      setDarkMode()
+    } else {
+      setLightMode()
+    }
+  })
+
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
@@ -517,6 +602,13 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   state.minMatchLength = state.defaultMinMatchLength
   state.maxMatchLength = state.defaultMaxMatchLength
   setWordList(state, wordListDropdown.value)
+  if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
+    setDarkMode()
+    lightDarkModeElement.checked = true
+  } else {
+    setLightMode()
+    lightDarkModeElement.checked = false
+  }
   requiredLettersElement.focus()
 
 </script>
