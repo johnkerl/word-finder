@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+<meta name="description" content="jsbee" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- mobile-friendly -->
+<title>jsbee</title>
+
+<style>
+  a:link {
+    color: maroon;
+  }
+  a:visited {
+    color: maroon;
+  }
+  a:active {
+    color: maroon;
+  }
+
+  button {
+    font-weight: bold;
+    color: maroon;
+    border: 0;
+    padding: 4px;
+    border-radius: 4px;
+    margin: 4px;
+  }
+
+  button:hover {
+    font-weight: bold;
+    background-color: #d8d8d8;
+    border: 0;
+    padding: 4px;
+    border-radius: 4px;
+    margin: 4px;
+  }
+
+  button:active {
+    font-weight: bold;
+    background-color: #c0c0c0;
+    border: 0;
+    padding: 4px;
+    border-radius: 4px;
+    margin: 4px;
+  }
+
+  .boxed-text {
+    border: 1px solid black;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .center {
+    text-align: center;
+  }
+  .maroon {
+    color: maroon;
+  }
+  .boldmaroon {
+    font-weight: bold;
+    color: maroon;
+  }
+
+  body {
+    color: black;
+    background-color: white;
+    font-family: Verdana, sans-serif;
+    font-size: 150%;
+    letter-spacing: 0.25px;
+    line-height: 125%;
+  }
+  h1 {
+    font-weight: bold;
+    color: maroon;
+    font-size: 110%;
+    text-align: center;
+    margin: 40px;
+  }
+  h2 {
+    font-weight: bold;
+    color: maroon;
+    font-size: 105%
+  }
+  h3 {
+    font-weight: bold;
+    color: maroon;
+    font-size: 100%
+  }
+  input {
+    font-weight: bold;
+    color: black;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 17px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+</style>
+
+</head>
+
+<!-- ================================================================ -->
+<body>
+
+<h1><span class="boxed-text">jsbee</span></h1>
+
+<table>
+<tr>
+  <td>
+    <button class="maroon" id="jsbee-clear-letters-button"> Clear </button>
+  </td>
+  <td>
+    <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="jsbee-required-letters"></input>
+  </td>
+  <td>
+    Required letter(s)
+  </td>
+</tr>
+<tr>
+  <td>
+    <button class="maroon" id="jsbee-example-button"> Example </button>
+  </td>
+  <td>
+    <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input>
+  </td>
+  <td>
+    Other letter(s)
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <button class="maroon" id="jsbee-all-others-button">A-Z</button>
+  </td>
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    &nbsp;
+  </td>
+</tr>
+
+<tr>
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    <select tabindex=3 id="jsbee-word-list-dropdown">
+      <option value="./usual-suspects.txt">Usual suspects</option>
+      <option value="./long-list.txt">Long list</option>
+    </select>
+  </td>
+  <td>
+    Word list
+  </td>
+</tr>
+<tr>
+  <td>
+    <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button>
+  </td>
+  <td>
+    <span>
+      <input tabindex=4 type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
+      <input tabindex=5 type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
+    </span>
+  </td>
+  <td>
+    <label for="jsbee-min-match-length">Minimum and maximum word lengths</label>
+  </td>
+</tr>
+
+</table>
+
+<p/>
+<div>
+  <button class="maroon" id="jsbee-output-show-hide-button"> Hide results </button>
+</div>
+<div>
+  <span id="jsbee-output-count" style="display:none"> </span>
+</div>
+<div>
+  <span id="jsbee-output" style="display:block"> </span>
+</div>
+
+<!-- ================================================================ -->
+<hr/>
+
+<div>
+Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
+</div>
+<p/>
+
+<div>
+  <label class="switch">
+    <input type="checkbox" id="jsbee-light-dark-mode-toggle">
+    <span class="slider round"></span>
+  </label>
+    <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
+</div>
+
+<!-- ================================================================ -->
+<script>
+
+  // ----------------------------------------------------------------
+  // LOGGING
+
+  function logAt0(...args) {
+    logAt(0, ...args)
+  }
+
+  function logAt1(...args) {
+    logAt(1, ...args)
+  }
+
+  function logAt2(...args) {
+    logAt(2, ...args)
+  }
+
+  function logAt3(...args) {
+    logAt(3, ...args)
+  }
+
+  function logAt(level, ...args) {
+    if (state.logLevel >= level) {
+      console.log(...args)
+    }
+  }
+
+  // ----------------------------------------------------------------
+  // UTILITIES
+
+  function isInteger(text) {
+    // TODO: this accepts '3.4' and should not
+    return !isNaN(parseInt(text))
+  }
+
+  // ----------------------------------------------------------------
+  // APPLICATION LOGIC
+
+  function setWordList(state, url) {
+    logAt0("FETCHING WORD LIST FROM URL:", url)
+    state.wordListURL = url
+    fetch(url).then((response) => response.text().then((text) => {
+      state.wordList = text.split("\n")
+      // Must be called from this callback, since this is async
+      showMatches(state)
+    }))
+  }
+
+  function checkWordList(state) {
+    if (state.wordListURL == null) {
+      outputElement.textContent = "No word list set"
+      return false
+    }
+    if (state.wordList == null) {
+      outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
+      return false
+    }
+    return true
+  }
+
+  function showMatches(state) {
+    if (!checkWordList(state)) {
+      return
+    }
+
+    requiredLetters = requiredLettersElement.value
+    otherLetters = otherLettersElement.value
+
+    matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
+    matches = matches.map(match => match.toUpperCase())
+    matches = matches.sort()
+    logAt2(matches)
+
+    outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
+
+    if (requiredLetters.length == 0 && otherLetters.length == 0) {
+      outputElement.textContent = ""
+    } else if (matches.length == 0) {
+      outputElement.textContent = "(No matches)"
+    } else {
+      outputElement.textContent = matches.join(" ")
+    }
+  }
+
+  function getMatchesFromWordList(state, requiredLetters, optionalLetters) {
+    logAt1("MATCHER ENTER")
+    logAt1("requiredLetters ", requiredLetters)
+    logAt1("optionalLetters", optionalLetters)
+    logAt1("wordList.length", state.wordList.length)
+    logAt3("wordList", state.wordList)
+
+    requiredLetters = requiredLetters.toLowerCase()
+    optionalLetters = optionalLetters.toLowerCase()
+    matches = []
+    state.wordList.forEach((word) => {
+      logAt3("WORD <<", word, ">>")
+      if (wordMatches(state, requiredLetters, optionalLetters, word)) {
+        logAt2("MATCH", word)
+        matches.push(word)
+      }
+    })
+    return matches
+  }
+
+  function wordMatches(state, requiredLetters, optionalLetters, word) {
+    let allLetters = requiredLetters + optionalLetters
+    if (state.minMatchLength != null && word.length < state.minMatchLength) {
+      logAt3("-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
+      return false
+    }
+    if (state.maxMatchLength != null && word.length > state.maxMatchLength) {
+      logAt3("-- match out 2: word", word, "with length", word.length, "more than max", state.maxMatchLength)
+      return false
+    }
+    for (let i = 0; i < requiredLetters.length; i++) {
+      requiredLetter = requiredLetters[i]
+      if (word.indexOf(requiredLetter) < 0) {
+        logAt3("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
+        return false
+      }
+    }
+    for (let i = 0; i < word.length; i++) {
+      let letter = word[i]
+      if (allLetters.indexOf(letter) < 0) {
+        logAt3("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
+        return false
+      }
+    }
+    logAt2("-- match:", word)
+    return true
+  }
+
+  function setAllOthers() {
+    requiredLettersElement.value = ""
+    otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    outputElement.textContent = ""
+  }
+
+  function setExample() {
+    requiredLettersElement.value = "E"
+    otherLettersElement.value = "XAMPLS"
+    outputElement.textContent = ""
+  }
+
+  function setLightMode() {
+    document.body.style.color = "black"
+    document.body.style.backgroundColor = "white"
+    lightDarkModeLabel.textContent = "Switch to dark mode"
+    localStorage.setItem("jsbee-dark-mode-enabled", "false")
+  }
+
+  function setDarkMode() {
+    document.body.style.color = "white"
+    document.body.style.backgroundColor = "black"
+    lightDarkModeLabel.textContent = "Switch to light mode"
+    localStorage.setItem("jsbee-dark-mode-enabled", "true")
+  }
+
+  // ----------------------------------------------------------------
+  // ELEMENTS
+
+  const requiredLettersElement  = document.getElementById("jsbee-required-letters")
+  const otherLettersElement     = document.getElementById("jsbee-other-letters")
+  const wordListDropdown        = document.getElementById("jsbee-word-list-dropdown")
+  const minMatchLengthElement   = document.getElementById("jsbee-min-match-length")
+  const maxMatchLengthElement   = document.getElementById("jsbee-max-match-length")
+  const clearLettersButton      = document.getElementById("jsbee-clear-letters-button")
+  const allOthersButton         = document.getElementById("jsbee-all-others-button")
+  const exampleButton           = document.getElementById("jsbee-example-button")
+  const resetMatchLengthsButton = document.getElementById("jsbee-reset-match-lengths-button")
+  const outputShowHideButton    = document.getElementById("jsbee-output-show-hide-button")
+  const outputCountElement      = document.getElementById("jsbee-output-count")
+  const outputElement           = document.getElementById("jsbee-output")
+  const lightDarkModeElement    = document.getElementById("jsbee-light-dark-mode-toggle")
+  const lightDarkModeLabel      = document.getElementById("jsbee-light-dark-mode-label")
+
+  // Dev notes: I've used React before and it's powerful. Sometimes for fun
+  // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
+  // "in the middle".
+  //
+  // That said, JS libraries like React do simplify things. Factors as of this writing:
+  //
+  // * Some initial state (such as visibilities) is spread between HTML and JS init logic.
+  // * The min-match-length and max-match-length buttons, individually, have
+  //   identical logic for when the user types in non-numeric things. This
+  //   could be put into a class.
+  // * The min-match-length and max-match-length buttons, as a pair, have a
+  //   cross-check: the left's value cannot exceed the right's.
+  // * There is some controller/controllee coupling, e.g. which button resets
+  //   which other widgets' values.
+  // * There is duplication of information (and referential-integrity work)
+  //   between the `state` object and widget state.
+  //
+  // Food for thought. This has been a quick holiday project; nothing more.
+
+  // ----------------------------------------------------------------
+  // EVENT LISTENERS
+
+  requiredLettersElement.addEventListener("input", function(event) {
+    logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+    requiredLettersElement.value = event.target.value.toUpperCase()
+    showMatches(state)
+  })
+
+  otherLettersElement.addEventListener("input", function(event) {
+    logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+    otherLettersElement.value = event.target.value.toUpperCase()
+    showMatches(state)
+  })
+
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
+  minMatchLengthElement.addEventListener("change", function(event) {
+    let self  = minMatchLengthElement
+    logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+
+    // The up-and-down sliders won't let the user choose outside the widget's min/max.
+    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+    if (!isInteger(event.target.value)) {
+      self.value = self.defaultValue
+      state.minMatchLength = self.value
+      showMatches(state)
+      return;
+    }
+    let requestedValue = Number(event.target.value)
+
+    // Check self-bounds
+    if (requestedValue < self.min) {
+      state.minMatchLength = self.min
+      self.value = self.min
+    } else if (requestedValue > self.max) {
+      state.minMatchLength = self.max
+      self.value = self.max
+
+    // Check other-bounds
+    } else if (requestedValue > state.maxMatchLength) {
+      self.value = state.maxMatchLength
+
+    } else {
+      state.minMatchLength = requestedValue
+    }
+    showMatches(state)
+  })
+
+  maxMatchLengthElement.addEventListener("change", function(event) {
+    let self  = maxMatchLengthElement
+    logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+
+    // The up-and-down sliders won't let the user choose outside the widget's min/max.
+    // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+    if (!isInteger(event.target.value)) {
+      self.value = self.defaultValue
+      state.maxMatchLength = self.value
+      showMatches(state)
+      return;
+    }
+    let requestedValue = Number(event.target.value)
+
+    // Check self-bounds
+    if (requestedValue < self.min) {
+      state.maxMatchLength = self.min
+      self.value = self.min
+    } else if (requestedValue > self.max) {
+      state.maxMatchLength = self.max
+      self.value = self.max
+
+    // Check other-bounds
+    } else if (requestedValue < state.minMatchLength) {
+      self.value = state.minMatchLength
+
+    } else {
+      state.maxMatchLength = requestedValue
+    }
+    showMatches(state)
+  })
+
+  clearLettersButton.addEventListener("click", function(event) {
+    logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
+    requiredLettersElement.value = ""
+    otherLettersElement.value = ""
+    showMatches(state)
+  })
+
+  allOthersButton.addEventListener("click", function(event) {
+    logAt1("ALL-OTHERS BUTTON WAS CLICKED")
+    setAllOthers()
+    showMatches(state)
+  })
+
+  exampleButton.addEventListener("click", function(event) {
+    logAt1("EXAMPLE BUTTON WAS CLICKED")
+    setExample()
+    showMatches(state)
+  })
+
+  resetMatchLengthsButton.addEventListener("click", function(event) {
+    logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+    minMatchLengthElement.value =  state.defaultMinMatchLength
+    maxMatchLengthElement.value =  state.defaultMaxMatchLength
+    state.minMatchLength = state.defaultMinMatchLength
+    state.maxMatchLength = state.defaultMaxMatchLength
+    showMatches(state)
+  })
+
+  outputShowHideButton.addEventListener("click", function(event) {
+    let self = outputShowHideButton
+    logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
+    if (state.outputHidden) {
+      state.outputHidden = false
+      self.textContent = "Hide results"
+      outputCountElement.style.display = "none"
+      outputElement.style.display = "block"
+    } else {
+      state.outputHidden = true
+      self.textContent = "Show results"
+      outputCountElement.style.display = "block"
+      outputElement.style.display = "none"
+    }
+  })
+
+  wordListDropdown.addEventListener("change", function() {
+    url = wordListDropdown.value
+    logAt1("SELECTED WORD LIST: <<", url, ">>")
+    setWordList(state, url)
+    showMatches(state)
+  })
+
+  lightDarkModeElement.addEventListener("change", function(e) {
+    if (lightDarkModeElement.checked) {
+      setDarkMode()
+    } else {
+      setLightMode()
+    }
+  })
+
+  // ----------------------------------------------------------------
+  // APPLICATION STATE
+
+  state = {
+    "logLevel": 0, // 0,1,2,3
+    "defaultMinMatchLength": 4,
+    "defaultMaxMatchLength": 16,
+    "minMatchLength": Number(minMatchLengthElement.value),
+    "maxMatchLength": Number(maxMatchLengthElement.value),
+    "wordListURL": null,
+    "wordList": null,
+    "outputHidden": false,
+  }
+
+  minMatchLengthElement.value = state.defaultMinMatchLength
+  maxMatchLengthElement.value = state.defaultMaxMatchLength
+  state.minMatchLength = state.defaultMinMatchLength
+  state.maxMatchLength = state.defaultMaxMatchLength
+  setWordList(state, wordListDropdown.value)
+  if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
+    setDarkMode()
+    lightDarkModeElement.checked = true
+  } else {
+    setLightMode()
+    lightDarkModeElement.checked = false
+  }
+  requiredLettersElement.focus()
+
+</script>
+<!-- ================================================================ -->
+</body>
+</html>
