@@ -423,6 +423,16 @@
         }
       })
 
+      this.elements.minMatchLengthElement.value = this.state.defaultMinMatchLength
+      this.elements.maxMatchLengthElement.value = this.state.defaultMaxMatchLength
+
+      this.state.minMatchLength = this.state.defaultMinMatchLength
+      this.state.maxMatchLength = this.state.defaultMaxMatchLength
+      this.setWordList(this.elements.wordListDropdown.value)
+
+      this.restore()
+      this.elements.requiredLettersElement.focus()
+
     }
 
     restore() {
@@ -584,17 +594,6 @@
 
   // ----------------------------------------------------------------
   const app = new JSBeeApp()
-
-  // TODO: move to constructor
-  app.elements.minMatchLengthElement.value = app.state.defaultMinMatchLength
-  app.elements.maxMatchLengthElement.value = app.state.defaultMaxMatchLength
-
-  app.state.minMatchLength = app.state.defaultMinMatchLength
-  app.state.maxMatchLength = app.state.defaultMaxMatchLength
-  app.setWordList(app.elements.wordListDropdown.value)
-
-  app.restore()
-  app.elements.requiredLettersElement.focus()
 
 </script>
 <!-- ================================================================ -->
