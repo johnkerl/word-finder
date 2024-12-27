@@ -231,6 +231,15 @@
 </div>
 <p/>
 
+<div>
+  <label class="switch">
+    <input type="checkbox" id="jsbee-light-dark-mode-toggle-2">
+    <span class="slider round"></span>
+  </label>
+  <span id="jsbee-light-dark-mode-label-2"> Switch to dark mode 2 </span>
+</div>
+<p/>
+
 <!-- ================================================================ -->
 <script>
   'use strict';
@@ -238,9 +247,55 @@
   // ----------------------------------------------------------------
   // UTILITIES
 
+  // TODO: assertor for non-null (e.g. get-element-by-id)
+
   function isInteger(text) {
     // TODO: this accepts '3.4' and should not
     return !isNaN(parseInt(text))
+  }
+
+  // ----------------------------------------------------------------
+  // EXPERIMENTAL WIDGET CLASSES
+
+  // TODO: move to a separate .js file
+
+  class Slider {
+    constructor(sliderElementID, labelElementID, isCheckedLabel, isUncheckedLabel, toCheckedCallback, toUncheckedCallback) {
+      // Browser-model element by composition
+      this.underlyingSlider = document.getElementById(sliderElementID)
+      this.underlyingLabel  = document.getElementById(labelElementID)
+      this.underlyingSlider.parent = this
+      this.underlyingLabel.parent  = this
+
+      this.isCheckedLabel      = isCheckedLabel
+      this.isUncheckedLabel    = isUncheckedLabel
+      this.toCheckedCallback   = toCheckedCallback
+      this.toUncheckedCallback = toUncheckedCallback
+
+      this.underlyingSlider.addEventListener("change", function(e) {
+        let obj = this.parent // Map from browser-level up to class-level
+
+        if (this.checked) {
+          obj.toUncheckedCallback(e)
+          obj.underlyingLabel.textContent = obj.isUncheckedLabel
+        } else {
+          obj.toCheckedCallback(e)
+          obj.underlyingLabel.textContent = obj.isCheckedLabel
+        }
+      })
+    }
+  }
+
+  class LightDarkModeSlider extends Slider {
+    constructor(sliderElementID, labelElementID, lightenCallback, darkenCallback) {
+      super(
+        sliderElementID,
+        labelElementID,
+        "Switch to dark mode",
+        "Switch to light mode",
+        lightenCallback,
+        darkenCallback)
+    }
   }
 
   // ----------------------------------------------------------------
@@ -298,6 +353,17 @@
 
         "lightDarkModeElement":    document.getElementById("jsbee-light-dark-mode-toggle"),
         "lightDarkModeLabel":      document.getElementById("jsbee-light-dark-mode-label"),
+
+        "lightDarkModeElement2": new LightDarkModeSlider(
+          "jsbee-light-dark-mode-toggle-2",
+          "jsbee-light-dark-mode-label-2",
+          () => {
+            document.body.style.backgroundColor = "green"
+          },
+          () => {
+            document.body.style.backgroundColor = "red"
+          },
+        )
       }
 
       this.elements.requiredLettersElement.addEventListener("input", function(event) {
@@ -397,16 +463,6 @@
         app.showMatches()
       })
 
-      this.elements.lightDarkModeElement.addEventListener("change", function(e) {
-        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
-        // Need a way to have the element get a ref to the app.
-        if (this.checked) {
-          app.setDarkMode()
-        } else {
-          app.setLightMode()
-        }
-      })
-
       this.elements.clearLettersButton.addEventListener("click", function(event) {
         app.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
         app.elements.requiredLettersElement.value = ""
@@ -435,6 +491,16 @@
           this.textContent = "Show results"
           app.elements.outputCountElement.style.display = "block"
           app.elements.outputElement.style.display = "none"
+        }
+      })
+
+      this.elements.lightDarkModeElement.addEventListener("change", function(e) {
+        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
+        // Need a way to have the element get a ref to the app.
+        if (this.checked) {
+          app.setDarkMode()
+        } else {
+          app.setLightMode()
         }
       })
 
