@@ -64,8 +64,14 @@
   }
 
   body {
+    /* Light mode */
     color: black;
     background-color: white;
+    /* Dark mode */
+    /*
+    color: white;
+    background-color: black;
+    */
     font-family: Verdana, sans-serif;
     font-size: 150%;
     letter-spacing: 0.25px;
@@ -93,6 +99,58 @@
     color: black;
   }
 
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 17px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
 </style>
 
 </head>
@@ -108,7 +166,7 @@
     <button class="maroon" id="jsbee-clear-letters-button"> Clear </button>
   </td>
   <td>
-    <input type=text tabindex=1 placeholder="..." cols=10 autocapitalize="characters" id="jsbee-required-letters"></input>
+    <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="jsbee-required-letters"></input>
   </td>
   <td>
     Required letter(s)
@@ -119,7 +177,7 @@
     <button class="maroon" id="jsbee-example-button"> Example </button>
   </td>
   <td>
-    <input type=text tabindex=2 placeholder="..." cols=10 autocapitalize="characters" id="jsbee-other-letters"></input>
+    <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input>
   </td>
   <td>
     Other letter(s)
@@ -183,9 +241,17 @@
 <!-- ================================================================ -->
 <hr/>
 
-<p>
-Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
-</p>
+<div>
+  Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
+</div>
+<p/>
+<div>
+  <label class="switch">
+    <input type="checkbox" id="jsbee-light-dark-mode-toggle">
+    <span class="slider round"></span>
+  </label>
+    <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
+</div>
 
 <!-- ================================================================ -->
 <script>
@@ -348,6 +414,8 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   const outputShowHideButton    = document.getElementById("jsbee-output-show-hide-button")
   const outputCountElement      = document.getElementById("jsbee-output-count")
   const outputElement           = document.getElementById("jsbee-output")
+  const lightDarkModeElement    = document.getElementById("jsbee-light-dark-mode-toggle")
+  const lightDarkModeLabel      = document.getElementById("jsbee-light-dark-mode-label")
 
   // Dev notes: I've used React before and it's powerful. Sometimes for fun
   // I like to use plain ES6, HTML, CSS, and the browser API -- nothing
@@ -499,6 +567,19 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     showMatches(app)
   })
 
+  lightDarkModeElement.addEventListener("change", function(e) {
+    if (lightDarkModeElement.checked) {
+      document.body.style.color = "white"
+      document.body.style.backgroundColor = "black"
+      lightDarkModeLabel.textContent = "Switch to light mode"
+
+    } else {
+      document.body.style.color = "black"
+      document.body.style.backgroundColor = "white"
+      lightDarkModeLabel.textContent = "Switch to dark mode"
+    }
+  })
+
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
@@ -510,7 +591,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   }
 
   const app = new JSBeeApp({
-    "logLevel": 2, // 0,1,2,3
+    "logLevel": 1, // 0,1,2,3
     "defaultMinMatchLength": 4,
     "defaultMaxMatchLength": 16,
     "minMatchLength": Number(minMatchLengthElement.value),
