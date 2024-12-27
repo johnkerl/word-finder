@@ -189,6 +189,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
 
 <!-- ================================================================ -->
 <script>
+  'use strict';
 
   // ----------------------------------------------------------------
   // LOGGING
@@ -210,7 +211,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   }
 
   function logAt(level, ...args) {
-    if (state.logLevel >= level) {
+    if (app.state.logLevel >= level) {
       console.log(...args)
     }
   }
@@ -226,37 +227,37 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // ----------------------------------------------------------------
   // APPLICATION LOGIC
 
-  function setWordList(state, url) {
+  function setWordList(url) {
     logAt0("FETCHING WORD LIST FROM URL:", url)
-    state.wordListURL = url
+    app.state.wordListURL = url
     fetch(url).then((response) => response.text().then((text) => {
-      state.wordList = text.split("\n")
+      app.state.wordList = text.split("\n")
       // Must be called from this callback, since this is async
-      showMatches(state)
+      showMatches(app)
     }))
   }
 
-  function checkWordList(state) {
-    if (state.wordListURL == null) {
+  function checkWordList() {
+    if (app.state.wordListURL == null) {
       outputElement.textContent = "No word list set"
       return false
     }
-    if (state.wordList == null) {
+    if (app.state.wordList == null) {
       outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
       return false
     }
     return true
   }
 
-  function showMatches(state) {
-    if (!checkWordList(state)) {
+  function showMatches(app) {
+    if (!checkWordList(app.state)) {
       return
     }
 
-    requiredLetters = requiredLettersElement.value
-    otherLetters = otherLettersElement.value
+    let requiredLetters = requiredLettersElement.value
+    let otherLetters = otherLettersElement.value
 
-    matches = getMatchesFromWordList(state, requiredLetters, otherLetters)
+    let matches = getMatchesFromWordList(requiredLetters, otherLetters)
     matches = matches.map(match => match.toUpperCase())
     matches = matches.sort()
     logAt2(matches)
@@ -272,19 +273,19 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     }
   }
 
-  function getMatchesFromWordList(state, requiredLetters, optionalLetters) {
+  function getMatchesFromWordList(requiredLetters, optionalLetters) {
     logAt1("MATCHER ENTER")
     logAt1("requiredLetters ", requiredLetters)
     logAt1("optionalLetters", optionalLetters)
-    logAt1("wordList.length", state.wordList.length)
-    logAt3("wordList", state.wordList)
+    logAt1("wordList.length", app.state.wordList.length)
+    logAt3("wordList", app.state.wordList)
 
     requiredLetters = requiredLetters.toLowerCase()
     optionalLetters = optionalLetters.toLowerCase()
-    matches = []
-    state.wordList.forEach((word) => {
+    let matches = []
+    app.state.wordList.forEach((word) => {
       logAt3("WORD <<", word, ">>")
-      if (wordMatches(state, requiredLetters, optionalLetters, word)) {
+      if (wordMatches(requiredLetters, optionalLetters, word)) {
         logAt2("MATCH", word)
         matches.push(word)
       }
@@ -292,18 +293,18 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     return matches
   }
 
-  function wordMatches(state, requiredLetters, optionalLetters, word) {
+  function wordMatches(requiredLetters, optionalLetters, word) {
     let allLetters = requiredLetters + optionalLetters
-    if (state.minMatchLength != null && word.length < state.minMatchLength) {
-      logAt3("-- match out 1: word", word, "with length", word.length, "less than min", state.minMatchLength)
+    if (app.state.minMatchLength != null && word.length < app.state.minMatchLength) {
+      logAt3("-- match out 1: word", word, "with length", word.length, "less than min", app.state.minMatchLength)
       return false
     }
-    if (state.maxMatchLength != null && word.length > state.maxMatchLength) {
-      logAt3("-- match out 2: word", word, "with length", word.length, "more than max", state.maxMatchLength)
+    if (app.state.maxMatchLength != null && word.length > app.state.maxMatchLength) {
+      logAt3("-- match out 2: word", word, "with length", word.length, "more than max", app.state.maxMatchLength)
       return false
     }
     for (let i = 0; i < requiredLetters.length; i++) {
-      requiredLetter = requiredLetters[i]
+      let requiredLetter = requiredLetters[i]
       if (word.indexOf(requiredLetter) < 0) {
         logAt3("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
         return false
@@ -373,118 +374,118 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   requiredLettersElement.addEventListener("input", function(event) {
     logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
     requiredLettersElement.value = event.target.value.toUpperCase()
-    showMatches(state)
+    showMatches(app)
   })
 
   otherLettersElement.addEventListener("input", function(event) {
     logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
     otherLettersElement.value = event.target.value.toUpperCase()
-    showMatches(state)
+    showMatches(app)
   })
 
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number
   minMatchLengthElement.addEventListener("change", function(event) {
     let self  = minMatchLengthElement
-    logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+    logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
 
     // The up-and-down sliders won't let the user choose outside the widget's min/max.
     // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
     if (!isInteger(event.target.value)) {
       self.value = self.defaultValue
-      state.minMatchLength = self.value
-      showMatches(state)
+      app.state.minMatchLength = self.value
+      showMatches(app)
       return;
     }
     let requestedValue = Number(event.target.value)
 
     // Check self-bounds
     if (requestedValue < self.min) {
-      state.minMatchLength = self.min
+      app.state.minMatchLength = self.min
       self.value = self.min
     } else if (requestedValue > self.max) {
-      state.minMatchLength = self.max
+      app.state.minMatchLength = self.max
       self.value = self.max
 
     // Check other-bounds
-    } else if (requestedValue > state.maxMatchLength) {
-      self.value = state.maxMatchLength
+    } else if (requestedValue > app.state.maxMatchLength) {
+      self.value = app.state.maxMatchLength
 
     } else {
-      state.minMatchLength = requestedValue
+      app.state.minMatchLength = requestedValue
     }
-    showMatches(state)
+    showMatches(app)
   })
 
   maxMatchLengthElement.addEventListener("change", function(event) {
     let self  = maxMatchLengthElement
-    logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", state.minMatchLength, state.maxMatchLength)
+    logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
 
     // The up-and-down sliders won't let the user choose outside the widget's min/max.
     // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
     if (!isInteger(event.target.value)) {
       self.value = self.defaultValue
-      state.maxMatchLength = self.value
-      showMatches(state)
+      app.state.maxMatchLength = self.value
+      showMatches(app)
       return;
     }
     let requestedValue = Number(event.target.value)
 
     // Check self-bounds
     if (requestedValue < self.min) {
-      state.maxMatchLength = self.min
+      app.state.maxMatchLength = self.min
       self.value = self.min
     } else if (requestedValue > self.max) {
-      state.maxMatchLength = self.max
+      app.state.maxMatchLength = self.max
       self.value = self.max
 
     // Check other-bounds
-    } else if (requestedValue < state.minMatchLength) {
-      self.value = state.minMatchLength
+    } else if (requestedValue < app.state.minMatchLength) {
+      self.value = app.state.minMatchLength
 
     } else {
-      state.maxMatchLength = requestedValue
+      app.state.maxMatchLength = requestedValue
     }
-    showMatches(state)
+    showMatches(app)
   })
 
   clearLettersButton.addEventListener("click", function(event) {
     logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
     requiredLettersElement.value = ""
     otherLettersElement.value = ""
-    showMatches(state)
+    showMatches(app)
   })
 
   allOthersButton.addEventListener("click", function(event) {
     logAt1("ALL-OTHERS BUTTON WAS CLICKED")
     setAllOthers()
-    showMatches(state)
+    showMatches(app)
   })
 
   exampleButton.addEventListener("click", function(event) {
     logAt1("EXAMPLE BUTTON WAS CLICKED")
     setExample()
-    showMatches(state)
+    showMatches(app)
   })
 
   resetMatchLengthsButton.addEventListener("click", function(event) {
     logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-    minMatchLengthElement.value =  state.defaultMinMatchLength
-    maxMatchLengthElement.value =  state.defaultMaxMatchLength
-    state.minMatchLength = state.defaultMinMatchLength
-    state.maxMatchLength = state.defaultMaxMatchLength
-    showMatches(state)
+    minMatchLengthElement.value =  app.state.defaultMinMatchLength
+    maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
+    app.state.minMatchLength = app.state.defaultMinMatchLength
+    app.state.maxMatchLength = app.state.defaultMaxMatchLength
+    showMatches(app)
   })
 
   outputShowHideButton.addEventListener("click", function(event) {
     let self = outputShowHideButton
     logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
-    if (state.outputHidden) {
-      state.outputHidden = false
+    if (app.state.outputHidden) {
+      app.state.outputHidden = false
       self.textContent = "Hide results"
       outputCountElement.style.display = "none"
       outputElement.style.display = "block"
     } else {
-      state.outputHidden = true
+      app.state.outputHidden = true
       self.textContent = "Show results"
       outputCountElement.style.display = "block"
       outputElement.style.display = "none"
@@ -492,17 +493,24 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   })
 
   wordListDropdown.addEventListener("change", function() {
-    url = wordListDropdown.value
+    let url = wordListDropdown.value
     logAt1("SELECTED WORD LIST: <<", url, ">>")
-    setWordList(state, url)
-    showMatches(state)
+    setWordList(url)
+    showMatches(app)
   })
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
-  state = {
-    "logLevel": 0, // 0,1,2,3
+  class JSBeeApp {
+    // TODO: dom root?
+    constructor(argstate) {
+      this.state = {...argstate}
+    }
+  }
+
+  const app = new JSBeeApp({
+    "logLevel": 2, // 0,1,2,3
     "defaultMinMatchLength": 4,
     "defaultMaxMatchLength": 16,
     "minMatchLength": Number(minMatchLengthElement.value),
@@ -510,13 +518,13 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     "wordListURL": null,
     "wordList": null,
     "outputHidden": false,
-  }
+  })
 
-  minMatchLengthElement.value = state.defaultMinMatchLength
-  maxMatchLengthElement.value = state.defaultMaxMatchLength
-  state.minMatchLength = state.defaultMinMatchLength
-  state.maxMatchLength = state.defaultMaxMatchLength
-  setWordList(state, wordListDropdown.value)
+  minMatchLengthElement.value = app.state.defaultMinMatchLength
+  maxMatchLengthElement.value = app.state.defaultMaxMatchLength
+  app.state.minMatchLength = app.state.defaultMinMatchLength
+  app.state.maxMatchLength = app.state.defaultMaxMatchLength
+  setWordList(wordListDropdown.value)
   requiredLettersElement.focus()
 
 </script>
