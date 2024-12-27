@@ -169,7 +169,7 @@
   <td> Required letter(s) </td>
 </tr>
 <tr>
-  <td> <button class="maroon" id="jsbee-example-button"> Example </button> </td>
+  <td> <button class="maroon" id="jsbee-example-button"> Bug if you see this </button> </td>
   <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input> </td>
   <td> Other letter(s) </td>
 </tr>
@@ -352,6 +352,27 @@
     }
   }
 
+  class Button {
+    constructor(
+      elementID,
+      text,
+      callback,
+    ) {
+      // Browser-model element by composition
+      this.underlying = document.getElementById(elementID)
+      // This lets underlying-level callbacks invoke our methods
+      this.underlying.parent = this
+      this.callback = callback
+
+      this.underlying.textContent = text
+
+      this.underlying.addEventListener("click", function(e) {
+        let obj = this.parent // Map from browser-level up to class-level
+        obj.callback(e)
+      })
+    }
+  }
+
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
@@ -395,7 +416,17 @@
         "maxMatchLengthElement":   document.getElementById("jsbee-max-match-length"),
 
         "clearLettersButton":      document.getElementById("jsbee-clear-letters-button"),
-        "exampleButton":           document.getElementById("jsbee-example-button"),
+
+        "exampleButton": new Button(
+          "jsbee-example-button",
+          "Example",
+          () => {
+            this.logAt1("EXAMPLE BUTTON WAS CLICKED")
+            this.setExample()
+            this.showMatches()
+          },
+        ),
+
         "allOthersButton":         document.getElementById("jsbee-all-others-button"),
         "resetMatchLengthsButton": document.getElementById("jsbee-reset-match-lengths-button"),
 
@@ -495,14 +526,6 @@
         } else {
           app.state.maxMatchLength = requestedValue
         }
-        app.showMatches()
-      })
-
-      this.elements.exampleButton.addEventListener("click", function(event) {
-        app.logAt1("EXAMPLE BUTTON WAS CLICKED")
-        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
-        // Need a way to have the element get a ref to the app.
-        app.setExample()
         app.showMatches()
       })
 
