@@ -253,7 +253,7 @@
     <input type="checkbox" id="jsbee-light-dark-mode-toggle">
     <span class="slider round"></span>
   </label>
-    <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
+  <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
 </div>
 <p/>
 
@@ -490,7 +490,7 @@
       }
     }
 
-    setUp() {
+    restore() {
       if (localStorage.getItem(this.state.localStorageModeKey) == "true") {
         this.setDarkMode()
         lightDarkModeElement.checked = true
@@ -631,7 +631,7 @@
   app.state.maxMatchLength = app.state.defaultMaxMatchLength
   app.setWordList(wordListDropdown.value)
 
-  app.setUp()
+  app.restore()
 
   requiredLettersElement.focus()
 
