@@ -245,6 +245,7 @@
   Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
 </div>
 <p/>
+
 <div>
   <label class="switch">
     <input type="checkbox" id="jsbee-light-dark-mode-toggle">
@@ -252,6 +253,7 @@
   </label>
     <span id="jsbee-light-dark-mode-label"> Switch to dark mode </span>
 </div>
+<p/>
 
 <!-- ================================================================ -->
 <script>
@@ -397,6 +399,20 @@
     requiredLettersElement.value = "E"
     otherLettersElement.value = "XAMPLS"
     outputElement.textContent = ""
+  }
+
+  function setLightMode() {
+    document.body.style.color = "black"
+    document.body.style.backgroundColor = "white"
+    lightDarkModeLabel.textContent = "Switch to dark mode"
+    localStorage.setItem("jsbee-dark-mode-enabled", "false")
+  }
+
+  function setDarkMode() {
+    document.body.style.color = "white"
+    document.body.style.backgroundColor = "black"
+    lightDarkModeLabel.textContent = "Switch to light mode"
+    localStorage.setItem("jsbee-dark-mode-enabled", "true")
   }
 
   // ----------------------------------------------------------------
@@ -569,14 +585,9 @@
 
   lightDarkModeElement.addEventListener("change", function(e) {
     if (lightDarkModeElement.checked) {
-      document.body.style.color = "white"
-      document.body.style.backgroundColor = "black"
-      lightDarkModeLabel.textContent = "Switch to light mode"
-
+      setDarkMode()
     } else {
-      document.body.style.color = "black"
-      document.body.style.backgroundColor = "white"
-      lightDarkModeLabel.textContent = "Switch to dark mode"
+      setLightMode()
     }
   })
 
@@ -584,28 +595,35 @@
   // APPLICATION STATE
 
   class JSBeeApp {
-    // TODO: dom root?
-    constructor(argstate) {
-      this.state = {...argstate}
+    // TODO: DOM root?
+    constructor() {
+      this.state = {
+        "logLevel": 1, // 0,1,2,3
+        "defaultMinMatchLength": 4,
+        "defaultMaxMatchLength": 16,
+        "minMatchLength": Number(minMatchLengthElement.value),
+        "maxMatchLength": Number(maxMatchLengthElement.value),
+        "wordListURL": null,
+        "wordList": null,
+        "outputHidden": false,
+      }
     }
   }
 
-  const app = new JSBeeApp({
-    "logLevel": 1, // 0,1,2,3
-    "defaultMinMatchLength": 4,
-    "defaultMaxMatchLength": 16,
-    "minMatchLength": Number(minMatchLengthElement.value),
-    "maxMatchLength": Number(maxMatchLengthElement.value),
-    "wordListURL": null,
-    "wordList": null,
-    "outputHidden": false,
-  })
+  const app = new JSBeeApp()
 
   minMatchLengthElement.value = app.state.defaultMinMatchLength
   maxMatchLengthElement.value = app.state.defaultMaxMatchLength
   app.state.minMatchLength = app.state.defaultMinMatchLength
   app.state.maxMatchLength = app.state.defaultMaxMatchLength
   setWordList(wordListDropdown.value)
+  if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
+    setDarkMode()
+    lightDarkModeElement.checked = true
+  } else {
+    setLightMode()
+    lightDarkModeElement.checked = false
+  }
   requiredLettersElement.focus()
 
 </script>
