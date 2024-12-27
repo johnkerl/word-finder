@@ -486,11 +486,12 @@
         "wordListURL": null,
         "wordList": null,
         "outputHidden": false,
+        "localStorageModeKey": document.URL + ":jsbee-dark-mode-enabled",
       }
     }
 
     setUp() {
-      if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
+      if (localStorage.getItem(this.state.localStorageModeKey) == "true") {
         this.setDarkMode()
         lightDarkModeElement.checked = true
       } else {
@@ -609,14 +610,14 @@
       document.body.style.color = "black"
       document.body.style.backgroundColor = "white"
       lightDarkModeLabel.textContent = "Switch to dark mode"
-      localStorage.setItem("jsbee-dark-mode-enabled", "false")
+      localStorage.setItem(this.state.localStorageModeKey, "false")
     }
 
     setDarkMode() {
       document.body.style.color = "white"
       document.body.style.backgroundColor = "black"
       lightDarkModeLabel.textContent = "Switch to light mode"
-      localStorage.setItem("jsbee-dark-mode-enabled", "true")
+      localStorage.setItem(this.state.localStorageModeKey, "true")
     }
   }
 

@@ -397,14 +397,14 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     document.body.style.color = "black"
     document.body.style.backgroundColor = "white"
     lightDarkModeLabel.textContent = "Switch to dark mode"
-    localStorage.setItem("jsbee-dark-mode-enabled", "false")
+    localStorage.setItem(state.localStorageModeKey, "false")
   }
 
   function setDarkMode() {
     document.body.style.color = "white"
     document.body.style.backgroundColor = "black"
     lightDarkModeLabel.textContent = "Switch to light mode"
-    localStorage.setItem("jsbee-dark-mode-enabled", "true")
+    localStorage.setItem(state.localStorageModeKey, "true")
   }
 
   // ----------------------------------------------------------------
@@ -595,6 +595,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
     "wordListURL": null,
     "wordList": null,
     "outputHidden": false,
+    "localStorageModeKey": document.URL + ":jsbee-dark-mode-enabled",
   }
 
   minMatchLengthElement.value = state.defaultMinMatchLength
@@ -602,7 +603,7 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   state.minMatchLength = state.defaultMinMatchLength
   state.maxMatchLength = state.defaultMaxMatchLength
   setWordList(state, wordListDropdown.value)
-  if (localStorage.getItem("jsbee-dark-mode-enabled") == "true") {
+  if (localStorage.getItem(state.localStorageModeKey) == "true") {
     setDarkMode()
     lightDarkModeElement.checked = true
   } else {
