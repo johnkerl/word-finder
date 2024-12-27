@@ -169,13 +169,13 @@
   <td> Required letter(s) </td>
 </tr>
 <tr>
-  <td> <button class="maroon" id="jsbee-example-button"> Bug if you see this </button> </td>
+  <td> <button class="maroon" id="jsbee-example-button">UNINIT</button> </td>
   <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input> </td>
   <td> Other letter(s) </td>
 </tr>
 
 <tr>
-  <td> <button class="maroon" id="jsbee-all-others-button">A-Z</button> </td>
+  <td> <button class="maroon" id="jsbee-all-others-button">UNINIT</button> </td>
   <td> &nbsp; </td>
   <td> &nbsp; </td>
 </tr>
@@ -227,7 +227,7 @@
     <input type="checkbox" id="jsbee-light-mode-dark-mode-toggle">
     <span class="slider round"></span>
   </label>
-  <span id="jsbee-light-mode-dark-mode-label"> Bug if you see this </span>
+  <span id="jsbee-light-mode-dark-mode-label">UNINIT</span>
 </div>
 <p/>
 
@@ -415,7 +415,16 @@
         "minMatchLengthElement":   document.getElementById("jsbee-min-match-length"),
         "maxMatchLengthElement":   document.getElementById("jsbee-max-match-length"),
 
-        "clearLettersButton":      document.getElementById("jsbee-clear-letters-button"),
+        "clearLettersButton": new Button(
+          "jsbee-clear-letters-button",
+          "Clear",
+          () => {
+            this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
+            this.elements.requiredLettersElement.value = ""
+            this.elements.otherLettersElement.value = ""
+            this.showMatches()
+          },
+        ),
 
         "exampleButton": new Button(
           "jsbee-example-button",
@@ -427,7 +436,16 @@
           },
         ),
 
-        "allOthersButton":         document.getElementById("jsbee-all-others-button"),
+        "allOthersButton": new Button(
+          "jsbee-all-others-button",
+          "A-Z",
+          () => {
+            this.logAt1("A-Z BUTTON WAS CLICKED")
+            this.setAllOthers()
+            this.showMatches()
+          },
+        ),
+
         "resetMatchLengthsButton": document.getElementById("jsbee-reset-match-lengths-button"),
 
         "outputShowHideButton":    document.getElementById("jsbee-output-show-hide-button"),
@@ -529,21 +547,6 @@
         app.showMatches()
       })
 
-      this.elements.allOthersButton.addEventListener("click", function(event) {
-        app.logAt1("ALL-OTHERS BUTTON WAS CLICKED")
-        // TODO: awkward positioning of 'this' -- inside, it refers to the element.
-        // Need a way to have the element get a ref to the app.
-        app.setAllOthers()
-        app.showMatches()
-      })
-
-      this.elements.clearLettersButton.addEventListener("click", function(event) {
-        app.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
-        app.elements.requiredLettersElement.value = ""
-        app.elements.otherLettersElement.value = ""
-        app.showMatches()
-      })
-    
       this.elements.resetMatchLengthsButton.addEventListener("click", function(event) {
         app.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
         app.elements.minMatchLengthElement.value =  app.state.defaultMinMatchLength
@@ -552,7 +555,7 @@
         app.state.maxMatchLength = app.state.defaultMaxMatchLength
         app.showMatches()
       })
-    
+
       this.elements.outputShowHideButton.addEventListener("click", function(event) {
         app.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
         if (app.state.outputHidden) {
