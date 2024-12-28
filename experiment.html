@@ -264,123 +264,128 @@
     }
 
     setElementsAndCallbacks() {
-      console.log("WTFC")
-      this.elements = {
+      this.elements = {}
 
-        "requiredLettersElement": new TextInput(
-          "jsbee-required-letters",
-          () => {
-            this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
-            this.showMatches()
-        }),
+      this.elements.requiredLettersElement = new TextInput(
+        "jsbee-required-letters",
+        () => {
+          this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+          this.showMatches()
+      })
 
-        "otherLettersElement": new TextInput(
-          "jsbee-other-letters",
-          () => {
-            this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
-            this.showMatches()
-        }),
+      this.elements.otherLettersElement = new TextInput(
+        "jsbee-other-letters",
+        () => {
+          this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+          this.showMatches()
+      })
 
-        "wordListDropdown":        document.getElementById("jsbee-word-list-dropdown"),
+      this.elements.wordListDropdown = document.getElementById("jsbee-word-list-dropdown")
 
-        "minMatchLengthElement": new IntRangeInput(
-          "jsbee-min-match-length",
-          this.state.minMatchLength, // default
-          this.state.minMatchLength, // min
-          this.state.maxMatchLength, // maxt
-          () => {
-            this.showMatches()
-          },
-        ),
+      let minMatchLengthElement = new IntRangeInput(
+        "jsbee-min-match-length",
+        this.state.minMatchLength, // default
+        this.state.minMatchLength, // min
+        this.state.maxMatchLength, // max
+        () => {
+          this.showMatches()
+        },
+      )
 
-        "maxMatchLengthElement": new IntRangeInput(
-          "jsbee-max-match-length",
-          this.state.maxMatchLength, // default
-          this.state.minMatchLength, // min
-          this.state.maxMatchLength, // maxt
-          () => {
-            this.showMatches()
-          },
-        ),
+      let maxMatchLengthElement = new IntRangeInput(
+        "jsbee-max-match-length",
+        this.state.maxMatchLength, // default
+        this.state.minMatchLength, // min
+        this.state.maxMatchLength, // max
+        () => {
+          this.showMatches()
+        },
+      )
 
-        "clearLettersButton": new Button(
-          "jsbee-clear-letters-button",
-          "Clear",
-          () => {
-            this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
-            this.elements.requiredLettersElement.set("")
-            this.elements.otherLettersElement.set("")
-            this.showMatches()
-          },
-        ),
+      // TODO: do this coupling at the class level -- IntRangeInputPair maybe
+      minMatchLengthElement.setPeerMax(maxMatchLengthElement)
+      maxMatchLengthElement.setPeerMin(minMatchLengthElement)
 
-        "exampleButton": new Button(
-          "jsbee-example-button",
-          "Example",
-          () => {
-            this.logAt1("EXAMPLE BUTTON WAS CLICKED")
-            this.setExample()
-            this.showMatches()
-          },
-        ),
+      this.elements.minMatchLengthElement = minMatchLengthElement
+      this.elements.maxMatchLengthElement = maxMatchLengthElement
 
-        "allOthersButton": new Button(
-          "jsbee-all-others-button",
-          "A-Z",
-          () => {
-            this.logAt1("A-Z BUTTON WAS CLICKED")
-            this.setAllOthers()
-            this.showMatches()
-          },
-        ),
+      this.elements.clearLettersButton = new Button(
+        "jsbee-clear-letters-button",
+        "Clear",
+        () => {
+          this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
+          this.elements.requiredLettersElement.set("")
+          this.elements.otherLettersElement.set("")
+          this.showMatches()
+        },
+      )
 
-        "resetMatchLengthsButton": new Button(
-          "jsbee-reset-match-lengths-button",
-          "Reset",
-          () => {
-            this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-            this.elements.minMatchLengthElement.resetToDefault(),
-            this.elements.maxMatchLengthElement.resetToDefault(),
-            this.showMatches()
-          },
-        ),
+      this.elements.exampleButton = new Button(
+        "jsbee-example-button",
+        "Example",
+        () => {
+          this.logAt1("EXAMPLE BUTTON WAS CLICKED")
+          this.setExample()
+          this.showMatches()
+        },
+      )
 
-        "outputShowHideButton": new Button(
-          "jsbee-output-show-hide-button",
-          //"Hide results", // XXX TEMP
-          "Show/hide results",
-          () => {
-            this.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
-            if (this.state.outputHidden) {
-              this.state.outputHidden = false
-              //this.textContent = "Hide results" // RONG NOW
-              this.elements.outputCountElement.underlying.style.display = "none"
-              this.elements.outputElement.underlying.style.display = "block"
-            } else {
-              this.state.outputHidden = true
-              //this.textContent = "Show results" // RONG NOW
-              this.elements.outputCountElement.underlying.style.display = "block"
-              this.elements.outputElement.underlying.style.display = "none"
-            }
-          },
-        ),
+      this.elements.allOthersButton = new Button(
+        "jsbee-all-others-button",
+        "A-Z",
+        () => {
+          this.logAt1("A-Z BUTTON WAS CLICKED")
+          this.setAllOthers()
+          this.showMatches()
+        },
+      )
 
-        "outputElement": new TextSpan("jsbee-output", ""),
-        "outputCountElement": new TextSpan("jsbee-output-count", ""),
+      this.elements.resetMatchLengthsButton = new Button(
+        "jsbee-reset-match-lengths-button",
+        "Reset",
+        () => {
+          this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+          this.elements.minMatchLengthElement.resetToDefault(),
+          this.elements.maxMatchLengthElement.resetToDefault(),
+          this.showMatches()
+        },
+      )
 
-        "lightDarkModeElement": new LightDarkModeSlider(
-          "jsbee-light-mode-dark-mode-toggle",
-          "jsbee-light-mode-dark-mode-label",
-          () => {
-            document.body.style.backgroundColor = "white"
-            document.body.style.color = "black"
-          },
-          () => {
-            document.body.style.backgroundColor = "black"
-            document.body.style.color = "white"
-          },
-        )
-      }
+      this.elements.outputShowHideButton = new Button(
+        "jsbee-output-show-hide-button",
+        //"Hide results", // XXX TEMP
+        "Show/hide results",
+        () => {
+          this.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
+          if (this.state.outputHidden) {
+            this.state.outputHidden = false
+            //this.textContent = "Hide results" // RONG NOW
+            this.elements.outputCountElement.underlying.style.display = "none"
+            this.elements.outputElement.underlying.style.display = "block"
+          } else {
+            this.state.outputHidden = true
+            //this.textContent = "Show results" // RONG NOW
+            this.elements.outputCountElement.underlying.style.display = "block"
+            this.elements.outputElement.underlying.style.display = "none"
+          }
+        },
+      )
+
+      this.elements.outputElement = new TextSpan("jsbee-output", "")
+      this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
+
+      this.elements.lightDarkModeElement = new LightDarkModeSlider(
+        "jsbee-light-mode-dark-mode-toggle",
+        "jsbee-light-mode-dark-mode-label",
+        () => {
+          document.body.style.backgroundColor = "white"
+          document.body.style.color = "black"
+        },
+        () => {
+          document.body.style.backgroundColor = "black"
+          document.body.style.color = "white"
+        },
+      )
 
       this.elements.wordListDropdown.addEventListener("change", function() {
         let url = this.value
@@ -558,7 +563,6 @@
   }
 
   // ----------------------------------------------------------------
-  console.log("WTF9")
   const app = new JSBeeApp()
 
 </script>
