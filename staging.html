@@ -288,9 +288,6 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // APPLICATION LOGIC
 
   function setWordList(state, url) {
-    logAt0("DOCUMENT.URL", document.URL)
-    logAt0("FETCHING WORD LIST FROM URL:", url)
-
     // CORS make us unable to load ./anything when doing local-disk dev
     if (document.URL.startsWith("file://")) {
       state.wordListURL = "local-in-memory"
@@ -317,7 +314,9 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
         "tinct", "titmice", "toccata", "tomtit", "toon", "toonie", "tori", "toric", "torii", "tutee",
         "tutti", "tutu", "undid", "vanilla", "vanillin", "woohoo",
       ]
+      showMatches(state)
     } else {
+      logAt0("FETCHING WORD LIST FROM URL:", url)
       state.wordListURL = url
       fetch(url).then((response) => response.text().then((text) => {
         state.wordList = text.split("\n")

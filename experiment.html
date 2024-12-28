@@ -449,10 +449,10 @@
           "Reset",
           () => {
             this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-            this.elements.minMatchLengthElement.value = app.state.defaultMinMatchLength
-            this.elements.maxMatchLengthElement.value = app.state.defaultMaxMatchLength
-            this.state.minMatchLength = app.state.defaultMinMatchLength
-            this.state.maxMatchLength = app.state.defaultMaxMatchLength
+            this.elements.minMatchLengthElement.value = this.state.defaultMinMatchLength
+            this.elements.maxMatchLengthElement.value = this.state.defaultMaxMatchLength
+            this.state.minMatchLength = this.state.defaultMinMatchLength
+            this.state.maxMatchLength = this.state.defaultMaxMatchLength
             this.showMatches()
           },
         ),
@@ -600,13 +600,42 @@
     }
 
     setWordList(url) {
-      this.logAt0("FETCHING WORD LIST FROM URL:", url)
-      this.state.wordListURL = url
-      fetch(url).then((response) => response.text().then((text) => {
-        this.state.wordList = text.split("\n")
-        // Must be called from this callback, since this is async
+      // CORS make us unable to load ./anything when doing local-disk dev
+      if (document.URL.startsWith("file://")) {
+        this.state.wordListURL = "local-in-memory"
+        this.state.wordList = [
+          "abaci", "acacia", "acai", "acetate", "affiant", "aioli", "alfalfa", "alga", "algae", "algal",
+          "allele", "ameba", "amoeba", "amoebae", "amyl", "anneal", "anyhoo", "apian", "apnea", "arancini",
+          "arhat", "aria", "aril", "arnica", "atilt", "atria", "attaboy", "baaed", "baba", "babel", "babka",
+          "bailiff", "banana", "bandana", "bandanna", "barbacoa", "blin", "blini", "boll", "bombe", "bonbon",
+          "bonobo", "booboo", "bootee", "bootie", "bowwow", "cabala", "cabana", "cacao", "cacti", "caddie",
+          "caddied", "caiman", "cairn", "calla", "callaloo", "cami", "cancan", "canid", "canna", "canola",
+          "cantata", "canteen", "captcha", "carioca", "celeb", "celli", "cellule", "cetacean", "chai", "chia",
+          "chic", "chica", "chichi", "ciao", "cirri", "coca", "cocci", "cocoa", "cocoon", "codon", "coho",
+          "coir", "colcannon", "collab", "croon", "deicide", "ditto", "dorado", "dunno", "electee", "emcee",
+          "emceed", "epee", "falafel", "fantail", "froufrou", "galangal", "gavage", "gelee", "gooey",
+          "google", "googol", "gotta", "haka", "hake", "halal", "hamachi", "haram", "hatha", "hoodoo",
+          "iambi", "icemen", "imam", "infill", "innie", "iota", "laic", "laical", "lallygag", "lanai",
+          "lanolin", "lantana", "lavage", "libelee", "llano", "logroll", "lollygag", "lookback", "lookbook",
+          "loonie", "luging", "lunula", "magma", "mahatma", "malic", "mama", "melee", "mentee", "minim",
+          "momma", "muumuu", "naan", "nada", "naiad", "nana", "nankeen", "natant", "nene", "neocon", "niacin",
+          "noncom", "nonillion", "nuncio", "oleo", "olio", "onion", "paean", "paella", "palapa", "pampa",
+          "panini", "papa", "payee", "peahen", "peke", "pica", "pinniped", "pintail", "pipit", "pippin",
+          "pitapat", "pooh", "poplin", "poppa", "powwow", "raffia", "raita", "rapini", "ratatat", "ribbit",
+          "rococo", "tahini", "tali", "tannic", "tannin", "tantara", "tartan", "tartar", "tattoo", "tilth",
+          "tinct", "titmice", "toccata", "tomtit", "toon", "toonie", "tori", "toric", "torii", "tutee",
+          "tutti", "tutu", "undid", "vanilla", "vanillin", "woohoo",
+        ]
         this.showMatches()
-      }))
+      } else {
+        this.logAt0("FETCHING WORD LIST FROM URL:", url)
+        this.state.wordListURL = url
+        fetch(url).then((response) => response.text().then((text) => {
+          this.state.wordList = text.split("\n")
+          // Must be called from this callback, since this is async
+          this.showMatches()
+        }))
+      }
     }
 
     showMatches() {
@@ -620,7 +649,7 @@
       let matches = this.getMatchesFromWordList(requiredLetters, otherLetters)
       matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
-      app.logAt2(matches)
+      this.logAt2(matches)
 
       this.elements.outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
 
@@ -644,9 +673,9 @@
       optionalLetters = optionalLetters.toLowerCase()
       let matches = []
       this.state.wordList.forEach((word) => {
-        app.logAt3("WORD <<", word, ">>")
+        this.logAt3("WORD <<", word, ">>")
         if (this.wordMatches(requiredLetters, optionalLetters, word)) {
-          app.logAt2("MATCH", word)
+          this.logAt2("MATCH", word)
           matches.push(word)
         }
       })
@@ -656,28 +685,28 @@
     wordMatches(requiredLetters, optionalLetters, word) {
       let allLetters = requiredLetters + optionalLetters
       if (this.state.minMatchLength != null && word.length < this.state.minMatchLength) {
-        app.logAt3("-- match out 1: word", word, "with length", word.length, "less than min", this.state.minMatchLength)
+        this.logAt3("-- match out 1: word", word, "with length", word.length, "less than min", this.state.minMatchLength)
         return false
       }
       if (this.state.maxMatchLength != null && word.length > this.state.maxMatchLength) {
-        app.logAt3("-- match out 2: word", word, "with length", word.length, "more than max", this.state.maxMatchLength)
+        this.logAt3("-- match out 2: word", word, "with length", word.length, "more than max", this.state.maxMatchLength)
         return false
       }
       for (let i = 0; i < requiredLetters.length; i++) {
         let requiredLetter = requiredLetters[i]
         if (word.indexOf(requiredLetter) < 0) {
-          app.logAt3("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
+          this.logAt3("-- match out 3: word", word, "missing required letter", requiredLetter, "from", requiredLetters)
           return false
         }
       }
       for (let i = 0; i < word.length; i++) {
         let letter = word[i]
         if (allLetters.indexOf(letter) < 0) {
-          app.logAt3("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
+          this.logAt3("-- match out 4: word", word, "missing letter", letter, "from", allLetters)
           return false
         }
       }
-      app.logAt2("-- match:", word)
+      this.logAt2("-- match:", word)
       return true
     }
 
