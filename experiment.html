@@ -64,7 +64,6 @@
     border-radius: 4px;
     margin: 4px;
   }
-
   button:hover {
     font-weight: bold;
     background-color: #d8d8d8;
@@ -73,7 +72,6 @@
     border-radius: 4px;
     margin: 4px;
   }
-
   button:active {
     font-weight: bold;
     background-color: #c0c0c0;
@@ -205,7 +203,7 @@
 
 <p/>
 <div>
-  <button class="maroon" id="jsbee-output-show-hide-button"> Hide results </button>
+  <button class="maroon" id="jsbee-output-show-hide-button"> UNINIT </button>
 </div>
 <div>
   <span id="jsbee-output-count" style="display:none"> </span>
@@ -446,11 +444,44 @@
           },
         ),
 
-        "resetMatchLengthsButton": document.getElementById("jsbee-reset-match-lengths-button"),
+        "resetMatchLengthsButton": new Button(
+          "jsbee-reset-match-lengths-button",
+          "Reset",
+          () => {
+            this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+            this.elements.minMatchLengthElement.value = app.state.defaultMinMatchLength
+            this.elements.maxMatchLengthElement.value = app.state.defaultMaxMatchLength
+            this.state.minMatchLength = app.state.defaultMinMatchLength
+            this.state.maxMatchLength = app.state.defaultMaxMatchLength
+            this.showMatches()
+          },
+        ),
 
-        "outputShowHideButton":    document.getElementById("jsbee-output-show-hide-button"),
-        "outputCountElement":      document.getElementById("jsbee-output-count"),
-        "outputElement":           document.getElementById("jsbee-output"),
+        "outputShowHideButton": new Button(
+          "jsbee-output-show-hide-button",
+          //"Hide results", // XXX TEMP
+          "Show/hide results",
+          () => {
+            this.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
+            if (this.state.outputHidden) {
+              console.log("AAA")
+              this.state.outputHidden = false
+              //this.textContent = "Hide results" // RONG NOW
+              this.textContent = "Hide results" // RONG NOW
+              this.elements.outputCountElement.style.display = "none"
+              this.elements.outputElement.style.display = "block"
+            } else {
+              console.log("BBB")
+              this.state.outputHidden = true
+              t//his.textContent = "Show results" // RONG NOW
+              this.elements.outputCountElement.style.display = "block"
+              this.elements.outputElement.style.display = "none"
+            }
+          },
+        ),
+
+        "outputCountElement": document.getElementById("jsbee-output-count"),
+        "outputElement":      document.getElementById("jsbee-output"),
 
         "lightDarkModeElement": new LightDarkModeSlider(
           "jsbee-light-mode-dark-mode-toggle",
@@ -547,30 +578,13 @@
         app.showMatches()
       })
 
-      this.elements.resetMatchLengthsButton.addEventListener("click", function(event) {
-        app.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-        app.elements.minMatchLengthElement.value =  app.state.defaultMinMatchLength
-        app.elements.maxMatchLengthElement.value =  app.state.defaultMaxMatchLength
-        app.state.minMatchLength = app.state.defaultMinMatchLength
-        app.state.maxMatchLength = app.state.defaultMaxMatchLength
-        app.showMatches()
-      })
+    }
 
-      this.elements.outputShowHideButton.addEventListener("click", function(event) {
-        app.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
-        if (app.state.outputHidden) {
-          app.state.outputHidden = false
-          this.textContent = "Hide results"
-          app.elements.outputCountElement.style.display = "none"
-          app.elements.outputElement.style.display = "block"
-        } else {
-          app.state.outputHidden = true
-          this.textContent = "Show results"
-          app.elements.outputCountElement.style.display = "block"
-          app.elements.outputElement.style.display = "none"
-        }
-      })
-
+    onClear() {
+      this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
+      this.elements.requiredLettersElement.value = ""
+      this.elements.otherLettersElement.value = ""
+      this.showMatches()
     }
 
     checkWordList() {
