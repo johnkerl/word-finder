@@ -12,14 +12,26 @@ function isInteger(text) {
 }
 
 // ----------------------------------------------------------------
-// EXPERIMENTAL WIDGET CLASSES
+// WIDGET CLASSES
 
-// TODO:
-// * move to a separate .js file
-// * base class with hide/show and focus()? transparency suggests we do not
-// * text-span class with set/get? transparency suggests we do not
+class BaseElement {
+  constructor() {
+  }
 
-class Slider {
+  makeVisible() {
+    this.underlying.style.display = "block"
+  }
+
+  makeInvisible() {
+    this.underlying.style.display = "none"
+  }
+
+  focus() {
+    this.underlying.focus()
+  }
+}
+
+class Slider extends BaseElement {
   constructor(
     sliderElementID,
     labelElementID,
@@ -28,6 +40,7 @@ class Slider {
     toUncheckedCallback,
     toCheckedCallback,
   ) {
+    super()
 
     // Browser-model element by composition
     // * Underlying unchecked = slider left = light mode
@@ -121,12 +134,14 @@ class LightDarkModeSlider extends PersistentSlider {
   }
 }
 
-class Button {
+class Button extends BaseElement {
   constructor(
     elementID,
     text,
     callback,
   ) {
+    super()
+
     // Browser-model element by composition
     this.underlying = document.getElementById(elementID)
     // This lets underlying-level callbacks invoke our methods
@@ -140,11 +155,17 @@ class Button {
       obj.callback(event)
     })
   }
+
+  setTextContent(text) {
+    this.underlying.textContent = text
+  }
 }
 
-class TextInput {
+class TextInput extends BaseElement {
   // Single-line input element
   constructor(elementID, callback) {
+    super()
+
     // Browser-model element by composition
     this.underlying = document.getElementById(elementID)
 
@@ -166,9 +187,11 @@ class TextInput {
   }
 }
 
-class TextSpan {
+class TextSpan extends BaseElement {
   // This is write-only
   constructor(elementID, initialText) {
+    super()
+
     // Browser-model element by composition
     this.underlying = document.getElementById(elementID)
     this.underlying.textContent = initialText
@@ -178,9 +201,11 @@ class TextSpan {
   }
 }
 
-class IntRangeInput {
+class IntRangeInput extends BaseElement {
   // Int-selector with min/max caps, and protection against non-numeric user input
   constructor(elementID, defaultValue, minAllowable, maxAllowable, callback) {
+    super()
+
     this.defaultValue = defaultValue
     // Min/max values for this widget:
     this.minAllowable = minAllowable
@@ -242,8 +267,10 @@ class IntRangeInput {
   }
 }
 
-class Dropdown {
+class Dropdown extends BaseElement {
   constructor(elementID, callback) {
+    super()
+
     // Browser-model element by composition
     this.underlying = document.getElementById(elementID)
 

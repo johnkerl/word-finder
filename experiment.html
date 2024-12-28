@@ -232,7 +232,7 @@
 
 <!-- ================================================================ -->
 <script src="./classes.js">
-  // Note: self-closing doesn't work:
+  // Note: self-closing doesn't work for the script tag:
   //   <script src="./classes.js"/>
   // -- browsers will not see the close.
 </script>
@@ -261,7 +261,7 @@
 
       this.setElementsAndCallbacks()
       this.setWordList(this.elements.wordListDropdown.get())
-      this.elements.requiredLettersElement.underlying.focus()
+      this.elements.requiredLettersElement.focus()
     }
 
     setElementsAndCallbacks() {
@@ -269,14 +269,14 @@
 
       this.elements.requiredLettersElement = new TextInput(
         "jsbee-required-letters",
-        () => {
+        (event) => {
           this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
           this.showMatches()
       })
 
       this.elements.otherLettersElement = new TextInput(
         "jsbee-other-letters",
-        () => {
+        (event) => {
           this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
           this.showMatches()
       })
@@ -295,7 +295,7 @@
         this.state.minMatchLength, // default
         this.state.minMatchLength, // min
         this.state.maxMatchLength, // max
-        () => {
+        (event) => {
           this.showMatches()
         },
       )
@@ -305,12 +305,12 @@
         this.state.maxMatchLength, // default
         this.state.minMatchLength, // min
         this.state.maxMatchLength, // max
-        () => {
+        (event) => {
           this.showMatches()
         },
       )
 
-      // TODO: do this coupling at the class level -- IntRangeInputPair maybe
+      // TODO: do this coupling at the class level -- IntRangeInputPair maybe -- with resetter
       minMatchLengthElement.setPeerMax(maxMatchLengthElement)
       maxMatchLengthElement.setPeerMin(minMatchLengthElement)
 
@@ -320,7 +320,7 @@
       this.elements.clearLettersButton = new Button(
         "jsbee-clear-letters-button",
         "Clear",
-        () => {
+        (event) => {
           this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
           this.elements.requiredLettersElement.set("")
           this.elements.otherLettersElement.set("")
@@ -331,7 +331,7 @@
       this.elements.exampleButton = new Button(
         "jsbee-example-button",
         "Example",
-        () => {
+        (event) => {
           this.logAt1("EXAMPLE BUTTON WAS CLICKED")
           this.setExample()
           this.showMatches()
@@ -341,7 +341,7 @@
       this.elements.allOthersButton = new Button(
         "jsbee-all-others-button",
         "A-Z",
-        () => {
+        (event) => {
           this.logAt1("A-Z BUTTON WAS CLICKED")
           this.setAllOthers()
           this.showMatches()
@@ -351,7 +351,7 @@
       this.elements.resetMatchLengthsButton = new Button(
         "jsbee-reset-match-lengths-button",
         "Reset",
-        () => {
+        (event) => {
           this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
           this.elements.minMatchLengthElement.resetToDefault(),
           this.elements.maxMatchLengthElement.resetToDefault(),
@@ -359,22 +359,22 @@
         },
       )
 
+      // TODO: make a class for these three ...
       this.elements.outputShowHideButton = new Button(
         "jsbee-output-show-hide-button",
-        //"Hide results", // XXX TEMP
-        "Show/hide results",
-        () => {
+        "Hide results", // TODO: FIXME
+        (event) => {
           this.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
           if (this.state.outputHidden) {
             this.state.outputHidden = false
-            //this.textContent = "Hide results" // RONG NOW
-            this.elements.outputCountElement.underlying.style.display = "none"
-            this.elements.outputElement.underlying.style.display = "block"
+            this.elements.outputShowHideButton.setTextContent("Hide results") // TODO: THIS IS WEIRD NOW
+            this.elements.outputCountElement.makeInvisible()
+            this.elements.outputElement.makeVisible()
           } else {
             this.state.outputHidden = true
-            //this.textContent = "Show results" // RONG NOW
-            this.elements.outputCountElement.underlying.style.display = "block"
-            this.elements.outputElement.underlying.style.display = "none"
+            this.elements.outputShowHideButton.setTextContent("Show results") // TODO: THIS IS WEIRD NOW
+            this.elements.outputCountElement.makeVisible()
+            this.elements.outputElement.makeInvisible()
           }
         },
       )
@@ -385,11 +385,11 @@
       this.elements.lightDarkModeElement = new LightDarkModeSlider(
         "jsbee-light-mode-dark-mode-toggle",
         "jsbee-light-mode-dark-mode-label",
-        () => {
+        (event) => {
           document.body.style.backgroundColor = "white"
           document.body.style.color = "black"
         },
-        () => {
+        (event) => {
           document.body.style.backgroundColor = "black"
           document.body.style.color = "white"
         },

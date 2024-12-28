@@ -1,28 +1,15 @@
-maybe classes:
-* input text
-* integer range w/ protected input
-* min/max coupled range
-* buttons
-
-parents/mixins:
-* reset/clear pattern
-* example/A-Z pattern
-* maybe a base class -- ? for style.display etc?
-  o but this is redundant w/ respect to the browser model -- keep it transparent
-  o base elementID & obj?
-
 how to encapsulate:
-* ctor w/ form id -- where to insert
-  o min/default/max -- ctor args here too
-* reset methods
-* delegate event-listeners
-* attr-getters for avoiding duplication into app state
 * include CSS as well? needs to come from the app ...
 
-app level:
-* make the app a class? w/ its state?
-* setState method -- ?
+more:
+* use modules
 
 notes on react:
 * props: immutable, owned by the parent component, passed down to children
 * state: mutable, owned by the component itself
+
+TODO:
+* isInteger(3.4) b04k
+* parameterize upper-casing -- maybe a cleanerizer callback??
+* dropdown options in JS?
+* show/hide weirdness
