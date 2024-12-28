@@ -162,7 +162,7 @@
 
 <table>
 <tr>
-  <td> <button class="maroon" id="jsbee-clear-letters-button"> Clear </button> </td>
+  <td> <button class="maroon" id="jsbee-clear-letters-button"> UNINIT </button> </td>
   <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="jsbee-required-letters"></input> </td>
   <td> Required letter(s) </td>
 </tr>
@@ -206,10 +206,10 @@
   <button class="maroon" id="jsbee-output-show-hide-button"> UNINIT </button>
 </div>
 <div>
-  <span id="jsbee-output-count" style="display:none"> </span>
+  <span id="jsbee-output" style="display:block"> UNINIT </span>
 </div>
 <div>
-  <span id="jsbee-output" style="display:block"> </span>
+  <span id="jsbee-output-count" style="display:none"> UNINIT </span>
 </div>
 
 <!-- ================================================================ -->
@@ -236,7 +236,8 @@
   // ----------------------------------------------------------------
   // UTILITIES
 
-  // TODO: assertor for non-null (e.g. get-element-by-id)
+  // TODO:
+  // * assertor for non-null (e.g. get-element-by-id)
 
   function isInteger(text) {
     // TODO: this accepts '3.4' and should not
@@ -246,7 +247,10 @@
   // ----------------------------------------------------------------
   // EXPERIMENTAL WIDGET CLASSES
 
-  // TODO: move to a separate .js file
+  // TODO:
+  // * move to a separate .js file
+  // * base class with hide/show and focus()? transparency suggests we do not
+  // * text-span class with set/get? transparency suggests we do not
 
   class Slider {
     constructor(
@@ -364,10 +368,45 @@
 
       this.underlying.textContent = text
 
-      this.underlying.addEventListener("click", function(e) {
+      this.underlying.addEventListener("click", function(event) {
         let obj = this.parent // Map from browser-level up to class-level
-        obj.callback(e)
+        obj.callback(event)
       })
+    }
+  }
+
+  class TextInput {
+    // Single-line input element
+    constructor(elementID, callback) {
+      // Browser-model element by composition
+      this.underlying = document.getElementById(elementID)
+
+      // This lets underlying-level callbacks invoke our methods
+      this.underlying.parent = this
+      this.callback = callback
+
+      this.underlying.addEventListener("input", function(event) {
+        let obj = this.parent // Map from browser-level up to class-level
+        obj.callback(event)
+      })
+    }
+    set(text) {
+      this.underlying.value = text
+    }
+    get(text) {
+      return this.underlying.value
+    }
+  }
+
+  class TextSpan {
+    // This is write-only
+    constructor(elementID, initialText) {
+      // Browser-model element by composition
+      this.underlying = document.getElementById(elementID)
+      this.underlying.textContent = initialText
+    }
+    set(text) {
+      this.underlying.textContent = text
     }
   }
 
@@ -398,15 +437,28 @@
       this.state.maxMatchLength = this.state.defaultMaxMatchLength
       this.setWordList(this.elements.wordListDropdown.value)
 
-      this.elements.requiredLettersElement.focus()
+      this.elements.requiredLettersElement.underlying.focus()
 
     }
 
     setElementsAndCallbacks() {
       this.elements = {
 
-        "requiredLettersElement":  document.getElementById("jsbee-required-letters"),
-        "otherLettersElement":     document.getElementById("jsbee-other-letters"),
+        "requiredLettersElement": new TextInput(
+          "jsbee-required-letters",
+          () => {
+            this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+            // xxx.value = event.target.value.toUpperCase()
+            this.showMatches()
+        }),
+
+        "otherLettersElement": new TextInput(
+          "jsbee-other-letters",
+          () => {
+            this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+            // xxx.value = event.target.value.toUpperCase()
+            this.showMatches()
+        }),
 
         "wordListDropdown":        document.getElementById("jsbee-word-list-dropdown"),
 
@@ -418,8 +470,8 @@
           "Clear",
           () => {
             this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
-            this.elements.requiredLettersElement.value = ""
-            this.elements.otherLettersElement.value = ""
+            this.elements.requiredLettersElement.set("")
+            this.elements.otherLettersElement.set("")
             this.showMatches()
           },
         ),
@@ -464,24 +516,21 @@
           () => {
             this.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
             if (this.state.outputHidden) {
-              console.log("AAA")
               this.state.outputHidden = false
               //this.textContent = "Hide results" // RONG NOW
-              this.textContent = "Hide results" // RONG NOW
-              this.elements.outputCountElement.style.display = "none"
-              this.elements.outputElement.style.display = "block"
+              this.elements.outputCountElement.underlying.style.display = "none"
+              this.elements.outputElement.underlying.style.display = "block"
             } else {
-              console.log("BBB")
               this.state.outputHidden = true
-              t//his.textContent = "Show results" // RONG NOW
-              this.elements.outputCountElement.style.display = "block"
-              this.elements.outputElement.style.display = "none"
+              //this.textContent = "Show results" // RONG NOW
+              this.elements.outputCountElement.underlying.style.display = "block"
+              this.elements.outputElement.underlying.style.display = "none"
             }
           },
         ),
 
-        "outputCountElement": document.getElementById("jsbee-output-count"),
-        "outputElement":      document.getElementById("jsbee-output"),
+        "outputElement": new TextSpan("jsbee-output", ""),
+        "outputCountElement": new TextSpan("jsbee-output-count", ""),
 
         "lightDarkModeElement": new LightDarkModeSlider(
           "jsbee-light-mode-dark-mode-toggle",
@@ -496,18 +545,6 @@
           },
         )
       }
-
-      this.elements.requiredLettersElement.addEventListener("input", function(event) {
-        app.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
-        this.value = event.target.value.toUpperCase()
-        app.showMatches()
-      })
-
-      this.elements.otherLettersElement.addEventListener("input", function(event) {
-        app.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
-        this.value = event.target.value.toUpperCase()
-        app.showMatches()
-      })
 
       this.elements.wordListDropdown.addEventListener("change", function() {
         let url = this.value
@@ -582,18 +619,18 @@
 
     onClear() {
       this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
-      this.elements.requiredLettersElement.value = ""
-      this.elements.otherLettersElement.value = ""
+      this.elements.requiredLettersElement.set("")
+      this.elements.otherLettersElement.set("")
       this.showMatches()
     }
 
     checkWordList() {
       if (this.state.wordListURL == null) {
-        this.elements.outputElement.textContent = "No word list set"
+        this.elements.outputElement.set("No word list set")
         return false
       }
       if (this.state.wordList == null) {
-        this.elements.outputElement.textContent = "Failed to fetch word list from \"" + url + "\""
+        this.elements.outputElement.set('Failed to fetch word list from "' + url + '"')
         return false
       }
       return true
@@ -643,22 +680,22 @@
         return
       }
 
-      let requiredLetters = this.elements.requiredLettersElement.value
-      let otherLetters = this.elements.otherLettersElement.value
+      let requiredLetters = this.elements.requiredLettersElement.get()
+      let otherLetters = this.elements.otherLettersElement.get()
 
       let matches = this.getMatchesFromWordList(requiredLetters, otherLetters)
       matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       this.logAt2(matches)
 
-      this.elements.outputCountElement.textContent = "(" + String(matches.length) + " hidden)"
+      this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
 
       if (requiredLetters.length == 0 && otherLetters.length == 0) {
-        this.elements.outputElement.textContent = ""
+        this.elements.outputElement.set("")
       } else if (matches.length == 0) {
-        this.elements.outputElement.textContent = "(No matches)"
+        this.elements.outputElement.set("(No matches)")
       } else {
-        this.elements.outputElement.textContent = matches.join(" ")
+        this.elements.outputElement.set(matches.join(" "))
       }
     }
 
@@ -711,15 +748,15 @@
     }
 
     setAllOthers() {
-      this.elements.requiredLettersElement.value = ""
-      this.elements.otherLettersElement.value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      this.elements.outputElement.textContent = ""
+      this.elements.requiredLettersElement.set("")
+      this.elements.otherLettersElement.set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+      this.elements.outputElement.set("")
     }
 
     setExample() {
-      this.elements.requiredLettersElement.value = "E"
-      this.elements.otherLettersElement.value = "XAMPLS"
-      this.elements.outputElement.textContent = ""
+      this.elements.requiredLettersElement.set("E")
+      this.elements.otherLettersElement.set("XAMPLS")
+      this.elements.outputElement.set("")
     }
 
     // ----------------------------------------------------------------
