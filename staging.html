@@ -288,13 +288,43 @@ Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://gi
   // APPLICATION LOGIC
 
   function setWordList(state, url) {
+    logAt0("DOCUMENT.URL", document.URL)
     logAt0("FETCHING WORD LIST FROM URL:", url)
-    state.wordListURL = url
-    fetch(url).then((response) => response.text().then((text) => {
-      state.wordList = text.split("\n")
-      // Must be called from this callback, since this is async
-      showMatches(state)
-    }))
+
+    // CORS make us unable to load ./anything when doing local-disk dev
+    if (document.URL.startsWith("file://")) {
+      state.wordListURL = "local-in-memory"
+      state.wordList = [
+        "abaci", "acacia", "acai", "acetate", "affiant", "aioli", "alfalfa", "alga", "algae", "algal",
+        "allele", "ameba", "amoeba", "amoebae", "amyl", "anneal", "anyhoo", "apian", "apnea", "arancini",
+        "arhat", "aria", "aril", "arnica", "atilt", "atria", "attaboy", "baaed", "baba", "babel", "babka",
+        "bailiff", "banana", "bandana", "bandanna", "barbacoa", "blin", "blini", "boll", "bombe", "bonbon",
+        "bonobo", "booboo", "bootee", "bootie", "bowwow", "cabala", "cabana", "cacao", "cacti", "caddie",
+        "caddied", "caiman", "cairn", "calla", "callaloo", "cami", "cancan", "canid", "canna", "canola",
+        "cantata", "canteen", "captcha", "carioca", "celeb", "celli", "cellule", "cetacean", "chai", "chia",
+        "chic", "chica", "chichi", "ciao", "cirri", "coca", "cocci", "cocoa", "cocoon", "codon", "coho",
+        "coir", "colcannon", "collab", "croon", "deicide", "ditto", "dorado", "dunno", "electee", "emcee",
+        "emceed", "epee", "falafel", "fantail", "froufrou", "galangal", "gavage", "gelee", "gooey",
+        "google", "googol", "gotta", "haka", "hake", "halal", "hamachi", "haram", "hatha", "hoodoo",
+        "iambi", "icemen", "imam", "infill", "innie", "iota", "laic", "laical", "lallygag", "lanai",
+        "lanolin", "lantana", "lavage", "libelee", "llano", "logroll", "lollygag", "lookback", "lookbook",
+        "loonie", "luging", "lunula", "magma", "mahatma", "malic", "mama", "melee", "mentee", "minim",
+        "momma", "muumuu", "naan", "nada", "naiad", "nana", "nankeen", "natant", "nene", "neocon", "niacin",
+        "noncom", "nonillion", "nuncio", "oleo", "olio", "onion", "paean", "paella", "palapa", "pampa",
+        "panini", "papa", "payee", "peahen", "peke", "pica", "pinniped", "pintail", "pipit", "pippin",
+        "pitapat", "pooh", "poplin", "poppa", "powwow", "raffia", "raita", "rapini", "ratatat", "ribbit",
+        "rococo", "tahini", "tali", "tannic", "tannin", "tantara", "tartan", "tartar", "tattoo", "tilth",
+        "tinct", "titmice", "toccata", "tomtit", "toon", "toonie", "tori", "toric", "torii", "tutee",
+        "tutti", "tutu", "undid", "vanilla", "vanillin", "woohoo",
+      ]
+    } else {
+      state.wordListURL = url
+      fetch(url).then((response) => response.text().then((text) => {
+        state.wordList = text.split("\n")
+        // Must be called from this callback, since this is async
+        showMatches(state)
+      }))
+    }
   }
 
   function checkWordList(state) {
