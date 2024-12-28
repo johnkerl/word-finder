@@ -410,6 +410,55 @@
     }
   }
 
+  class IntRangeInput {
+    // Int-selector with min/max caps, and protection against non-numeric user input
+    constructor(elementID, defaultValue, minAllowable, maxAllowable, callback) {
+      this.defaultValue = defaultValue
+      this.minAllowable = minAllowable
+      this.maxAllowable = maxAllowable
+
+      // Browser-model element by composition
+      this.underlying = document.getElementById(elementID)
+
+      // This lets underlying-level callbacks invoke our methods
+      this.underlying.parent = this
+      this.callback = callback
+
+      // XXX TO MERGE
+      this.underlying.addEventListener("change", function(event) {
+        let obj = this.parent // Map from browser-level up to class-level
+
+        // The up-and-down sliders won't let the user choose outside the widget's min/max.
+        // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
+        if (!isInteger(event.target.value)) {
+          obj.underlying.value = obj.defaultValue
+        } else {
+          let requestedValue = Number(event.target.value)
+
+          // Check self-bounds
+          if (requestedValue < obj.minAllowable) {
+            obj.underlying.value = obj.minAllowable
+          } else if (requestedValue > obj.maxAllowable) {
+            obj.underlying.value = obj.maxAllowable
+        }
+
+//        // XXX TO DO
+//        // Check other-bounds
+//        } else if (requestedValue > app.state.maxMatchLength) {
+//          this.value = app.state.maxMatchLength
+//
+//        } else {
+//          app.state.minMatchLength = requestedValue
+//        }
+
+        obj.callback(event)
+      })
+    }
+    setDefault() {
+      this.underlying.value = this.defaultValue
+    }
+  }
+
   // ----------------------------------------------------------------
   // APPLICATION STATE
 
@@ -421,6 +470,7 @@
         "logLevel": 0, // 0,1,2,3
         "defaultMinMatchLength": 4,
         "defaultMaxMatchLength": 16,
+        // XXX REMOVE FROM APP STATE AND MOVE TO WIDGET STATE
         "minMatchLength": 4,
         "maxMatchLength": 16,
         "wordListURL": null,
@@ -435,10 +485,10 @@
 
       this.state.minMatchLength = this.state.defaultMinMatchLength
       this.state.maxMatchLength = this.state.defaultMaxMatchLength
+
       this.setWordList(this.elements.wordListDropdown.value)
 
       this.elements.requiredLettersElement.underlying.focus()
-
     }
 
     setElementsAndCallbacks() {
@@ -448,7 +498,6 @@
           "jsbee-required-letters",
           () => {
             this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
-            // xxx.value = event.target.value.toUpperCase()
             this.showMatches()
         }),
 
@@ -456,7 +505,6 @@
           "jsbee-other-letters",
           () => {
             this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
-            // xxx.value = event.target.value.toUpperCase()
             this.showMatches()
         }),
 
@@ -615,13 +663,6 @@
         app.showMatches()
       })
 
-    }
-
-    onClear() {
-      this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
-      this.elements.requiredLettersElement.set("")
-      this.elements.otherLettersElement.set("")
-      this.showMatches()
     }
 
     checkWordList() {
