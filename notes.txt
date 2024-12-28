@@ -9,6 +9,7 @@ parents/mixins:
 * example/A-Z pattern
 * maybe a base class -- ? for style.display etc?
   o but this is redundant w/ respect to the browser model -- keep it transparent
+  o base elementID & obj?
 
 how to encapsulate:
 * ctor w/ form id -- where to insert

@@ -182,6 +182,7 @@
   <td> &nbsp; </td>
   <td>
     <select tabindex=3 id="jsbee-word-list-dropdown">
+      <!-- TODO: init the options in JS or HTML? -->
       <option value="./usual-suspects.txt">Usual suspects</option>
       <option value="./long-list.txt">Long list</option>
     </select>
@@ -259,7 +260,7 @@
       }
 
       this.setElementsAndCallbacks()
-      this.setWordList(this.elements.wordListDropdown.value)
+      this.setWordList(this.elements.wordListDropdown.get())
       this.elements.requiredLettersElement.underlying.focus()
     }
 
@@ -280,7 +281,14 @@
           this.showMatches()
       })
 
-      this.elements.wordListDropdown = document.getElementById("jsbee-word-list-dropdown")
+      this.elements.wordListDropdown = new Dropdown(
+        "jsbee-word-list-dropdown",
+        (event) => {
+          let url = event.target.value
+          this.logAt1("SELECTED WORD LIST: <<", url, ">>")
+          this.setWordList(url)
+          this.showMatches()
+      })
 
       let minMatchLengthElement = new IntRangeInput(
         "jsbee-min-match-length",
@@ -386,13 +394,6 @@
           document.body.style.color = "white"
         },
       )
-
-      this.elements.wordListDropdown.addEventListener("change", function() {
-        let url = this.value
-        app.logAt1("SELECTED WORD LIST: <<", url, ">>")
-        app.setWordList(url)
-        app.showMatches()
-      })
 
     }
 
