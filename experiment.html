@@ -230,234 +230,17 @@
 <p/>
 
 <!-- ================================================================ -->
+<script src="./classes.js">
+  // Note: self-closing doesn't work:
+  //   <script src="./classes.js"/>
+  // -- browsers will not see the close.
+</script>
+
 <script>
   'use strict';
 
-  // ----------------------------------------------------------------
-  // UTILITIES
-
-  // TODO:
-  // * assertor for non-null (e.g. get-element-by-id)
-
-  function isInteger(text) {
-    // TODO: this accepts '3.4' and should not
-    return !isNaN(parseInt(text))
-  }
-
-  // ----------------------------------------------------------------
-  // EXPERIMENTAL WIDGET CLASSES
-
-  // TODO:
-  // * move to a separate .js file
-  // * base class with hide/show and focus()? transparency suggests we do not
-  // * text-span class with set/get? transparency suggests we do not
-
-  class Slider {
-    constructor(
-      sliderElementID,
-      labelElementID,
-      isUncheckedLabel,
-      isCheckedLabel,
-      toUncheckedCallback,
-      toCheckedCallback,
-    ) {
-
-      // Browser-model element by composition
-      // * Underlying unchecked = slider left = light mode
-      // * Underlying checked   = slider left = dark  mode
-      this.underlyingSlider = document.getElementById(sliderElementID)
-      this.underlyingLabel  = document.getElementById(labelElementID)
-      // This lets underlying-level callbacks invoke our methods
-      this.underlyingSlider.parent = this
-
-      this.isUncheckedLabel    = isUncheckedLabel
-      this.isCheckedLabel      = isCheckedLabel
-      this.toUncheckedCallback = toUncheckedCallback
-      this.toCheckedCallback   = toCheckedCallback
-
-      this.underlyingSlider.addEventListener("change", function(e) {
-        let obj = this.parent // Map from browser-level up to class-level
-        if (this.checked) { // Here, this is the underlying, and this.checked is the new state
-          obj.toChecked(e)
-        } else {
-          obj.toUnchecked(e)
-        }
-      })
-    }
-
-    // Set the browser-level elements we control
-    toUnchecked(e) {
-      this.toUncheckedCallback(e)
-      this.underlyingLabel.textContent = this.isUncheckedLabel
-      this.underlyingSlider.checked = false
-    }
-    toChecked(e) {
-      this.toCheckedCallback(e)
-      this.underlyingLabel.textContent = this.isCheckedLabel
-      this.underlyingSlider.checked = true
-    }
-  }
-
-  class PersistentSlider extends Slider {
-    // Uses local storage to remember the state of the slider
-
-    constructor(
-      sliderElementID,
-      labelElementID,
-      isUncheckedLabel,
-      isCheckedLabel,
-      toUncheckedCallback,
-      toCheckedCallback,
-    ) {
-
-      super(
-        sliderElementID,
-        labelElementID,
-        isUncheckedLabel,
-        isCheckedLabel,
-        toUncheckedCallback,
-        toCheckedCallback,
-      )
-
-      this.localStorageKey = document.URL + ":" + sliderElementID + ":checked"
-
-      // Restore previous state upon construction
-      if (localStorage.getItem(this.localStorageKey) == "true") {
-        this.toChecked(null)
-      } else {
-        this.toUnchecked(null)
-      }
-    }
-
-    // Remember last-set state
-    toUnchecked(e) {
-      super.toUnchecked(e)
-      localStorage.setItem(this.localStorageKey, "false")
-    }
-    toChecked(e) {
-      super.toChecked(e)
-      localStorage.setItem(this.localStorageKey, "true")
-    }
-  }
-
-  class LightDarkModeSlider extends PersistentSlider {
-    // Lightly decorates PersistentSlider by adding labels
-    constructor(sliderElementID, labelElementID, lightenCallback, darkenCallback) {
-      super(
-        sliderElementID,
-        labelElementID,
-        "Switch to dark mode",
-        "Switch to light mode",
-        lightenCallback,
-        darkenCallback,
-      )
-    }
-  }
-
-  class Button {
-    constructor(
-      elementID,
-      text,
-      callback,
-    ) {
-      // Browser-model element by composition
-      this.underlying = document.getElementById(elementID)
-      // This lets underlying-level callbacks invoke our methods
-      this.underlying.parent = this
-      this.callback = callback
-
-      this.underlying.textContent = text
-
-      this.underlying.addEventListener("click", function(event) {
-        let obj = this.parent // Map from browser-level up to class-level
-        obj.callback(event)
-      })
-    }
-  }
-
-  class TextInput {
-    // Single-line input element
-    constructor(elementID, callback) {
-      // Browser-model element by composition
-      this.underlying = document.getElementById(elementID)
-
-      // This lets underlying-level callbacks invoke our methods
-      this.underlying.parent = this
-      this.callback = callback
-
-      this.underlying.addEventListener("input", function(event) {
-        let obj = this.parent // Map from browser-level up to class-level
-        obj.callback(event)
-      })
-    }
-    set(text) {
-      this.underlying.value = text
-    }
-    get(text) {
-      return this.underlying.value
-    }
-  }
-
-  class TextSpan {
-    // This is write-only
-    constructor(elementID, initialText) {
-      // Browser-model element by composition
-      this.underlying = document.getElementById(elementID)
-      this.underlying.textContent = initialText
-    }
-    set(text) {
-      this.underlying.textContent = text
-    }
-  }
-
-  class IntRangeInput {
-    // Int-selector with min/max caps, and protection against non-numeric user input
-    constructor(elementID, defaultValue, minAllowable, maxAllowable, callback) {
-      this.defaultValue = defaultValue
-      this.minAllowable = minAllowable
-      this.maxAllowable = maxAllowable
-
-      // Browser-model element by composition
-      this.underlying = document.getElementById(elementID)
-
-      // This lets underlying-level callbacks invoke our methods
-      this.underlying.parent = this
-      this.callback = callback
-
-      // XXX TO MERGE
-      this.underlying.addEventListener("change", function(event) {
-        let obj = this.parent // Map from browser-level up to class-level
-
-        // The up-and-down sliders won't let the user choose outside the widget's min/max.
-        // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
-        if (!isInteger(event.target.value)) {
-          obj.underlying.value = obj.defaultValue
-        } else {
-          let requestedValue = Number(event.target.value)
-
-          // Check self-bounds
-          if (requestedValue < obj.minAllowable) {
-            obj.underlying.value = obj.minAllowable
-          } else if (requestedValue > obj.maxAllowable) {
-            obj.underlying.value = obj.maxAllowable
-        }
-
-//        // XXX TO DO
-//        // Check other-bounds
-//        } else if (requestedValue > app.state.maxMatchLength) {
-//          this.value = app.state.maxMatchLength
-//
-//        } else {
-//          app.state.minMatchLength = requestedValue
-//        }
-
-        obj.callback(event)
-      })
-    }
-    setDefault() {
-      this.underlying.value = this.defaultValue
-    }
-  }
+  // Someday:
+  // import {isInteger, LightDarkModeSlider, Button, TextInput, TextSpan, IntRangeInput } from "./classes.js"
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
@@ -468,9 +251,6 @@
 
       this.state = {
         "logLevel": 0, // 0,1,2,3
-        "defaultMinMatchLength": 4,
-        "defaultMaxMatchLength": 16,
-        // XXX REMOVE FROM APP STATE AND MOVE TO WIDGET STATE
         "minMatchLength": 4,
         "maxMatchLength": 16,
         "wordListURL": null,
@@ -479,19 +259,12 @@
       }
 
       this.setElementsAndCallbacks()
-
-      this.elements.minMatchLengthElement.value = this.state.defaultMinMatchLength
-      this.elements.maxMatchLengthElement.value = this.state.defaultMaxMatchLength
-
-      this.state.minMatchLength = this.state.defaultMinMatchLength
-      this.state.maxMatchLength = this.state.defaultMaxMatchLength
-
       this.setWordList(this.elements.wordListDropdown.value)
-
       this.elements.requiredLettersElement.underlying.focus()
     }
 
     setElementsAndCallbacks() {
+      console.log("WTFC")
       this.elements = {
 
         "requiredLettersElement": new TextInput(
@@ -510,8 +283,25 @@
 
         "wordListDropdown":        document.getElementById("jsbee-word-list-dropdown"),
 
-        "minMatchLengthElement":   document.getElementById("jsbee-min-match-length"),
-        "maxMatchLengthElement":   document.getElementById("jsbee-max-match-length"),
+        "minMatchLengthElement": new IntRangeInput(
+          "jsbee-min-match-length",
+          this.state.minMatchLength, // default
+          this.state.minMatchLength, // min
+          this.state.maxMatchLength, // maxt
+          () => {
+            this.showMatches()
+          },
+        ),
+
+        "maxMatchLengthElement": new IntRangeInput(
+          "jsbee-max-match-length",
+          this.state.maxMatchLength, // default
+          this.state.minMatchLength, // min
+          this.state.maxMatchLength, // maxt
+          () => {
+            this.showMatches()
+          },
+        ),
 
         "clearLettersButton": new Button(
           "jsbee-clear-letters-button",
@@ -549,10 +339,8 @@
           "Reset",
           () => {
             this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
-            this.elements.minMatchLengthElement.value = this.state.defaultMinMatchLength
-            this.elements.maxMatchLengthElement.value = this.state.defaultMaxMatchLength
-            this.state.minMatchLength = this.state.defaultMinMatchLength
-            this.state.maxMatchLength = this.state.defaultMaxMatchLength
+            this.elements.minMatchLengthElement.resetToDefault(),
+            this.elements.maxMatchLengthElement.resetToDefault(),
             this.showMatches()
           },
         ),
@@ -598,68 +386,6 @@
         let url = this.value
         app.logAt1("SELECTED WORD LIST: <<", url, ">>")
         app.setWordList(url)
-        app.showMatches()
-      })
-
-      this.elements.minMatchLengthElement.addEventListener("change", function(event) {
-        app.logAt1("MIN LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
-
-        // The up-and-down sliders won't let the user choose outside the widget's min/max.
-        // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
-        if (!isInteger(event.target.value)) {
-          this.value = this.defaultValue
-          app.state.minMatchLength = this.value
-          app.showMatches()
-          return;
-        }
-        let requestedValue = Number(event.target.value)
-
-        // Check self-bounds
-        if (requestedValue < this.min) {
-          app.state.minMatchLength = this.min
-          this.value = this.min
-        } else if (requestedValue > this.max) {
-          app.state.minMatchLength = this.max
-          this.value = this.max
-
-        // Check other-bounds
-        } else if (requestedValue > app.state.maxMatchLength) {
-          this.value = app.state.maxMatchLength
-
-        } else {
-          app.state.minMatchLength = requestedValue
-        }
-        app.showMatches()
-      })
-
-      this.elements.maxMatchLengthElement.addEventListener("change", function(event) {
-        app.logAt1("MAX LENGTH CHANGE", event.target.value, "; CURRENT", app.state.minMatchLength, app.state.maxMatchLength)
-
-        // The up-and-down sliders won't let the user choose outside the widget's min/max.
-        // But the user can still type "999" or "aaa" into the widget. Here we protect against this.
-        if (!isInteger(event.target.value)) {
-          this.value = this.defaultValue
-          app.state.maxMatchLength = this.value
-          app.showMatches()
-          return;
-        }
-        let requestedValue = Number(event.target.value)
-
-        // Check self-bounds
-        if (requestedValue < this.min) {
-          app.state.maxMatchLength = this.min
-          this.value = this.min
-        } else if (requestedValue > this.max) {
-          app.state.maxMatchLength = this.max
-          this.value = this.max
-
-        // Check other-bounds
-        } else if (requestedValue < app.state.minMatchLength) {
-          this.value = app.state.minMatchLength
-
-        } else {
-          app.state.maxMatchLength = requestedValue
-        }
         app.showMatches()
       })
 
@@ -762,12 +488,16 @@
 
     wordMatches(requiredLetters, optionalLetters, word) {
       let allLetters = requiredLetters + optionalLetters
-      if (this.state.minMatchLength != null && word.length < this.state.minMatchLength) {
-        this.logAt3("-- match out 1: word", word, "with length", word.length, "less than min", this.state.minMatchLength)
+
+      let minMatchLength = this.elements.minMatchLengthElement.get()
+      let maxMatchLength = this.elements.maxMatchLengthElement.get()
+
+      if (minMatchLength != null && word.length < minMatchLength) {
+        this.logAt3("-- match out 1: word", word, "with length", word.length, "less than min", minMatchLength)
         return false
       }
-      if (this.state.maxMatchLength != null && word.length > this.state.maxMatchLength) {
-        this.logAt3("-- match out 2: word", word, "with length", word.length, "more than max", this.state.maxMatchLength)
+      if (maxMatchLength != null && word.length > maxMatchLength) {
+        this.logAt3("-- match out 2: word", word, "with length", word.length, "more than max", maxMatchLength)
         return false
       }
       for (let i = 0; i < requiredLetters.length; i++) {
@@ -828,6 +558,7 @@
   }
 
   // ----------------------------------------------------------------
+  console.log("WTF9")
   const app = new JSBeeApp()
 
 </script>
