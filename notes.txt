@@ -5,6 +5,8 @@ how to encapsulate:
 * include CSS as well? needs to come from the app ...
 
 more:
+* the .maroon business has always been weird
+  o relates to CSS-specification improvement ..
 * use modules
 
 notes on react:
@@ -20,4 +22,3 @@ TODO:
 * isInteger(3.4) b04k
 * parameterize upper-casing -- maybe a cleanerizer callback??
 * dropdown options in JS?
-* show/hide weirdness
