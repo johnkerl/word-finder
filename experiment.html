@@ -261,12 +261,9 @@
 <p/>
 
 <!-- ================================================================ -->
-<!--
 <script src="https://johnkerl.org/sliver/classes.js">
--->
-<script src="./classes.js">
   // Note: self-closing doesn't work for the script tag:
-  //   <script src="./classes.js"/>
+  //   <script src="whatever.js"/>
   // -- browsers will not see the close.
 </script>
 
@@ -274,7 +271,7 @@
   'use strict';
 
   // Someday:
-  // import {isInteger, LightDarkModeSlider, Button, TextInput, TextSpan, IntRangeInput } from "./classes.js"
+  // import {isInteger, LightDarkModeSlider, Button, TextInput, TextSpan, IntRangeInput } from "https://johnkerl.org/sliver/classes.js"
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
@@ -289,7 +286,6 @@
         "maxMatchLength": 16,
         "wordListURL": null,
         "wordList": null,
-        "outputHidden": false,
       }
 
       this.setElementsAndCallbacks()

@@ -18,6 +18,8 @@ This is a quick little JavaScript app for (last-hope-desperation!!) peeking into
 
 [https://johnkerl.org/jsbee](https://johnkerl.org/jsbee).
 
+Note: this uses the [Sliver JavaScript framework](https://github.com/johnkerl/sliver).
+
 ## Examples
 
 Specify one required or "center" letter, and others, using the short list:

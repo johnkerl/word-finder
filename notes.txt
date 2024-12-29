@@ -15,9 +15,7 @@ notes on react:
 * state: mutable, owned by the component itself
 
 sliver:
-* package w/ readme etc
 * props to ctors (e.g. button colors)
-* example app
 
 TODO:
 * isInteger(3.4) b04k
