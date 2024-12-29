@@ -59,6 +59,7 @@
   button {
     font-weight: bold;
     color: maroon;
+    background-color: #e8e8e8;
     border: 0;
     padding: 4px;
     border-radius: 4px;
@@ -92,10 +93,6 @@
     text-align: center;
   }
   .maroon {
-    color: maroon;
-  }
-  .boldmaroon {
-    font-weight: bold;
     color: maroon;
   }
 
@@ -193,6 +190,7 @@
   </td>
   <td> Word list </td>
 </tr>
+
 <tr>
   <td> <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button> </td>
   <td>
@@ -370,27 +368,16 @@
         },
       )
 
-      // TODO: make a class for these three ...
-      this.elements.outputShowHideButton = new Button(
-        "jsbee-output-show-hide-button",
-        "Hide results", // TODO: FIXME
-        (event) => {
-          this.logAt1("OUTPUT SHOW-HIDE BUTTON WAS CLICKED")
-          if (this.state.outputHidden) {
-            this.state.outputHidden = false
-            this.elements.outputShowHideButton.setTextContent("Hide results") // TODO: THIS IS WEIRD NOW
-            this.elements.outputCountElement.makeInvisible()
-            this.elements.outputElement.makeVisible()
-          } else {
-            this.state.outputHidden = true
-            this.elements.outputShowHideButton.setTextContent("Show results") // TODO: THIS IS WEIRD NOW
-            this.elements.outputCountElement.makeVisible()
-            this.elements.outputElement.makeInvisible()
-          }
-        },
-      )
       this.elements.outputElement = new TextSpan("jsbee-output", "")
       this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
+
+      this.outputShowHideButton = new TwoElementSwitcher(
+        "jsbee-output-show-hide-button",
+        this.elements.outputElement,
+        this.elements.outputCountElement,
+        "Hide results",
+        "Show results",
+      )
 
       this.elements.lightDarkModeElement = new LightDarkModeSlider(
         "jsbee-light-mode-dark-mode-toggle",
@@ -404,6 +391,12 @@
           document.body.style.color = "white"
         },
       )
+
+      //this.fooTable1 = new GenericElement("jsbee-foo-table-1")
+      //this.fooTable2 = new GenericElement("jsbee-foo-table-2")
+      //this.foo1 = new GenericElement("foo1")
+      //this.foo2 = new GenericElement("foo2")
+      //this.fooButton = new TwoElementSwitcher("jsbee-foo-button", this.foo1, this.foo2, "FOO", "BAR")
 
     }
 

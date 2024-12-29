@@ -20,6 +20,7 @@ class BaseElement {
 
   makeVisible() {
     this.underlying.style.display = "block"
+    //this.underlying.style.display = "inline"
   }
 
   makeInvisible() {
@@ -28,6 +29,15 @@ class BaseElement {
 
   focus() {
     this.underlying.focus()
+  }
+}
+
+class GenericElement extends BaseElement {
+  constructor(
+    elementID,
+  ) {
+    super()
+    this.underlying = document.getElementById(elementID)
   }
 }
 
@@ -286,5 +296,48 @@ class Dropdown extends BaseElement {
 
   get() {
     return this.underlying.value
+  }
+}
+
+class TwoElementSwitcher {
+  // A single button, controlling which of two elements are visible
+  constructor(
+    buttonElementID,
+    item1, // TODO: assert extends BaseElement
+    item2, // TODO: assert extends BaseElement
+    item1ShownButtonText,
+    item2ShownButtonText,
+  ) {
+    this.button = new Button(buttonElementID, item1ShownButtonText, this.onClick)
+    this.button.parent = this
+    this.item1  = item1
+    this.item2  = item2
+    this.item1ShownButtonText = item1ShownButtonText
+    this.item2ShownButtonText = item2ShownButtonText
+    this.show1()
+  }
+
+  show1() {
+    this.whichShown = 1
+    this.item1.makeVisible()
+    this.item2.makeInvisible()
+    this.button.setTextContent(this.item1ShownButtonText)
+  }
+
+  show2() {
+    this.whichShown = 2
+    this.item1.makeInvisible()
+    this.item2.makeVisible()
+    this.button.setTextContent(this.item2ShownButtonText)
+  }
+
+  onClick(event) {
+    // "this" is the Button; need to parent up to get the TwoElementSwitcher
+    let obj = this.parent
+    if (obj.whichShown == 1) {
+      obj.show2()
+    } else {
+      obj.show1()
+    }
   }
 }
