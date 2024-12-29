@@ -19,8 +19,8 @@ class BaseElement {
   }
 
   makeVisible() {
-    this.underlying.style.display = "block"
-    //this.underlying.style.display = "inline"
+    // Null is best for show/hide of table rows/cells, vs/ "block" or "inline"
+    this.underlying.style.display = null
   }
 
   makeInvisible() {
@@ -303,32 +303,38 @@ class TwoElementSwitcher {
   // A single button, controlling which of two elements are visible
   constructor(
     buttonElementID,
-    item1, // TODO: assert extends BaseElement
-    item2, // TODO: assert extends BaseElement
-    item1ShownButtonText,
-    item2ShownButtonText,
+    itemList1, // TODO: assert each extends BaseElement
+    itemList2, // TODO: assert each extends BaseElement
+    itemList1ShownButtonText,
+    itemList2ShownButtonText,
+    appCallback,
   ) {
-    this.button = new Button(buttonElementID, item1ShownButtonText, this.onClick)
+    this.button = new Button(buttonElementID, itemList1ShownButtonText, this.onClick)
     this.button.parent = this
-    this.item1  = item1
-    this.item2  = item2
-    this.item1ShownButtonText = item1ShownButtonText
-    this.item2ShownButtonText = item2ShownButtonText
+    this.itemList1  = itemList1
+    this.itemList2  = itemList2
+    this.itemList1ShownButtonText = itemList1ShownButtonText
+    this.itemList2ShownButtonText = itemList2ShownButtonText
+    this.appCallback = appCallback
     this.show1()
+  }
+
+  which() {
+    return this.whichShown
   }
 
   show1() {
     this.whichShown = 1
-    this.item1.makeVisible()
-    this.item2.makeInvisible()
-    this.button.setTextContent(this.item1ShownButtonText)
+    this.itemList1.forEach((item) => item.makeVisible())
+    this.itemList2.forEach((item) => item.makeInvisible())
+    this.button.setTextContent(this.itemList1ShownButtonText)
   }
 
   show2() {
     this.whichShown = 2
-    this.item1.makeInvisible()
-    this.item2.makeVisible()
-    this.button.setTextContent(this.item2ShownButtonText)
+    this.itemList1.forEach((item) => item.makeInvisible())
+    this.itemList2.forEach((item) => item.makeVisible())
+    this.button.setTextContent(this.itemList2ShownButtonText)
   }
 
   onClick(event) {
@@ -339,5 +345,6 @@ class TwoElementSwitcher {
     } else {
       obj.show1()
     }
+    obj.appCallback()
   }
 }

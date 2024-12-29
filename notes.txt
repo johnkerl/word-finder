@@ -1,5 +1,6 @@
 app:
-* mwords as card somehow ... hidden/switch ...
+* current/next semantics for mode button (vs hide/show button)
+* local-storage memory for bee/pattern mode, and word-list selection -- and hey probably minmax as well
 
 how to encapsulate:
 * include CSS as well? needs to come from the app ...
@@ -22,3 +23,5 @@ TODO:
 * isInteger(3.4) b04k
 * parameterize upper-casing -- maybe a cleanerizer callback??
 * dropdown options in JS?
+* lots of assertions
+* better way to surface errors
