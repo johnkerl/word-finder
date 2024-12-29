@@ -3,9 +3,9 @@
 
 <head>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-<meta name="description" content="jsbee" />
+<meta name="description" content="jsbee:dev" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- mobile-friendly -->
-<title>jsbee</title>
+<title>jsbee:dev</title>
 
 <style>
 
@@ -261,17 +261,28 @@
 <p/>
 
 <!-- ================================================================ -->
-<script src="https://johnkerl.org/sliver/stable/classes.js">
+<!--
+<script src="https://johnkerl.org/sliver/dev/classes.js">
   // Note: self-closing doesn't work for the script tag:
   //   <script src="whatever.js"/>
   // -- browsers will not see the close.
 </script>
+-->
 
-<script>
+<script type=module>
   'use strict';
 
-  // Someday:
-  // import {isInteger, LightDarkThemeSlider, Button, TextInput, TextSpan, IntRangeInput } from "https://johnkerl.org/sliver/classes.js"
+  import {
+    Button,
+    Dropdown,
+    GenericElement,
+    IntRangeInput,
+    LightDarkThemeSlider,
+    TextInput,
+    TextSpan,
+    TwoElementSwitcher,
+    isInteger
+  } from "https://johnkerl.org/sliver/dev/classes.js"
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
