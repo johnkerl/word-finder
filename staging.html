@@ -282,7 +282,9 @@
 
       this.state = {
         "logLevel": 0, // 0,1,2,3
-        "minMatchLength": 4,
+        "defaultLowMatchLength": 4,
+        "defaultHighMatchLength": 16,
+        "minMatchLength": 1,
         "maxMatchLength": 16,
         "wordListURL": null,
         "wordList": null,
@@ -351,7 +353,7 @@
 
       let minMatchLengthElement = new IntRangeInput(
         "jsbee-min-match-length",
-        this.state.minMatchLength, // default
+        this.state.defaultLowMatchLength, // default
         this.state.minMatchLength, // min
         this.state.maxMatchLength, // max
         (event) => {
@@ -361,7 +363,7 @@
 
       let maxMatchLengthElement = new IntRangeInput(
         "jsbee-max-match-length",
-        this.state.maxMatchLength, // default
+        this.state.defaultHighMatchLength, // default
         this.state.minMatchLength, // min
         this.state.maxMatchLength, // max
         (event) => {
