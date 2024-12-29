@@ -10,10 +10,10 @@
 <style>
 
   body {
-    /* Light mode */
+    /* Light theme */
     color: black;
     background-color: white;
-    /* Dark mode */
+    /* Dark theme */
     /*
     color: white;
     background-color: black;
@@ -253,10 +253,10 @@
 
 <div>
   <label class="switch">
-    <input type="checkbox" id="jsbee-light-mode-dark-mode-toggle">
+    <input type="checkbox" id="jsbee-light-theme-dark-theme-toggle">
     <span class="slider round"></span>
   </label>
-  <span id="jsbee-light-mode-dark-mode-label">UNINIT</span>
+  <span id="jsbee-light-theme-dark-theme-label">UNINIT</span>
 </div>
 <p/>
 
@@ -271,7 +271,7 @@
   'use strict';
 
   // Someday:
-  // import {isInteger, LightDarkModeSlider, Button, TextInput, TextSpan, IntRangeInput } from "https://johnkerl.org/sliver/classes.js"
+  // import {isInteger, LightDarkThemeSlider, Button, TextInput, TextSpan, IntRangeInput } from "https://johnkerl.org/sliver/classes.js"
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
@@ -452,9 +452,9 @@
         () => {},
       )
 
-      this.elements.lightDarkModeElement = new LightDarkModeSlider(
-        "jsbee-light-mode-dark-mode-toggle",
-        "jsbee-light-mode-dark-mode-label",
+      this.elements.lightDarkThemeElement = new LightDarkThemeSlider(
+        "jsbee-light-theme-dark-theme-toggle",
+        "jsbee-light-theme-dark-theme-label",
         (event) => {
           document.body.style.backgroundColor = "white"
           document.body.style.color = "black"
