@@ -1,3 +1,6 @@
+app:
+* mwords as card somehow ... hidden/switch ...
+
 how to encapsulate:
 * include CSS as well? needs to come from the app ...
 
@@ -7,6 +10,11 @@ more:
 notes on react:
 * props: immutable, owned by the parent component, passed down to children
 * state: mutable, owned by the component itself
+
+sliver:
+* package w/ readme etc
+* props to ctors (e.g. button colors)
+* example app
 
 TODO:
 * isInteger(3.4) b04k

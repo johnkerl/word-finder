@@ -160,6 +160,10 @@
 
 <h1><span class="boxed-text">jsbee</span></h1>
 
+<!--
+<div border=1 style="border: 1px solid black; padding:10px">
+-->
+
 <table>
 <tr>
   <td> <button class="maroon" id="jsbee-clear-letters-button"> UNINIT </button> </td>
@@ -213,6 +217,10 @@
   <span id="jsbee-output-count" style="display:none"> UNINIT </span>
 </div>
 
+<!--
+</div>
+-->
+
 <!-- ================================================================ -->
 <hr/>
 
@@ -231,6 +239,9 @@
 <p/>
 
 <!-- ================================================================ -->
+<!--
+<script src="https://johnkerl.org/sliver/classes.js">
+-->
 <script src="./classes.js">
   // Note: self-closing doesn't work for the script tag:
   //   <script src="./classes.js"/>
@@ -378,7 +389,6 @@
           }
         },
       )
-
       this.elements.outputElement = new TextSpan("jsbee-output", "")
       this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
 
