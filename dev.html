@@ -173,9 +173,8 @@
 <h1><span class="boxed-text">jsbee</span></h1>
 
 <span>
-  <button id="jsbee-mode-button"> UNINIT </button>
-  <span id="bee-mode-label" class=maroon>Bee mode</span>
-  <span id="pattern-mode-label" class=maroon>Pattern mode</span>
+  <button id="bee-mode-button"> UNINIT </button>
+  <button id="pattern-mode-button"> UNINIT </button>
 </span>
 
 <table>
@@ -280,9 +279,11 @@
     LightDarkThemeSlider,
     TextInput,
     TextSpan,
-    TwoElementSwitcher,
-    isInteger
-  } from "https://johnkerl.org/sliver/dev/classes.js"
+    OneButtonSwitcher,
+    TwoButtonSwitcher,
+    isInteger,
+  } from "http://127.0.1:9999/sliver/dev/classes.js"
+  // npx http-server ~/pub_http_internet -o -p 9999
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
@@ -309,20 +310,26 @@
     setElementsAndCallbacks() {
       this.elements = {}
 
-      this.elements.modeButton = new TwoElementSwitcher(
-        "jsbee-mode-button",
+      this.elements.outputElement = new TextSpan("jsbee-output", "")
+      this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
+
+      this.elements.modeButton = new TwoButtonSwitcher(
+        "bee-mode-button",
+        "pattern-mode-button",
+        "Bee mode",
+        "Pattern mode",
         [
-          new GenericElement("bee-mode-label"),
           new GenericElement("bee-mode-row-1"),
           new GenericElement("bee-mode-row-2"),
           new GenericElement("bee-mode-row-3"),
         ],
         [
-          new GenericElement("pattern-mode-label"),
           new GenericElement("pattern-mode-row-1"),
         ],
-        "Switch to pattern mode",
-        "Switch to bee mode",
+        () => {
+          this.elements.outputElement.set("")
+          this.elements.outputCountElement.set("")
+        },
         () => {
           this.elements.outputElement.set("")
           this.elements.outputCountElement.set("")
@@ -453,10 +460,7 @@
         },
       )
 
-      this.elements.outputElement = new TextSpan("jsbee-output", "")
-      this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
-
-      this.outputShowHideButton = new TwoElementSwitcher(
+      this.outputShowHideButton = new OneButtonSwitcher(
         "jsbee-output-show-hide-button",
         [this.elements.outputElement],
         [this.elements.outputCountElement],
