@@ -41,6 +41,21 @@
     font-size: 100%
   }
 
+  table {
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: #808080;
+  }
+
+  /*
+  for debug
+  td {
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: #808080;
+  }
+  */
+
   a:link {
     color: maroon;
   }
@@ -58,7 +73,7 @@
 
   button {
     font-weight: bold;
-    color: maroon;
+    /*color: maroon;*/
     background-color: #e8e8e8;
     border: 0;
     padding: 4px;
@@ -157,28 +172,37 @@
 
 <h1><span class="boxed-text">jsbee</span></h1>
 
-<!--
-<div border=1 style="border: 1px solid black; padding:10px">
--->
+<button id="jsbee-mode-button"> UNINIT </button>
 
 <table>
-<tr>
+
+<!-- Row for bee mode -->
+<tr id="bee-mode-row-1">
   <td> <button class="maroon" id="jsbee-clear-letters-button"> UNINIT </button> </td>
   <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="jsbee-required-letters"></input> </td>
   <td> Required letter(s) </td>
 </tr>
-<tr>
+<!-- Row for bee mode -->
+<tr id="bee-mode-row-2">
   <td> <button class="maroon" id="jsbee-example-button">UNINIT</button> </td>
   <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input> </td>
   <td> Other letter(s) </td>
 </tr>
-
-<tr>
+<!-- Row for bee mode -->
+<tr id="bee-mode-row-3">
   <td> <button class="maroon" id="jsbee-all-others-button">UNINIT</button> </td>
   <td> &nbsp; </td>
   <td> &nbsp; </td>
 </tr>
 
+<!-- Row for pattern mode -->
+<tr id="pattern-mode-row-1">
+  <td> <button class="maroon" id="pattern-clear-letters-button"> UNINIT </button> </td>
+  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-letters"></input> </td>
+  <td> Letters, including <code>.</code> and <code>*</code> </td>
+</tr>
+
+<!-- Word list used by both modes -->
 <tr>
   <td> &nbsp; </td>
   <td>
@@ -199,7 +223,7 @@
       <input tabindex=5 type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
     </span>
   </td>
-  <td> <label for="jsbee-min-match-length">Minimum and maximum word lengths</label> </td>
+  <td> <label for="jsbee-min-match-length">Min/max word lengths</label> </td>
 </tr>
 
 </table>
@@ -214,10 +238,6 @@
 <div>
   <span id="jsbee-output-count" style="display:none"> UNINIT </span>
 </div>
-
-<!--
-</div>
--->
 
 <!-- ================================================================ -->
 <hr/>
@@ -276,18 +296,46 @@
     setElementsAndCallbacks() {
       this.elements = {}
 
+      this.elements.modeButton = new TwoElementSwitcher(
+        "jsbee-mode-button",
+        [
+          new GenericElement("bee-mode-row-1"),
+          new GenericElement("bee-mode-row-2"),
+          new GenericElement("bee-mode-row-3"),
+        ],
+        [
+          new GenericElement("pattern-mode-row-1"),
+        ],
+        "Switch to pattern mode",
+        "Switch to bee mode",
+        () => {
+          this.elements.outputElement.set("")
+          this.elements.outputCountElement.set("")
+        },
+      )
+
+      // Bee-mode element
       this.elements.requiredLettersElement = new TextInput(
         "jsbee-required-letters",
         (event) => {
           this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
-          this.showMatches()
+          this.showBeeModeMatches()
       })
 
+      // Bee-mode element
       this.elements.otherLettersElement = new TextInput(
         "jsbee-other-letters",
         (event) => {
           this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
-          this.showMatches()
+          this.showBeeModeMatches()
+      })
+
+      // Pattern-mode element
+      this.elements.patternLettersElement = new TextInput(
+        "pattern-letters",
+        (event) => {
+          this.logAt1("PATTERN-LETTERS INPUT: <<", event.target.value, ">>")
+          this.showPatternModeMatches()
       })
 
       this.elements.wordListDropdown = new Dropdown(
@@ -326,6 +374,7 @@
       this.elements.minMatchLengthElement = minMatchLengthElement
       this.elements.maxMatchLengthElement = maxMatchLengthElement
 
+      // Bee-mode element
       this.elements.clearLettersButton = new Button(
         "jsbee-clear-letters-button",
         "Clear",
@@ -333,27 +382,48 @@
           this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
           this.elements.requiredLettersElement.set("")
           this.elements.otherLettersElement.set("")
-          this.showMatches()
+          this.showBeeModeMatches()
         },
       )
 
+      // Bee-mode element
       this.elements.exampleButton = new Button(
         "jsbee-example-button",
         "Example",
         (event) => {
           this.logAt1("EXAMPLE BUTTON WAS CLICKED")
-          this.setExample()
-          this.showMatches()
+
+          this.elements.requiredLettersElement.set("E")
+          this.elements.otherLettersElement.set("XAMPLS")
+          this.elements.outputElement.set("")
+
+          this.showBeeModeMatches()
         },
       )
 
+      // Bee-mode element
       this.elements.allOthersButton = new Button(
         "jsbee-all-others-button",
         "A-Z",
         (event) => {
           this.logAt1("A-Z BUTTON WAS CLICKED")
-          this.setAllOthers()
-          this.showMatches()
+
+          this.elements.requiredLettersElement.set("")
+          this.elements.otherLettersElement.set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+          this.elements.outputElement.set("")
+
+          this.showBeeModeMatches()
+        },
+      )
+
+      // Pattern-mode element
+      this.elements.patternClearLettersButton = new Button(
+        "pattern-clear-letters-button",
+        "Clear",
+        (event) => {
+          this.logAt1("PATTERN-CLEAR-LETTERS BUTTON WAS CLICKED")
+          this.elements.patternLettersElement.set("")
+          this.showPatternModeMatches()
         },
       )
 
@@ -373,8 +443,8 @@
 
       this.outputShowHideButton = new TwoElementSwitcher(
         "jsbee-output-show-hide-button",
-        this.elements.outputElement,
-        this.elements.outputCountElement,
+        [this.elements.outputElement],
+        [this.elements.outputCountElement],
         "Hide results",
         "Show results",
       )
@@ -391,12 +461,6 @@
           document.body.style.color = "white"
         },
       )
-
-      //this.fooTable1 = new GenericElement("jsbee-foo-table-1")
-      //this.fooTable2 = new GenericElement("jsbee-foo-table-2")
-      //this.foo1 = new GenericElement("foo1")
-      //this.foo2 = new GenericElement("foo2")
-      //this.fooButton = new TwoElementSwitcher("jsbee-foo-button", this.foo1, this.foo2, "FOO", "BAR")
 
     }
 
@@ -452,6 +516,14 @@
     }
 
     showMatches() {
+      if (this.elements.modeButton.which() == 1) {
+        this.showBeeModeMatches()
+      } else {
+        this.showPatternModeMatches()
+      }
+    }
+
+    showBeeModeMatches() {
       if (!this.checkWordList()) {
         return
       }
@@ -459,7 +531,7 @@
       let requiredLetters = this.elements.requiredLettersElement.get()
       let otherLetters = this.elements.otherLettersElement.get()
 
-      let matches = this.getMatchesFromWordList(requiredLetters, otherLetters)
+      let matches = this.getBeeMatchesFromWordList(requiredLetters, otherLetters)
       matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       this.logAt2(matches)
@@ -475,7 +547,7 @@
       }
     }
 
-    getMatchesFromWordList(requiredLetters, optionalLetters) {
+    getBeeMatchesFromWordList(requiredLetters, optionalLetters) {
       this.logAt1("MATCHER ENTER")
       this.logAt1("requiredLetters ", requiredLetters)
       this.logAt1("optionalLetters", optionalLetters)
@@ -487,7 +559,7 @@
       let matches = []
       this.state.wordList.forEach((word) => {
         this.logAt3("WORD <<", word, ">>")
-        if (this.wordMatches(requiredLetters, optionalLetters, word)) {
+        if (this.wordBeeMatches(requiredLetters, optionalLetters, word)) {
           this.logAt2("MATCH", word)
           matches.push(word)
         }
@@ -495,7 +567,7 @@
       return matches
     }
 
-    wordMatches(requiredLetters, optionalLetters, word) {
+    wordBeeMatches(requiredLetters, optionalLetters, word) {
       let allLetters = requiredLetters + optionalLetters
 
       let minMatchLength = this.elements.minMatchLengthElement.get()
@@ -527,16 +599,76 @@
       return true
     }
 
-    setAllOthers() {
-      this.elements.requiredLettersElement.set("")
-      this.elements.otherLettersElement.set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-      this.elements.outputElement.set("")
+    regexify(patternLetters) {
+      // Regex mapping:
+      // o A-Z -> self
+      // o . -> .
+      // o * -> .*
+      // o Wrap in ^ and $
+
+      this.logAt1("REGEX IN ", patternLetters)
+      let regexString = "^"
+      let azre = new RegExp("^[A-Za-z]$")
+      for (let i = 0; i < patternLetters.length; i++) {
+        let patternLetter = patternLetters[i]
+        this.logAt1("  REQLT", patternLetter)
+        if (patternLetter == ".")  {
+          regexString += "."
+        } else if (patternLetter == "*")  {
+          regexString += ".*"
+        } else if (azre.exec(patternLetter)) {
+          regexString += patternLetter.toLowerCase()
+        }
+      }
+      regexString += "$"
+      this.logAt1("REGEX OUT", regexString)
+
+      return new RegExp(regexString)
     }
 
-    setExample() {
-      this.elements.requiredLettersElement.set("E")
-      this.elements.otherLettersElement.set("XAMPLS")
-      this.elements.outputElement.set("")
+    showPatternModeMatches() {
+      if (!this.checkWordList()) {
+        return
+      }
+      let patternLetters = this.elements.patternLettersElement.get()
+
+      let matches = this.getPatternMatchesFromWordList(patternLetters)
+      matches = matches.map(match => match.toUpperCase())
+      matches = matches.sort()
+      this.logAt2(matches)
+
+      this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
+      if (patternLetters.length == 0) {
+        this.elements.outputElement.set("")
+      } else if (matches.length == 0) {
+        this.elements.outputElement.set("(No matches)")
+      } else {
+        this.elements.outputElement.set(matches.join(" "))
+      }
+    }
+
+    getPatternMatchesFromWordList(patternLetters) {
+      this.logAt1("MATCHER ENTER")
+      this.logAt1("patternLetters ", patternLetters)
+      this.logAt1("wordList.length", this.state.wordList.length)
+      this.logAt3("wordList", this.state.wordList)
+
+      patternLetters = patternLetters.toLowerCase()
+      let re = this.regexify(patternLetters)
+
+      let matches = []
+      let minMatchLength = this.elements.minMatchLengthElement.get()
+      let maxMatchLength = this.elements.maxMatchLengthElement.get()
+      this.state.wordList.forEach((word) => {
+        // TODO: make a filterer/acceptor function
+        if (word.length < minMatchLength) {
+        } else if (word.length > maxMatchLength) {
+        } else if (re.exec(word)) {
+          matches.push(word)
+        }
+
+      })
+      return matches
     }
 
     // ----------------------------------------------------------------

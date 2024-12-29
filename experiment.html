@@ -172,7 +172,11 @@
 
 <h1><span class="boxed-text">jsbee</span></h1>
 
-<button id="jsbee-mode-button"> UNINIT </button>
+<span>
+  <button id="jsbee-mode-button"> UNINIT </button>
+  <span id="bee-mode-label">Bee mode</span>
+  <span id="pattern-mode-label">Pattern mode</span>
+</span>
 
 <table>
 
@@ -223,7 +227,7 @@
       <input tabindex=5 type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
     </span>
   </td>
-  <td> <label for="jsbee-min-match-length">Minimum and maximum word lengths</label> </td>
+  <td> <label for="jsbee-min-match-length">Min/max word lengths</label> </td>
 </tr>
 
 </table>
@@ -299,11 +303,13 @@
       this.elements.modeButton = new TwoElementSwitcher(
         "jsbee-mode-button",
         [
+          new GenericElement("bee-mode-label"),
           new GenericElement("bee-mode-row-1"),
           new GenericElement("bee-mode-row-2"),
           new GenericElement("bee-mode-row-3"),
         ],
         [
+          new GenericElement("pattern-mode-label"),
           new GenericElement("pattern-mode-row-1"),
         ],
         "Switch to pattern mode",
@@ -447,6 +453,7 @@
         [this.elements.outputCountElement],
         "Hide results",
         "Show results",
+        () => {},
       )
 
       this.elements.lightDarkModeElement = new LightDarkModeSlider(
@@ -556,10 +563,13 @@
 
       requiredLetters = requiredLetters.toLowerCase()
       optionalLetters = optionalLetters.toLowerCase()
+      let minMatchLength = this.elements.minMatchLengthElement.get()
+      let maxMatchLength = this.elements.maxMatchLengthElement.get()
       let matches = []
+
       this.state.wordList.forEach((word) => {
         this.logAt3("WORD <<", word, ">>")
-        if (this.wordBeeMatches(requiredLetters, optionalLetters, word)) {
+        if (this.wordBeeMatches(requiredLetters, optionalLetters, minMatchLength, maxMatchLength, word)) {
           this.logAt2("MATCH", word)
           matches.push(word)
         }
@@ -567,17 +577,14 @@
       return matches
     }
 
-    wordBeeMatches(requiredLetters, optionalLetters, word) {
+    wordBeeMatches(requiredLetters, optionalLetters, minMatchLength, maxMatchLength, word) {
       let allLetters = requiredLetters + optionalLetters
 
-      let minMatchLength = this.elements.minMatchLengthElement.get()
-      let maxMatchLength = this.elements.maxMatchLengthElement.get()
-
-      if (minMatchLength != null && word.length < minMatchLength) {
+      if (word.length < minMatchLength) {
         this.logAt3("-- match out 1: word", word, "with length", word.length, "less than min", minMatchLength)
         return false
       }
-      if (maxMatchLength != null && word.length > maxMatchLength) {
+      if (word.length > maxMatchLength) {
         this.logAt3("-- match out 2: word", word, "with length", word.length, "more than max", maxMatchLength)
         return false
       }
@@ -660,7 +667,6 @@
       let minMatchLength = this.elements.minMatchLengthElement.get()
       let maxMatchLength = this.elements.maxMatchLengthElement.get()
       this.state.wordList.forEach((word) => {
-        // TODO: make a filterer/acceptor function
         if (word.length < minMatchLength) {
         } else if (word.length > maxMatchLength) {
         } else if (re.exec(word)) {

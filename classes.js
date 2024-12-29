@@ -345,6 +345,8 @@ class TwoElementSwitcher {
     } else {
       obj.show1()
     }
-    obj.appCallback()
+    if (obj.appCallback != null) {
+      obj.appCallback()
+    }
   }
 }
