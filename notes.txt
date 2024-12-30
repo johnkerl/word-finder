@@ -4,4 +4,3 @@ TO DO:
 * The .maroon business has always been weird
 * Parameterize upper-casing -- maybe a cleanerizer callback??
 * Lots of assertions
-* Better way to surface errors

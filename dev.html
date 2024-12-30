@@ -66,6 +66,13 @@
     color: maroon;
   }
 
+  .error {
+    color: red;
+    background-color: white;
+    padding: 10px;
+    margin: 10px;
+  }
+
   input {
     font-weight: bold;
     color: black;
@@ -172,6 +179,8 @@
 
 <h1><span class="boxed-text">jsbee</span></h1>
 
+<div id="jsbee-error-content" class="error"></div>
+
 <span>
   <button id="bee-mode-button"> UNINIT </button>
   <button id="pattern-mode-button"> UNINIT </button>
@@ -274,12 +283,13 @@
     OneButtonSwitcher,
     TwoButtonSwitcher,
     isInteger,
+    setErrorWidget,
   } from "http://127.0.1:9999/sliver/dev/classes.js"
   // npx http-server ~/pub_http_internet -o -p 9999
 
-  // ----------------------------------------------------------------
-  // APPLICATION STATE
+  setErrorWidget("jsbee-error-content")
 
+  // ----------------------------------------------------------------
   class JSBeeApp {
 
     constructor() {
@@ -297,6 +307,7 @@
       this.setElementsAndCallbacks()
       this.setWordList(this.elements.wordListDropdown.get())
       this.elements.requiredLettersElement.focus()
+
     }
 
     setElementsAndCallbacks() {
