@@ -66,6 +66,10 @@
     color: maroon;
   }
 
+  .smallertext {
+    font-size: 80%
+  }
+
   .error {
     color: red;
     background-color: white;
@@ -192,18 +196,21 @@
 <tr id="bee-mode-row-1">
   <td> <button class="maroon" id="jsbee-clear-letters-button"> Loading ... </button> </td>
   <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="jsbee-required-letters"></input> </td>
-  <td> Required letter(s) </td>
+  <td>&nbsp;</td>
+  <td class="smallertext"> Required letter(s) </td>
 </tr>
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-2">
   <td> <button class="maroon" id="jsbee-example-button">Loading ...</button> </td>
   <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input> </td>
-  <td> Other letter(s) </td>
+  <td>&nbsp;</td>
+  <td class="smallertext"> Other letter(s) </td>
 </tr>
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-3">
   <td> <button class="maroon" id="jsbee-all-others-button">Loading ...</button> </td>
   <td> &nbsp; </td>
+  <td>&nbsp;</td>
   <td> &nbsp; </td>
 </tr>
 
@@ -224,7 +231,8 @@
       <option value="./long-list.txt">Long list</option>
     </select>
   </td>
-  <td> Word list </td>
+  <td>&nbsp;</td>
+  <td class="smallertext"> Word list </td>
 </tr>
 
 <tr>
@@ -235,7 +243,8 @@
       <input tabindex=5 type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
     </span>
   </td>
-  <td> <label for="jsbee-min-match-length">Min/max word lengths</label> </td>
+  <td>&nbsp;</td>
+  <td class="smallertext"> <label for="jsbee-min-match-length">Min/max word lengths</label> </td>
 </tr>
 
 </table>
