@@ -173,9 +173,8 @@
 <h1><span class="boxed-text">jsbee</span></h1>
 
 <span>
-  <button id="jsbee-mode-button"> UNINIT </button>
-  <span id="bee-mode-label" class=maroon>Bee mode</span>
-  <span id="pattern-mode-label" class=maroon>Pattern mode</span>
+  <button id="bee-mode-button"> UNINIT </button>
+  <button id="pattern-mode-button"> UNINIT </button>
 </span>
 
 <table>
@@ -261,17 +260,21 @@
 <p/>
 
 <!-- ================================================================ -->
-<script src="https://johnkerl.org/sliver/stable/classes.js">
-  // Note: self-closing doesn't work for the script tag:
-  //   <script src="whatever.js"/>
-  // -- browsers will not see the close.
-</script>
-
-<script>
+<script type=module>
   'use strict';
 
-  // Someday:
-  // import {isInteger, LightDarkThemeSlider, Button, TextInput, TextSpan, IntRangeInput } from "https://johnkerl.org/sliver/classes.js"
+  import {
+    Button,
+    Dropdown,
+    GenericElement,
+    IntRangeInput,
+    LightDarkThemeSlider,
+    TextInput,
+    TextSpan,
+    OneButtonSwitcher,
+    TwoButtonSwitcher,
+    isInteger,
+  } from "https://johnkerl.org/sliver/stable/classes.js"
 
   // ----------------------------------------------------------------
   // APPLICATION STATE
@@ -298,20 +301,26 @@
     setElementsAndCallbacks() {
       this.elements = {}
 
-      this.elements.modeButton = new TwoElementSwitcher(
-        "jsbee-mode-button",
+      this.elements.outputElement = new TextSpan("jsbee-output", "")
+      this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
+
+      this.elements.modeButton = new TwoButtonSwitcher(
+        "bee-mode-button",
+        "pattern-mode-button",
+        "Bee mode",
+        "Pattern mode",
         [
-          new GenericElement("bee-mode-label"),
           new GenericElement("bee-mode-row-1"),
           new GenericElement("bee-mode-row-2"),
           new GenericElement("bee-mode-row-3"),
         ],
         [
-          new GenericElement("pattern-mode-label"),
           new GenericElement("pattern-mode-row-1"),
         ],
-        "Switch to pattern mode",
-        "Switch to bee mode",
+        () => {
+          this.elements.outputElement.set("")
+          this.elements.outputCountElement.set("")
+        },
         () => {
           this.elements.outputElement.set("")
           this.elements.outputCountElement.set("")
@@ -442,10 +451,7 @@
         },
       )
 
-      this.elements.outputElement = new TextSpan("jsbee-output", "")
-      this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
-
-      this.outputShowHideButton = new TwoElementSwitcher(
+      this.outputShowHideButton = new OneButtonSwitcher(
         "jsbee-output-show-hide-button",
         [this.elements.outputElement],
         [this.elements.outputCountElement],

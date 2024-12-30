@@ -1,9 +1,7 @@
 TO DO:
-* Bee-mode/private-mode two-button selector (much more intuitive)
 * Local-storage memory for bee/pattern mode, and word-list selection -- and hey probably minmax as well
 * CSS/props in Sliver -- button colors, at minimum
 * The .maroon business has always been weird
-* Use modules
 * Parameterize upper-casing -- maybe a cleanerizer callback??
 * Lots of assertions
 * Better way to surface errors
