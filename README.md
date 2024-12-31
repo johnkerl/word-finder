@@ -30,9 +30,9 @@ Pattern mode:
 
 [https://johnkerl.org/jsbee](https://johnkerl.org/jsbee).
 
-## Framework
+## JavaScript tooling
 
-This app uses the [Sliver JavaScript framework](https://github.com/johnkerl/sliver).
+This app uses the [Sliver JavaScript library](https://github.com/johnkerl/sliver).
 
 ## Examples
 
