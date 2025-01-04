@@ -101,7 +101,6 @@
   /* BUTTONS */
   button {
     font-weight: bold;
-    /*color: maroon;*/
     background-color: #e8e8e8;
     border: 0;
     padding: 4px;
@@ -123,6 +122,12 @@
     padding: 4px;
     border-radius: 4px;
     margin: 4px;
+  }
+  button.selected {
+    font-weight: bold;
+  }
+  button.deselected {
+    font-weight: normal;
   }
 
   /* THEME SELECTOR */
@@ -350,6 +355,8 @@
           this.elements.outputElement.set("")
           this.elements.outputCountElement.set("")
         },
+        "selected",   // CSS style class
+        "deselected", // CSS style class
       )
 
       // Bee-mode element
