@@ -1,6 +1,5 @@
 TO DO:
 * Local-storage memory for bee/pattern mode, and word-list selection -- and hey probably minmax as well
-* CSS/props in Sliver -- button colors, at minimum
 * The .maroon business has always been weird
-* Parameterize upper-casing -- maybe a cleanerizer callback??
+* Parameterize upper-casing -- use a cleanerizer callback
 * Lots of assertions
