@@ -9,6 +9,7 @@
 
 <style>
 
+  /* BODY */
   body {
     /* Light theme */
     color: black;
@@ -40,22 +41,6 @@
     color: maroon;
     font-size: 100%
   }
-
-  table {
-    border: 1px solid;
-    border-collapse: collapse;
-    border-color: #808080;
-  }
-
-  /*
-  for debug
-  td {
-    border: 1px solid;
-    border-collapse: collapse;
-    border-color: #808080;
-  }
-  */
-
   a:link {
     color: maroon;
   }
@@ -66,10 +51,40 @@
     color: maroon;
   }
 
+  .boxed-text {
+    border: 1px solid black;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .center {
+    text-align: center;
+  }
+  .maroon {
+    color: maroon;
+  }
+
+  /* TABLE */
+  table {
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: #808080;
+  }
+  /*
+  for debug
+  td {
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: #808080;
+  }
+  */
+
   .smallertext {
     font-size: 80%
   }
 
+  /* ERROR-HANDLER */
   .error {
     color: red;
     background-color: white;
@@ -77,11 +92,13 @@
     margin: 10px;
   }
 
+  /* TEXT INPUTS */
   input {
     font-weight: bold;
     color: black;
   }
 
+  /* BUTTONS */
   button {
     font-weight: bold;
     /*color: maroon;*/
@@ -108,20 +125,7 @@
     margin: 4px;
   }
 
-  .boxed-text {
-    border: 1px solid black;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  .center {
-    text-align: center;
-  }
-  .maroon {
-    color: maroon;
-  }
-
+  /* THEME SELECTOR */
   .switch {
     position: relative;
     display: inline-block;
@@ -166,7 +170,6 @@
     -ms-transform: translateX(13px);
     transform: translateX(13px);
   }
-  /* Rounded sliders */
   .slider.round {
     border-radius: 17px;
   }
@@ -264,12 +267,12 @@
 <!-- ================================================================ -->
 <hr/>
 
-<div>
+<div class=smallertext>
   Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
 </div>
 <p/>
 
-<div>
+<div class=smallertext>
   <label class="switch">
     <input type="checkbox" id="jsbee-light-theme-dark-theme-toggle">
     <span class="slider round"></span>
