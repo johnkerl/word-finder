@@ -351,7 +351,11 @@
 
       this.setElementsAndCallbacks()
       this.setWordList(this.elements.wordListDropdown.get())
-      this.elements.requiredLettersElement.focus()
+      if (this.elements.modeButtons.which() == 'bee-mode-button') {
+        this.elements.requiredLettersElement.focus()
+      } else {
+        this.elements.patternLettersElement.focus()
+      }
 
     }
 
@@ -360,32 +364,6 @@
 
       this.elements.outputElement = new TextSpan("output", "")
       this.elements.outputCountElement = new TextSpan("output-count", "")
-
-      this.elements.modeButtons = new PersistentNButtonSwitcher( {
-          "bee-mode-button": {
-            "text": "Bee mode",
-            "items": [
-              new GenericElement("bee-mode-row-1"),
-              new GenericElement("bee-mode-row-2"),
-              new GenericElement("bee-mode-row-3"),
-            ],
-            "appCallback": () => {
-              this.showMatches()
-            },
-          },
-          "pattern-mode-button": {
-            "text": "Pattern mode",
-            "items": [
-              new GenericElement("pattern-mode-row-1"),
-            ],
-            "appCallback": () => {
-              this.showMatches()
-            },
-          },
-        },
-        "selected",   // CSS style class
-        "deselected", // CSS style class
-      )
 
       // Bee-mode element
       this.elements.requiredLettersElement = new ConstrainedTextInput(
@@ -521,6 +499,34 @@
         "Hide results",
         "Show results",
         () => {},
+      )
+
+      this.elements.modeButtons = new PersistentNButtonSwitcher( {
+          "bee-mode-button": {
+            "text": "Bee mode",
+            "items": [
+              new GenericElement("bee-mode-row-1"),
+              new GenericElement("bee-mode-row-2"),
+              new GenericElement("bee-mode-row-3"),
+            ],
+            "appCallback": () => {
+              this.elements.requiredLettersElement.focus()
+              this.showMatches()
+            },
+          },
+          "pattern-mode-button": {
+            "text": "Pattern mode",
+            "items": [
+              new GenericElement("pattern-mode-row-1"),
+            ],
+            "appCallback": () => {
+              this.elements.patternLettersElement.focus()
+              this.showMatches()
+            },
+          },
+        },
+        "selected",   // CSS style class
+        "deselected", // CSS style class
       )
 
       this.elements.lightDarkThemeElement = new LightDarkThemeSlider(
