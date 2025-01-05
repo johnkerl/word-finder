@@ -67,12 +67,15 @@
 
   /* TABLE */
   table {
+    border: none;
+  }
+  /*
+  for debug
+  table {
     border: 1px solid;
     border-collapse: collapse;
     border-color: #808080;
   }
-  /*
-  for debug
   td {
     border: 1px solid;
     border-collapse: collapse;
@@ -128,6 +131,9 @@
   }
   button.deselected {
     font-weight: normal;
+  }
+  button.no-margin {
+    margin: none;
   }
 
   /* THEME SELECTOR */
@@ -193,70 +199,73 @@
 
 <div id="error-content" class="error"></div>
 
-<span>
-  <button id="bee-mode-button"> Loading ... </button>
-  <button id="pattern-mode-button"> Loading ... </button>
-</span>
+<!-- fieldset allows a nice legend, of which I enjoy the styling -->
+<fieldset>
+  <legend>
+    <button id="bee-mode-button" class="no-margin"> Loading ... </button>
+    <button id="pattern-mode-button" class="no-margin"> Loading ... </button>
+  </legend>
 
-<table>
+  <table>
 
-<!-- Row for bee mode -->
-<tr id="bee-mode-row-1">
-  <td> <button class="maroon" id="clear-letters-button"> Loading ... </button> </td>
-  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-required-letters"></input> </td>
-  <td>&nbsp;</td>
-  <td class="smallertext"> Required letter(s) </td>
-</tr>
-<!-- Row for bee mode -->
-<tr id="bee-mode-row-2">
-  <td> <button class="maroon" id="example-button">Loading ...</button> </td>
-  <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-other-letters"></input> </td>
-  <td>&nbsp;</td>
-  <td class="smallertext"> Other letter(s) </td>
-</tr>
-<!-- Row for bee mode -->
-<tr id="bee-mode-row-3">
-  <td> <button class="maroon" id="all-others-button">Loading ...</button> </td>
-  <td> &nbsp; </td>
-  <td>&nbsp;</td>
-  <td> &nbsp; </td>
-</tr>
+  <!-- Row for bee mode -->
+  <tr id="bee-mode-row-1">
+    <td> <button class="maroon" id="clear-letters-button"> Loading ... </button> </td>
+    <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-required-letters"></input> </td>
+    <td>&nbsp;</td>
+    <td class="smallertext"> Required letter(s) </td>
+  </tr>
+  <!-- Row for bee mode -->
+  <tr id="bee-mode-row-2">
+    <td> <button class="maroon" id="example-button">Loading ...</button> </td>
+    <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-other-letters"></input> </td>
+    <td>&nbsp;</td>
+    <td class="smallertext"> Other letter(s) </td>
+  </tr>
+  <!-- Row for bee mode -->
+  <tr id="bee-mode-row-3">
+    <td> <button class="maroon" id="all-others-button">Loading ...</button> </td>
+    <td> &nbsp; </td>
+    <td>&nbsp;</td>
+    <td> &nbsp; </td>
+  </tr>
 
-<!-- Row for pattern mode -->
-<tr id="pattern-mode-row-1">
-  <td> <button class="maroon" id="pattern-clear-letters-button"> Loading ... </button> </td>
-  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-mode-letters"></input> </td>
-  <td> &nbsp; </td>
-  <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
-</tr>
+  <!-- Row for pattern mode -->
+  <tr id="pattern-mode-row-1">
+    <td> <button class="maroon" id="pattern-clear-letters-button"> Loading ... </button> </td>
+    <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-mode-letters"></input> </td>
+    <td> &nbsp; </td>
+    <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
+  </tr>
 
-<!-- Word list used by both modes -->
-<tr>
-  <td> &nbsp; </td>
-  <td>
-    <select tabindex=3 id="word-list-dropdown">
-      <!-- TODO: init the options in JS or HTML? -->
-      <option value="./usual-suspects.txt">Usual suspects</option>
-      <option value="./long-list.txt">Long list</option>
-    </select>
-  </td>
-  <td>&nbsp;</td>
-  <td class="smallertext"> Word list </td>
-</tr>
+  <!-- Word list used by both modes -->
+  <tr>
+    <td> &nbsp; </td>
+    <td>
+      <select tabindex=3 id="word-list-dropdown">
+        <!-- TODO: init the options in JS or HTML? -->
+        <option value="./usual-suspects.txt">Usual suspects</option>
+        <option value="./long-list.txt">Long list</option>
+      </select>
+    </td>
+    <td>&nbsp;</td>
+    <td class="smallertext"> Word list </td>
+  </tr>
 
-<tr>
-  <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
-  <td>
-    <span>
-      <input tabindex=4 type="number" id="min-match-length" name="min-match-length" min="1" max="16"/>
-      <input tabindex=5 type="number" id="max-match-length" name="max-match-length" min="1" max="16"/>
-    </span>
-  </td>
-  <td>&nbsp;</td>
-  <td class="smallertext"> <label for="min-match-length">Min/max word lengths</label> </td>
-</tr>
+  <tr>
+    <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
+    <td>
+      <span>
+        <input tabindex=4 type="number" id="min-match-length" name="min-match-length" min="1" max="16"/>
+        <input tabindex=5 type="number" id="max-match-length" name="max-match-length" min="1" max="16"/>
+      </span>
+    </td>
+    <td>&nbsp;</td>
+    <td class="smallertext"> <label for="min-match-length">Min/max word lengths</label> </td>
+  </tr>
 
-</table>
+  </table>
+</fieldset>
 
 <p/>
 <div>
