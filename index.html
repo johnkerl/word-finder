@@ -299,7 +299,7 @@
     TextInput,
     TextSpan,
     OneButtonSwitcher,
-    TwoButtonSwitcher,
+    NButtonSwitcher,
     isInteger,
     setErrorWidget,
   } from "https://johnkerl.org/sliver/stable/classes.js"
@@ -333,26 +333,30 @@
       this.elements.outputElement = new TextSpan("jsbee-output", "")
       this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
 
-      this.elements.modeButton = new TwoButtonSwitcher(
-        "bee-mode-button",
-        "pattern-mode-button",
-        "Bee mode",
-        "Pattern mode",
-        [
-          new GenericElement("bee-mode-row-1"),
-          new GenericElement("bee-mode-row-2"),
-          new GenericElement("bee-mode-row-3"),
-        ],
-        [
-          new GenericElement("pattern-mode-row-1"),
-        ],
-        () => {
-          this.elements.outputElement.set("")
-          this.elements.outputCountElement.set("")
-        },
-        () => {
-          this.elements.outputElement.set("")
-          this.elements.outputCountElement.set("")
+      this.elements.modeButton = new NButtonSwitcher(
+        {
+          "bee-mode-button": {
+            "text": "Bee mode",
+            "items": [
+              new GenericElement("bee-mode-row-1"),
+              new GenericElement("bee-mode-row-2"),
+              new GenericElement("bee-mode-row-3"),
+            ],
+            "appCallback": () => {
+              this.elements.outputElement.set("")
+              this.elements.outputCountElement.set("")
+            },
+          },
+          "pattern-mode-button": {
+            "text": "Pattern mode",
+            "items": [
+              new GenericElement("pattern-mode-row-1"),
+            ],
+            "appCallback": () => {
+              this.elements.outputElement.set("")
+              this.elements.outputCountElement.set("")
+            },
+          },
         },
         "selected",   // CSS style class
         "deselected", // CSS style class
