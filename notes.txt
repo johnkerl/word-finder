@@ -1,4 +1,4 @@
 TO DO:
-* Local-storage memory for bee/pattern mode, and word-list selection -- and hey probably minmax as well
+* Local-storage memory for minmax?
 * The .maroon business has always been weird
 * Lots of assertions

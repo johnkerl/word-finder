@@ -292,14 +292,14 @@
 
   import {
     Button,
-    Dropdown,
+    ConstrainedTextInput,
     GenericElement,
     IntRangeInput,
     LightDarkThemeSlider,
-    ConstrainedTextInput,
-    TextSpan,
-    OneButtonSwitcher,
     NButtonSwitcher,
+    OneButtonSwitcher,
+    PersistentDropdown,
+    TextSpan,
     isInteger,
     setErrorWidget,
   } from "https://johnkerl.org/sliver/staging/classes.js"
@@ -390,7 +390,7 @@
           this.showPatternModeMatches()
       })
 
-      this.elements.wordListDropdown = new Dropdown(
+      this.elements.wordListDropdown = new PersistentDropdown(
         "word-list-dropdown",
         (event) => {
           let url = event.target.value
