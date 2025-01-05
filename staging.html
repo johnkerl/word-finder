@@ -191,7 +191,7 @@
 
 <h1><span class="boxed-text">jsbee</span></h1>
 
-<div id="jsbee-error-content" class="error"></div>
+<div id="error-content" class="error"></div>
 
 <span>
   <button id="bee-mode-button"> Loading ... </button>
@@ -202,21 +202,21 @@
 
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-1">
-  <td> <button class="maroon" id="jsbee-clear-letters-button"> Loading ... </button> </td>
-  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="jsbee-required-letters"></input> </td>
+  <td> <button class="maroon" id="clear-letters-button"> Loading ... </button> </td>
+  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-required-letters"></input> </td>
   <td>&nbsp;</td>
   <td class="smallertext"> Required letter(s) </td>
 </tr>
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-2">
-  <td> <button class="maroon" id="jsbee-example-button">Loading ...</button> </td>
-  <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="jsbee-other-letters"></input> </td>
+  <td> <button class="maroon" id="example-button">Loading ...</button> </td>
+  <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-other-letters"></input> </td>
   <td>&nbsp;</td>
   <td class="smallertext"> Other letter(s) </td>
 </tr>
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-3">
-  <td> <button class="maroon" id="jsbee-all-others-button">Loading ...</button> </td>
+  <td> <button class="maroon" id="all-others-button">Loading ...</button> </td>
   <td> &nbsp; </td>
   <td>&nbsp;</td>
   <td> &nbsp; </td>
@@ -225,7 +225,7 @@
 <!-- Row for pattern mode -->
 <tr id="pattern-mode-row-1">
   <td> <button class="maroon" id="pattern-clear-letters-button"> Loading ... </button> </td>
-  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-letters"></input> </td>
+  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-mode-letters"></input> </td>
   <td> &nbsp; </td>
   <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
 </tr>
@@ -234,7 +234,7 @@
 <tr>
   <td> &nbsp; </td>
   <td>
-    <select tabindex=3 id="jsbee-word-list-dropdown">
+    <select tabindex=3 id="word-list-dropdown">
       <!-- TODO: init the options in JS or HTML? -->
       <option value="./usual-suspects.txt">Usual suspects</option>
       <option value="./long-list.txt">Long list</option>
@@ -245,28 +245,28 @@
 </tr>
 
 <tr>
-  <td> <button class="maroon" id="jsbee-reset-match-lengths-button"> Reset </button> </td>
+  <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
   <td>
     <span>
-      <input tabindex=4 type="number" id="jsbee-min-match-length" name="jsbee-min-match-length" min="1" max="16"/>
-      <input tabindex=5 type="number" id="jsbee-max-match-length" name="jsbee-max-match-length" min="1" max="16"/>
+      <input tabindex=4 type="number" id="min-match-length" name="min-match-length" min="1" max="16"/>
+      <input tabindex=5 type="number" id="max-match-length" name="max-match-length" min="1" max="16"/>
     </span>
   </td>
   <td>&nbsp;</td>
-  <td class="smallertext"> <label for="jsbee-min-match-length">Min/max word lengths</label> </td>
+  <td class="smallertext"> <label for="min-match-length">Min/max word lengths</label> </td>
 </tr>
 
 </table>
 
 <p/>
 <div>
-  <button class="maroon" id="jsbee-output-show-hide-button"> Loading ... </button>
+  <button class="maroon" id="output-show-hide-button"> Loading ... </button>
 </div>
 <div>
-  <span id="jsbee-output" style="display:block"> Loading ... </span>
+  <span id="output" style="display:block"> Loading ... </span>
 </div>
 <div>
-  <span id="jsbee-output-count" style="display:none"> Loading ... </span>
+  <span id="output-count" style="display:none"> Loading ... </span>
 </div>
 
 <!-- ================================================================ -->
@@ -279,10 +279,10 @@
 
 <div class=smallertext>
   <label class="switch">
-    <input type="checkbox" id="jsbee-light-theme-dark-theme-toggle">
+    <input type="checkbox" id="light-theme-dark-theme-toggle">
     <span class="slider round"></span>
   </label>
-  <span id="jsbee-light-theme-dark-theme-label">Loading ...</span>
+  <span id="light-theme-dark-theme-label">Loading ...</span>
 </div>
 <p/>
 
@@ -296,15 +296,16 @@
     GenericElement,
     IntRangeInput,
     LightDarkThemeSlider,
-    TextInput,
+    ConstrainedTextInput,
     TextSpan,
     OneButtonSwitcher,
     NButtonSwitcher,
     isInteger,
     setErrorWidget,
   } from "https://johnkerl.org/sliver/staging/classes.js"
+  // npx http-server ~/pub_http_internet -o -p 9999
 
-  setErrorWidget("jsbee-error-content")
+  setErrorWidget("error-content")
 
   // ----------------------------------------------------------------
   class JSBeeApp {
@@ -330,8 +331,8 @@
     setElementsAndCallbacks() {
       this.elements = {}
 
-      this.elements.outputElement = new TextSpan("jsbee-output", "")
-      this.elements.outputCountElement = new TextSpan("jsbee-output-count", "")
+      this.elements.outputElement = new TextSpan("output", "")
+      this.elements.outputCountElement = new TextSpan("output-count", "")
 
       this.elements.modeButton = new NButtonSwitcher(
         {
@@ -363,31 +364,34 @@
       )
 
       // Bee-mode element
-      this.elements.requiredLettersElement = new TextInput(
-        "jsbee-required-letters",
+      this.elements.requiredLettersElement = new ConstrainedTextInput(
+        "bee-mode-required-letters",
+        (text) => text.toUpperCase(),
         (event) => {
           this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
       })
 
       // Bee-mode element
-      this.elements.otherLettersElement = new TextInput(
-        "jsbee-other-letters",
+      this.elements.otherLettersElement = new ConstrainedTextInput(
+        "bee-mode-other-letters",
+        (text) => text.toUpperCase(),
         (event) => {
           this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
       })
 
       // Pattern-mode element
-      this.elements.patternLettersElement = new TextInput(
-        "pattern-letters",
+      this.elements.patternLettersElement = new ConstrainedTextInput(
+        "pattern-mode-letters",
+        (text) => text.toUpperCase(),
         (event) => {
           this.logAt1("PATTERN-LETTERS INPUT: <<", event.target.value, ">>")
           this.showPatternModeMatches()
       })
 
       this.elements.wordListDropdown = new Dropdown(
-        "jsbee-word-list-dropdown",
+        "word-list-dropdown",
         (event) => {
           let url = event.target.value
           this.logAt1("SELECTED WORD LIST: <<", url, ">>")
@@ -396,7 +400,7 @@
       })
 
       let minMatchLengthElement = new IntRangeInput(
-        "jsbee-min-match-length",
+        "min-match-length",
         this.state.defaultLowMatchLength, // default
         this.state.minMatchLength, // min
         this.state.maxMatchLength, // max
@@ -406,7 +410,7 @@
       )
 
       let maxMatchLengthElement = new IntRangeInput(
-        "jsbee-max-match-length",
+        "max-match-length",
         this.state.defaultHighMatchLength, // default
         this.state.minMatchLength, // min
         this.state.maxMatchLength, // max
@@ -424,7 +428,7 @@
 
       // Bee-mode element
       this.elements.clearLettersButton = new Button(
-        "jsbee-clear-letters-button",
+        "clear-letters-button",
         "Clear",
         (event) => {
           this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
@@ -436,7 +440,7 @@
 
       // Bee-mode element
       this.elements.exampleButton = new Button(
-        "jsbee-example-button",
+        "example-button",
         "Example",
         (event) => {
           this.logAt1("EXAMPLE BUTTON WAS CLICKED")
@@ -451,7 +455,7 @@
 
       // Bee-mode element
       this.elements.allOthersButton = new Button(
-        "jsbee-all-others-button",
+        "all-others-button",
         "A-Z",
         (event) => {
           this.logAt1("A-Z BUTTON WAS CLICKED")
@@ -476,7 +480,7 @@
       )
 
       this.elements.resetMatchLengthsButton = new Button(
-        "jsbee-reset-match-lengths-button",
+        "reset-match-lengths-button",
         "Reset",
         (event) => {
           this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
@@ -487,7 +491,7 @@
       )
 
       this.outputShowHideButton = new OneButtonSwitcher(
-        "jsbee-output-show-hide-button",
+        "output-show-hide-button",
         [this.elements.outputElement],
         [this.elements.outputCountElement],
         "Hide results",
@@ -496,8 +500,8 @@
       )
 
       this.elements.lightDarkThemeElement = new LightDarkThemeSlider(
-        "jsbee-light-theme-dark-theme-toggle",
-        "jsbee-light-theme-dark-theme-label",
+        "light-theme-dark-theme-toggle",
+        "light-theme-dark-theme-label",
         (event) => {
           document.body.style.backgroundColor = "white"
           document.body.style.color = "black"

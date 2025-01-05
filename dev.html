@@ -203,14 +203,14 @@
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-1">
   <td> <button class="maroon" id="clear-letters-button"> Loading ... </button> </td>
-  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="required-letters"></input> </td>
+  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-required-letters"></input> </td>
   <td>&nbsp;</td>
   <td class="smallertext"> Required letter(s) </td>
 </tr>
 <!-- Row for bee mode -->
 <tr id="bee-mode-row-2">
   <td> <button class="maroon" id="example-button">Loading ...</button> </td>
-  <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="other-letters"></input> </td>
+  <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-other-letters"></input> </td>
   <td>&nbsp;</td>
   <td class="smallertext"> Other letter(s) </td>
 </tr>
@@ -225,7 +225,7 @@
 <!-- Row for pattern mode -->
 <tr id="pattern-mode-row-1">
   <td> <button class="maroon" id="pattern-clear-letters-button"> Loading ... </button> </td>
-  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-letters"></input> </td>
+  <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-mode-letters"></input> </td>
   <td> &nbsp; </td>
   <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
 </tr>
@@ -296,7 +296,7 @@
     GenericElement,
     IntRangeInput,
     LightDarkThemeSlider,
-    TextInput,
+    ConstrainedTextInput,
     TextSpan,
     OneButtonSwitcher,
     NButtonSwitcher,
@@ -364,24 +364,27 @@
       )
 
       // Bee-mode element
-      this.elements.requiredLettersElement = new TextInput(
-        "required-letters",
+      this.elements.requiredLettersElement = new ConstrainedTextInput(
+        "bee-mode-required-letters",
+        (text) => text.toUpperCase(),
         (event) => {
           this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
       })
 
       // Bee-mode element
-      this.elements.otherLettersElement = new TextInput(
-        "other-letters",
+      this.elements.otherLettersElement = new ConstrainedTextInput(
+        "bee-mode-other-letters",
+        (text) => text.toUpperCase(),
         (event) => {
           this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
       })
 
       // Pattern-mode element
-      this.elements.patternLettersElement = new TextInput(
-        "pattern-letters",
+      this.elements.patternLettersElement = new ConstrainedTextInput(
+        "pattern-mode-letters",
+        (text) => text.toUpperCase(),
         (event) => {
           this.logAt1("PATTERN-LETTERS INPUT: <<", event.target.value, ">>")
           this.showPatternModeMatches()
