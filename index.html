@@ -135,6 +135,11 @@
   button.no-margin {
     margin: none;
   }
+  button.transparent {
+    font-weight: normal;
+    border: 0;
+    background-color: transparent;
+  }
 
   /* THEME SELECTOR */
   .switch {
@@ -197,7 +202,20 @@
 
 <h1><span class="boxed-text">jsbee</span></h1>
 
-<div id="error-content" class="error"></div>
+<!--
+  This is a self-contained widget for error-text and cancel/X button.
+  We use Sliver's setErrorWidget to route top-level errors here.
+-->
+<span id="error-container" class="error">
+  <button
+    class=transparent
+    onClick='
+      document.getElementById("error-container").style.display = "none";
+      document.getElementById("error-text").innerHTML = "";
+    '
+  > &times; </button>
+  <span id="error-text"> </span>
+</span>
 
 <!-- fieldset allows a nice legend, of which I enjoy the styling -->
 <fieldset>
@@ -313,7 +331,7 @@
     setErrorWidget,
   } from "https://johnkerl.org/sliver/stable/classes.js"
 
-  setErrorWidget("error-content")
+  setErrorWidget("error-container", "error-text")
 
   // ----------------------------------------------------------------
   class JSBeeApp {
