@@ -2,3 +2,51 @@ TO DO:
 * Local-storage memory for minmax?
 * The .maroon business has always been weird
 * Lots of assertions
+
+================================================================
+Dynamic import (yuck):
+
+  async function importModule(modulePath) {
+    const module = await import(modulePath);
+    return module;
+  }
+
+  let sliverPath = "https://johnkerl.org/sliver/stable/classes.js"
+  if (document.URL.endsWith("staging.html")) {
+    sliverPath = "https://johnkerl.org/sliver/staging/classes.js"
+  } else if (document.URL.endsWith("dev.html")) {
+    sliverPath = "http://127.0.1:9999/sliver/dev/classes.js"
+    // npx http-server ~/pub_http_internet -o -p 9999
+  }
+
+  var Button                    = null
+  var ConstrainedTextInput      = null
+  var GenericElement            = null
+  var IntRangeInput             = null
+  var LightDarkThemeSlider      = null
+  var OneButtonSwitcher         = null
+  var PersistentDropdown        = null
+  var PersistentNButtonSwitcher = null
+  var TextSpan                  = null
+  var isInteger                 = null
+  var setErrorWidget            = null
+
+  await importModule(sliverPath)
+    .then(sliver => {
+
+      Button                    = sliver.Button
+      ConstrainedTextInput      = sliver.ConstrainedTextInput
+      GenericElement            = sliver.GenericElement
+      IntRangeInput             = sliver.IntRangeInput
+      LightDarkThemeSlider      = sliver.LightDarkThemeSlider
+      OneButtonSwitcher         = sliver.OneButtonSwitcher
+      PersistentDropdown        = sliver.PersistentDropdown
+      PersistentNButtonSwitcher = sliver.PersistentNButtonSwitcher
+      TextSpan                  = sliver.TextSpan
+      isInteger                 = sliver.isInteger
+      setErrorWidget            = sliver.setErrorWidget
+
+    })
+    .catch(error => {
+      console.error('Error importing Sliver:', error);
+    });

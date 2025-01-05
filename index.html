@@ -296,14 +296,13 @@
     GenericElement,
     IntRangeInput,
     LightDarkThemeSlider,
-    NButtonSwitcher,
     OneButtonSwitcher,
     PersistentDropdown,
+    PersistentNButtonSwitcher,
     TextSpan,
     isInteger,
     setErrorWidget,
   } from "https://johnkerl.org/sliver/stable/classes.js"
-  // npx http-server ~/pub_http_internet -o -p 9999
 
   setErrorWidget("error-content")
 
@@ -334,8 +333,7 @@
       this.elements.outputElement = new TextSpan("output", "")
       this.elements.outputCountElement = new TextSpan("output-count", "")
 
-      this.elements.modeButton = new NButtonSwitcher(
-        {
+      this.elements.modeButtons = new PersistentNButtonSwitcher( {
           "bee-mode-button": {
             "text": "Bee mode",
             "items": [
@@ -344,8 +342,7 @@
               new GenericElement("bee-mode-row-3"),
             ],
             "appCallback": () => {
-              this.elements.outputElement.set("")
-              this.elements.outputCountElement.set("")
+              this.showMatches()
             },
           },
           "pattern-mode-button": {
@@ -354,8 +351,7 @@
               new GenericElement("pattern-mode-row-1"),
             ],
             "appCallback": () => {
-              this.elements.outputElement.set("")
-              this.elements.outputCountElement.set("")
+              this.showMatches()
             },
           },
         },
@@ -566,7 +562,12 @@
     }
 
     showMatches() {
-      if (this.elements.modeButton.which() == 1) {
+      if (this.elements.modeButtons == null) {
+        // At app initialization
+        return
+      }
+
+      if (this.elements.modeButtons.which() == 'bee-mode-button') {
         this.showBeeModeMatches()
       } else {
         this.showPatternModeMatches()
