@@ -1,6 +1,5 @@
 TO DO:
 * Local-storage memory for minmax?
-* Lots of assertions
 
 ================================================================
 Dynamic import (yuck):
