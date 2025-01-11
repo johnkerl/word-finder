@@ -1,6 +1,5 @@
 TO DO:
 * Local-storage memory for minmax?
-* The .maroon business has always been weird
 * Lots of assertions
 
 ================================================================
