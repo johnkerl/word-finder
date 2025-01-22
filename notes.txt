@@ -9,11 +9,11 @@ Dynamic import (yuck):
     return module;
   }
 
-  let sliverPath = "https://johnkerl.org/sliver/stable/classes.js"
+  let sliverPath = "https://johnkerl.org/sliver/stable/sliver.js"
   if (document.URL.endsWith("staging.html")) {
-    sliverPath = "https://johnkerl.org/sliver/staging/classes.js"
+    sliverPath = "https://johnkerl.org/sliver/staging/sliver.js"
   } else if (document.URL.endsWith("dev.html")) {
-    sliverPath = "http://127.0.1:9999/sliver/dev/classes.js"
+    sliverPath = "http://127.0.1:9999/sliver/dev/sliver.js"
     // npx http-server ~/pub_http_internet -o -p 9999
   }
 
