@@ -63,6 +63,9 @@
     color: maroon;
   }
 
+  .larger-input-text {
+    font-size: 100%;
+  }
   .boxed-text {
     border: 1px solid black;
     padding-top: 4px;
@@ -255,14 +258,14 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   <!-- Row for bee mode -->
   <tr id="bee-mode-row-1">
     <td> <button class="maroon" id="clear-letters-button"> Loading ... </button> </td>
-    <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-required-letters"></input> </td>
+    <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-required-letters" class="larger-input-text"></input></td>
     <td>&nbsp;</td>
     <td class="smallertext"> Required letter(s) </td>
   </tr>
   <!-- Row for bee mode -->
   <tr id="bee-mode-row-2">
     <td> <button class="maroon" id="example-button">Loading ...</button> </td>
-    <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-other-letters"></input> </td>
+    <td> <input type=text tabindex=2 placeholder="..." size=10 autocapitalize="characters" id="bee-mode-other-letters" class="larger-input-text"></input></td>
     <td>&nbsp;</td>
     <td class="smallertext"> Other letter(s) </td>
   </tr>
@@ -277,7 +280,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   <!-- Row for pattern mode -->
   <tr id="pattern-mode-row-1">
     <td> <button class="maroon" id="pattern-clear-letters-button"> Loading ... </button> </td>
-    <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-mode-letters"></input> </td>
+    <td> <input type=text tabindex=1 placeholder="..." size=10 autocapitalize="characters" id="pattern-mode-letters" class="larger-input-text"></input></td>
     <td> &nbsp; </td>
     <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
   </tr>
