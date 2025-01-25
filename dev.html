@@ -854,6 +854,16 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       )
 
       // ----------------------------------------------------------------
+      // XXX TEMP HACK
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          window.app.elements.bee_mode_help_background.makeInvisible()
+          window.app.elements.pattern_mode_help_background.makeInvisible()
+          window.app.elements.anagram_mode_help_background.makeInvisible()
+        }
+      });
+
+      // ----------------------------------------------------------------
       this.elements.lightDarkThemeElement = new LightDarkThemeSlider(
         "light-theme-dark-theme-toggle",
         "light-theme-dark-theme-label",
