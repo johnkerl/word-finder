@@ -254,8 +254,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   <legend>
     <button id="bee-mode-button" class="no-margin"> Loading ... </button>
     <button id="pattern-mode-button" class="no-margin"> Loading ... </button>
+    <button id="anagram-mode-button" class="no-margin"> Loading ... </button>
   </legend>
-
   <table>
 
   <!-- Row for bee mode -->
@@ -318,7 +318,25 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
   </tr>
 
-  <!-- Word list used by both modes -->
+  <!-- Row for anagram mode -->
+  <tr id="anagram-mode-row-1">
+    <td> <button class="maroon" id="anagram-clear-letters-button"> Loading ... </button> </td>
+    <td>
+      <input
+        type=text
+        tabindex=1
+        placeholder="..."
+        size=10
+        autocapitalize="characters"
+        id="anagram-mode-letters"
+        class="larger-input-text">
+      </input>
+    </td>
+    <td> &nbsp; </td>
+    <td class="smallertext"> Letters </td>
+  </tr>
+
+  <!-- Word list used by all modes -->
   <tr>
     <td> &nbsp; </td>
     <td>
@@ -332,7 +350,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td class="smallertext"> Word list </td>
   </tr>
 
-  <tr>
+  <!-- Min/max word lengths used by bee and pattern modes, but not anagram mode -->
+  <tr id="match-lengths-row">
     <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
     <td>
       <span>
@@ -341,7 +360,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       </span>
     </td>
     <td>&nbsp;</td>
-    <td class="smallertext"> <label for="min-match-length">Min/max word lengths</label> </td>
+    <td class="smallertext"> <label for="min-max-match-length-label">Min/max word lengths</label> </td>
   </tr>
 
   </table>
@@ -456,6 +475,15 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           this.showPatternModeMatches()
       })
 
+      // Anagram-mode element
+      this.elements.anagramLettersElement = new ConstrainedTextInput(
+        "anagram-mode-letters",
+        (text) => text.toUpperCase(),
+        (event) => {
+          this.logAt1("ANAGRAM-LETTERS INPUT: <<", event.target.value, ">>")
+          this.showAnagramModeMatches()
+      })
+
       this.elements.wordListDropdown = new PersistentDropdown(
         "word-list-dropdown",
         (event) => {
@@ -545,6 +573,17 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         },
       )
 
+      // Anagram-mode element
+      this.elements.anagramClearLettersButton = new Button(
+        "anagram-clear-letters-button",
+        "Clear",
+        (event) => {
+          this.logAt1("ANAGRAM-CLEAR-LETTERS BUTTON WAS CLICKED")
+          this.elements.anagramLettersElement.set("")
+          this.showAnagramModeMatches()
+        },
+      )
+
       this.elements.resetMatchLengthsButton = new Button(
         "reset-match-lengths-button",
         "Reset",
@@ -572,6 +611,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("bee-mode-row-1"),
               new GenericElement("bee-mode-row-2"),
               new GenericElement("bee-mode-row-3"),
+              new GenericElement("match-lengths-row"),
             ],
             "callback": () => {
               this.elements.requiredLettersElement.focus()
@@ -582,9 +622,20 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
             "text": "Pattern mode",
             "items": [
               new GenericElement("pattern-mode-row-1"),
+              new GenericElement("match-lengths-row"),
             ],
             "callback": () => {
               this.elements.patternLettersElement.focus()
+              this.showMatches()
+            },
+          },
+          "anagram-mode-button": {
+            "text": "Anagram mode",
+            "items": [
+              new GenericElement("anagram-mode-row-1"),
+            ],
+            "callback": () => {
+              this.elements.anagramLettersElement.focus()
               this.showMatches()
             },
           },
@@ -667,8 +718,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 
       if (this.elements.modeButtons.which() == 'bee-mode-button') {
         this.showBeeModeMatches()
-      } else {
+      } else if (this.elements.modeButtons.which() == 'pattern-mode-button') {
         this.showPatternModeMatches()
+      } else {
+        this.showAnagramModeMatches()
       }
     }
 
@@ -814,7 +867,48 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         } else if (re.exec(word)) {
           matches.push(word)
         }
+      })
+      return matches
+    }
 
+    showAnagramModeMatches() {
+      if (!this.checkWordList()) {
+        return
+      }
+      let anagramLetters = this.elements.anagramLettersElement.get()
+
+      let matches = this.getAnagramMatchesFromWordList(anagramLetters)
+      matches = matches.map(match => match.toUpperCase())
+      matches = matches.sort()
+      this.logAt2(matches)
+
+      this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
+      if (anagramLetters.length == 0) {
+        this.elements.outputElement.set("")
+      } else if (matches.length == 0) {
+        this.elements.outputElement.set("(No matches)")
+      } else {
+        this.elements.outputElement.set(matches.join(" "))
+      }
+    }
+
+    getAnagramMatchesFromWordList(anagramLetters) {
+      this.logAt1("MATCHER ENTER")
+      this.logAt1("anagramLetters ", anagramLetters)
+      this.logAt1("wordList.length", this.state.wordList.length)
+      this.logAt3("wordList", this.state.wordList)
+
+      let sortedInput = anagramLetters.toLowerCase().split('').sort().join('');
+
+      let matches = []
+      let minMatchLength = this.elements.minMatchLengthElement.get()
+      let maxMatchLength = this.elements.maxMatchLengthElement.get()
+      this.state.wordList.forEach((word) => {
+        this.logAt3("-- matcher check", word, " vs ", anagramLetters)
+        let sortedWord = word.split('').sort().join('')
+        if (sortedWord == sortedInput) {
+          matches.push(word)
+        }
       })
       return matches
     }
