@@ -186,7 +186,7 @@
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 2px solid gray;
-    width: 60%;
+    width: 80%;
   }
 
   /* THEME SELECTOR */
@@ -395,9 +395,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 
   <tr>
     <td>
-      <!-- Modal-launcher button -->
       <div>
-        <button id="modal-1-launcher-button" class="general white-on-blue" > Help </button>
+        <button id="bee-mode-help-launcher-button"> Help </button>
+        <button id="pattern-mode-help-launcher-button"> Help </button>
+        <button id="anagram-mode-help-launcher-button"> Help </button>
       </div>
     </td>
     <td> &nbsp; </td>
@@ -421,25 +422,6 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 <!-- ================================================================ -->
 <hr/>
 
-<!-- Modal content -->
-<div id="modal-1-background" class="modal-background">
-  <div id="modal-1-content" class="modal-content">
-
-    <div>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-      labore et dolore magna aliqua.  Diam sollicitudin tempor id eu nisl nunc mi ipsum faucibus.
-      Sed vulputate mi sit amet mauris.  Ut tellus elementum sagittis vitae et leo duis ut.
-    </p>
-    </div>
-
-    <div>
-      <button id="modal-1-close-button" class="general white-on-green" > OK </button>
-    </div>
-
-  </div>
-</div>
-
 <div class=smallertext>
   Source and documentation: <a href="https://github.com/johnkerl/jsbee">https://github.com/johnkerl/jsbee</a>
 </div>
@@ -453,6 +435,103 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   <span id="light-theme-dark-theme-label">Loading ...</span>
 </div>
 <p/>
+
+<!-- ================================================================ -->
+
+<!-- Modal content -->
+<div id="bee-mode-help-background" class="modal-background">
+  <div id="bee-mode-help-content" class="modal-content">
+    <div>
+      <button id="bee-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+      <p>Enter your required letters and your other letters. (For the NYT Spelling Bee,
+      this will be the center letter and the surrounding letters, respectively.)
+
+      <p>Choose the word list from the dropdown.</p>
+      <ul>
+
+        <li><i>Usual suspects</i> is a short, curated list of once-bitten-twice-shy values from
+        previous Bees.</li>
+
+        <li><i>Long list</i> contains over 300,000 words, not all of which are in the NYT Spelling
+        Bee. (That is, this app can show words that the NYT Spelling Bee doesn&rsquo;t accept.)</li>
+
+      </ul>
+
+      <p>The output shown will include all words from the selected word list which contain only your
+      required letters and your other letters:</p>
+      <ul>
+
+        <li>If the required letter is <code>P</code> and the other letters are <code>AELM</code>,
+        then you&rsquo;ll see <code>PALM</code> and <code>PALE</code> but not
+        <code>MEAL</code>.</li>
+
+        <li>If the required letter is <code>M</code> and the other letters are <code>AELP</code>,
+        then you&rsquo;ll see <code>MALL</code> and <code>MEAL</code> but not
+        <code>PALE</code>.</li>
+
+        <li>If the required letters are left empty and the other letters are <code>AELPM</code>,
+        then you&rsquo;ll see words including <code>MALL</code>, <code>MEAL</code>,
+        <code>PALE</code>, <code>MAPLE</code>, and <code>EEL</code>.  </li>
+
+      </ul>
+
+      <p> You can further restrict your results by setting minimum and maximum word lengths.
+
+    </div>
+  </div>
+</div>
+
+<div id="pattern-mode-help-background" class="modal-background">
+  <div id="pattern-mode-help-content" class="modal-content">
+    <div>
+      <button id="pattern-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p> Enter your desired letters in the <code>Letters</code> field.</p>
+
+    <p> Select the word list you want to search in.</p>
+
+    <p> You can use a <code>.</code> as a wildcard to match any single letter. For example, <code>LE.T</code>
+    matches <code>LEFT</code>, <code>LENT</code>, <code>LEST</code>, etc.</p>
+
+    <p> You can use a <code>*</code> as a wildcard to match zero or more of any letter. For example:</p>
+    <ul>
+      <li><code>THR*</code> shows all words that begin with <code>THR</code>,</li>
+      <li><code>*EST</code> shows all words that end with <code>EST</code>,</li>
+      <li><code>TH*TH</code> shows all words that begin and end with <code>TH</code>, and</li>
+      <li><code>NIMB</code> shows all words that have the sequence <code>NIMB</code> anywhere within.</li>
+    </ul>
+
+    <p> You can further restrict your results by setting minimum and maximum word lengths. For
+    example, <code>*IEST</code> with minimum match length 5 and maximum match length 6 shows all
+    five-letter or six-letter words that end <code>IEST</code>. This shows <code>DRIEST</code> but
+    not <code>ARTIEST</code>.  </p>
+
+    </div>
+  </div>
+</div>
+
+<div id="anagram-mode-help-background" class="modal-background">
+  <div id="anagram-mode-help-content" class="modal-content">
+    <div>
+      <button id="anagram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p> Enter your desired letters in the <code>Letters</code> field.</p>
+
+    <p> Select the word list you want to search in.</p>
+
+    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram">anagrams</a> of the
+    letters you provide. For example, ELATES will match SEALET but not ELATE or SEALETS.  </p>
+
+    </div>
+  </div>
+</div>
 
 <!-- ================================================================ -->
 <script type=module>
@@ -664,6 +743,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         () => {},
       )
 
+      this.elements.matchLengthsRow = new GenericElement("match-lengths-row")
+
       this.elements.modeButtons = new PersistentNButtonSwitcher( {
           "bee-mode-button": {
             "text": "Bee mode",
@@ -671,9 +752,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("bee-mode-row-1"),
               new GenericElement("bee-mode-row-2"),
               new GenericElement("bee-mode-row-3"),
-              new GenericElement("match-lengths-row"),
+              new GenericElement("bee-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.elements.matchLengthsRow.makeVisible()
               this.elements.requiredLettersElement.focus()
               this.showMatches()
             },
@@ -682,9 +764,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
             "text": "Pattern mode",
             "items": [
               new GenericElement("pattern-mode-row-1"),
-              new GenericElement("match-lengths-row"),
+              new GenericElement("pattern-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.elements.matchLengthsRow.makeVisible()
               this.elements.patternLettersElement.focus()
               this.showMatches()
             },
@@ -693,8 +776,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
             "text": "Anagram mode",
             "items": [
               new GenericElement("anagram-mode-row-1"),
+              new GenericElement("anagram-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.elements.matchLengthsRow.makeInvisible()
               this.elements.anagramLettersElement.focus()
               this.showMatches()
             },
@@ -705,23 +790,66 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       )
 
       // ----------------------------------------------------------------
-      this.elements.modal_1_background  = new GenericElement("modal-1-background")
-      this.elements.modal_1_content  = new GenericElement("modal-1-content")
 
-      this.elements.modal_1_launcherButton = new Button(
-        "modal-1-launcher-button",
+      this.elements.bee_mode_help_background  = new GenericElement("bee-mode-help-background")
+      this.elements.bee_mode_help_content  = new GenericElement("bee-mode-help-content")
+
+      this.elements.bee_mode_help_launcherButton = new Button(
+        "bee-mode-help-launcher-button",
         null,
         (event) => {
-          this.elements.modal_1_background.makeVisible("block")
-          this.elements.modal_1_background.underlying.style.display = "block"
+          this.elements.bee_mode_help_background.makeVisible("block")
+          this.elements.bee_mode_help_background.underlying.style.display = "block"
         },
       )
 
-      this.elements.modal_1_close_button = new Button(
-        "modal-1-close-button",
+      this.elements.bee_mode_help_close_button = new Button(
+        "bee-mode-help-close-button",
         null,
         (event) => {
-          this.elements.modal_1_background.makeInvisible()
+          this.elements.bee_mode_help_background.makeInvisible()
+        },
+      )
+
+      // ----------------------------------------------------------------
+      this.elements.pattern_mode_help_background  = new GenericElement("pattern-mode-help-background")
+      this.elements.pattern_mode_help_content  = new GenericElement("pattern-mode-help-content")
+
+      this.elements.pattern_mode_help_launcherButton = new Button(
+        "pattern-mode-help-launcher-button",
+        null,
+        (event) => {
+          this.elements.pattern_mode_help_background.makeVisible("block")
+          this.elements.pattern_mode_help_background.underlying.style.display = "block"
+        },
+      )
+
+      this.elements.pattern_mode_help_close_button = new Button(
+        "pattern-mode-help-close-button",
+        null,
+        (event) => {
+          this.elements.pattern_mode_help_background.makeInvisible()
+        },
+      )
+
+      // ----------------------------------------------------------------
+      this.elements.anagram_mode_help_background  = new GenericElement("anagram-mode-help-background")
+      this.elements.anagram_mode_help_content  = new GenericElement("anagram-mode-help-content")
+
+      this.elements.anagram_mode_help_launcherButton = new Button(
+        "anagram-mode-help-launcher-button",
+        null,
+        (event) => {
+          this.elements.anagram_mode_help_background.makeVisible("block")
+          this.elements.anagram_mode_help_background.underlying.style.display = "block"
+        },
+      )
+
+      this.elements.anagram_mode_help_close_button = new Button(
+        "anagram-mode-help-close-button",
+        null,
+        (event) => {
+          this.elements.anagram_mode_help_background.makeInvisible()
         },
       )
 
@@ -732,14 +860,22 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         (event) => {
           document.body.style.backgroundColor = "white"
           document.body.style.color = "black"
-          this.elements.modal_1_content.underlying.style.backgroundColor = "white"
-          this.elements.modal_1_content.underlying.style.color = "black"
+          this.elements.bee_mode_help_content.underlying.style.backgroundColor = "white"
+          this.elements.bee_mode_help_content.underlying.style.color = "black"
+          this.elements.pattern_mode_help_content.underlying.style.backgroundColor = "white"
+          this.elements.pattern_mode_help_content.underlying.style.color = "black"
+          this.elements.anagram_mode_help_content.underlying.style.backgroundColor = "white"
+          this.elements.anagram_mode_help_content.underlying.style.color = "black"
         },
         (event) => {
           document.body.style.backgroundColor = "black"
           document.body.style.color = "white"
-          this.elements.modal_1_content.underlying.style.backgroundColor = "black"
-          this.elements.modal_1_content.underlying.style.color = "white"
+          this.elements.bee_mode_help_content.underlying.style.backgroundColor = "black"
+          this.elements.bee_mode_help_content.underlying.style.color = "white"
+          this.elements.pattern_mode_help_content.underlying.style.backgroundColor = "black"
+          this.elements.pattern_mode_help_content.underlying.style.color = "white"
+          this.elements.anagram_mode_help_content.underlying.style.backgroundColor = "black"
+          this.elements.anagram_mode_help_content.underlying.style.color = "white"
         },
       )
 

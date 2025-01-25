@@ -24,7 +24,7 @@ Bee mode:
 * Enter required and other letters. (For the NYT Spelling Bee, there is one of the former and six of the latter.)
 * Choose the word list from the dropdown:
   * "Usual suspects" is a short, curated list of once-bitten-twice-shy values from previous Bees.
-  * "Long list" is a long list (almost 200K words), not all of which are in the NYT Spelling Bee. That is, this can show words that the NYT Spelling Bee doesn't accept.
+  * "Long list" is a long list (over 300,000 words), not all of which are in the NYT Spelling Bee. That is, this can show words that the NYT Spelling Bee doesn't accept.
 * The output shown will include all words from the selected word list which contain only your required letters and your other letters. If those are `E` and `XAMPLS` then all the words shown will contain only some subset of the letters `EXAMPLS`, and additionally they'll have the letter `E`.
   * If the required letter is `P` and the other letters are `AELM`, then you'll see `PALM` and `PALE` but not `MEAL`.
   * If the required letter is `M` and the other letters are `AELP`, then you'll see `MALL` and `MEAL` but not `PALE`.
