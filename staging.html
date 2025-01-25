@@ -569,6 +569,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         "maxMatchLength": 30,
         "wordListURL": null,
         "wordList": null,
+        "wordListForAnagramMode": null, // Letters are sorted within words
       }
 
       this.setElementsAndCallbacks()
@@ -930,16 +931,27 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           "tinct", "titmice", "toccata", "tomtit", "toon", "toonie", "tori", "toric", "torii", "tutee",
           "tutti", "tutu", "undid", "vanilla", "vanillin", "woohoo",
         ]
+        this.setWordListForAnagramMode()
         this.showMatches()
       } else {
         this.logAt0("FETCHING WORD LIST FROM URL:", url)
         this.state.wordListURL = url
         fetch(url).then((response) => response.text().then((text) => {
           this.state.wordList = text.split("\n")
-          // Must be called from this callback, since this is async
+          this.setWordListForAnagramMode()
+          // Must be called from this callback, since this is all async
           this.showMatches()
         }))
       }
+    }
+
+    // Requires this.wordList to have already been computed.
+    // This precomputes sorting each word by its letter, which is a performance optimization.
+    setWordListForAnagramMode() {
+      this.wordListForAnagramMode = {}
+      this.state.wordList.forEach((word) => {
+        this.wordListForAnagramMode[word] = word.split('').sort().join('')
+      })
     }
 
     showMatches() {
@@ -1133,15 +1145,12 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       let sortedInput = anagramLetters.toLowerCase().split('').sort().join('');
 
       let matches = []
-      let minMatchLength = this.elements.minMatchLengthElement.get()
-      let maxMatchLength = this.elements.maxMatchLengthElement.get()
-      this.state.wordList.forEach((word) => {
+      for (const [word, sortedWord] of Object.entries(this.wordListForAnagramMode)) {
         this.logAt3("-- matcher check", word, " vs ", anagramLetters)
-        let sortedWord = word.split('').sort().join('')
         if (sortedWord == sortedInput) {
           matches.push(word)
         }
-      })
+      }
       return matches
     }
 
