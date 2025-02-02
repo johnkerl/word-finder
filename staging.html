@@ -65,6 +65,10 @@
     color: maroon;
   }
 
+  .rounded {
+    border-radius: 4px;
+  }
+
   .larger-input-text {
     /*
     font-size: 100%;
@@ -262,7 +266,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 <!-- ================================================================ -->
 <body>
 
-<h1><span class="boxed-text">JSBee</span></h1>
+<h1><span class="boxed-text rounded">JSBee</span></h1>
 
 <!--
   This is a self-contained widget for error-text and cancel/X button.
@@ -280,7 +284,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 </span>
 
 <!-- fieldset allows a nice legend, of which I enjoy the styling -->
-<fieldset>
+<fieldset class="rounded">
   <legend>
     <button id="bee-mode-button" class="no-margin"> Loading ... </button>
     <button id="pattern-mode-button" class="no-margin"> Loading ... </button>
