@@ -14,7 +14,7 @@
 </script>
 <!-- ================================================================ -->
 
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 <meta name="description" content="On-line word-finder app">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile-friendly -->
 <meta name="keywords" content="word finder anagram search puzzle">
@@ -377,7 +377,11 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       <select tabindex=3 id="word-list-dropdown">
         <!-- TODO: init the options in JS or HTML? -->
         <option value="./usual-suspects.txt">Usual suspects</option>
-        <option value="./long-list.txt">Long list</option>
+        <option value="./words-10K.txt">10K</option>
+        <option value="./words-20K-cumulative.txt">20K</option>
+        <option value="./words-30K-cumulative.txt">30K</option>
+        <option value="./words-40K-cumulative.txt">40K</option>
+        <option value="./long-list.txt">300K</option>
       </select>
     </td>
     <td>&nbsp;</td>
@@ -557,10 +561,11 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     TextSpan,
     isInteger,
     setErrorWidget,
-  } from "http://127.0.1:9999/sliver/dev/sliver.js"
+  // } from "http://127.0.1:9999/sliver/dev/sliver.js"
   // npx http-server ~/pub_http_internet -o -p 9999
   // } from "https://johnkerl.org/sliver/staging/sliver.js"
   // } from "https://johnkerl.org/sliver/stable/sliver.js"
+  } from "./sliver.js" // local copy
 
   setErrorWidget("error-container", "error-text")
 
