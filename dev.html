@@ -643,7 +643,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       // Bee-mode element
       this.elements.requiredLettersElement = new ConstrainedTextInput(
         "bee-mode-required-letters",
-        (text) => text.toUpperCase(),
+        //(text) => text.toUpperCase(),
+        (text) => text,
         (event) => {
           this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
@@ -652,7 +653,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       // Bee-mode element
       this.elements.otherLettersElement = new ConstrainedTextInput(
         "bee-mode-other-letters",
-        (text) => text.toUpperCase(),
+        //(text) => text.toUpperCase(),
+        (text) => text,
         (event) => {
           this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
@@ -661,7 +663,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       // Pattern-mode element
       this.elements.patternLettersElement = new ConstrainedTextInput(
         "pattern-mode-letters",
-        (text) => text.toUpperCase(),
+        //(text) => text.toUpperCase(),
+        (text) => text,
         (event) => {
           this.logAt1("PATTERN-LETTERS INPUT: <<", event.target.value, ">>")
           this.showPatternModeMatches()
@@ -670,7 +673,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       // Anagram-mode element
       this.elements.anagramLettersElement = new ConstrainedTextInput(
         "anagram-mode-letters",
-        (text) => text.toUpperCase(),
+        //(text) => text.toUpperCase(),
+        (text) => text,
         (event) => {
           this.logAt1("ANAGRAM-LETTERS INPUT: <<", event.target.value, ">>")
           this.showAnagramModeMatches()
@@ -869,10 +873,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("random-word-mode-help-launcher-button"),
             ],
             "callback": () => {
-              // XXX
-              //this.elements.matchLengthsRow.makeInvisible()
-              //this.elements.anagramLettersElement.focus()
-              //this.showMatches()
+              this.elements.matchLengthsRow.makeInvisible()
+              this.generateRandomWords()
             },
           },
 
@@ -1097,7 +1099,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       let otherLetters = this.elements.otherLettersElement.get()
 
       let matches = this.getBeeMatchesFromWordList(requiredLetters, otherLetters)
-      matches = matches.map(match => match.toUpperCase())
+      // matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       this.logAt2(matches)
 
@@ -1198,7 +1200,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       let patternLetters = this.elements.patternLettersElement.get()
 
       let matches = this.getPatternMatchesFromWordList(patternLetters)
-      matches = matches.map(match => match.toUpperCase())
+      // matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       this.logAt2(matches)
 
@@ -1241,7 +1243,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       let anagramLetters = this.elements.anagramLettersElement.get()
 
       let matches = this.getAnagramMatchesFromWordList(anagramLetters)
-      matches = matches.map(match => match.toUpperCase())
+      //matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       this.logAt2(matches)
 
