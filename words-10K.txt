@@ -970,7 +970,6 @@ shot
 lead
 move
 names
-
 stop
 higher
 et
@@ -1945,7 +1944,6 @@ gift
 ruin
 skill
 cattle
-
 equipment
 temple
 calls
@@ -2906,7 +2904,6 @@ tendency
 remote
 finish
 flag
-
 boots
 enabled
 administration
@@ -3859,7 +3856,6 @@ violently
 donation
 steamer
 witnesses
-
 specified
 learnt
 stores
@@ -4788,7 +4784,6 @@ hurriedly
 manhood
 quantities
 interpretation
-
 dressing
 rejoiced
 challenge
@@ -5711,7 +5706,6 @@ bee
 bury
 efficient
 mix
-
 supporting
 actor
 disturbance
@@ -6623,7 +6617,6 @@ soothing
 devised
 singer
 spaces
-
 disguised
 antique
 orthodox
@@ -7527,7 +7520,6 @@ blazed
 transition
 button
 headache
-
 tenant
 burns
 harmonious
@@ -8486,7 +8478,6 @@ sunken
 exasperated
 narrowly
 insulting
-
 deficiency
 operating
 overthrown

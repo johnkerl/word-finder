@@ -897,7 +897,6 @@ drake
 reconnoiter
 transmute
 clarinet
-
 gramophone
 isinglass
 jabber
@@ -1808,7 +1807,6 @@ native-born
 roommate
 sapient
 seethe
-
 trireme
 varmint
 x-ray
@@ -2764,7 +2762,6 @@ lignite
 nationalist
 overdose
 pratt
-
 premiere
 roach
 sapiens
@@ -3760,7 +3757,6 @@ pottle
 seamless
 stammerer
 teetotaller
-
 theta
 tourniquet
 trope
@@ -4757,7 +4753,6 @@ adoringly
 bailiwick
 buses
 cheesecloth
-
 costive
 defamatory
 ecb
@@ -5751,7 +5746,6 @@ trauma
 trompe
 uncountable
 velocipede
-
 zit
 zounds
 adapter
@@ -6713,7 +6707,6 @@ dewlap
 exploiter
 fecal
 fomentation
-
 fredericton
 homeopathy
 latvian
@@ -7706,7 +7699,6 @@ gittin
 gitting
 indonesian
 kabyle
-
 kudos
 lacteal
 logarithmic
@@ -8699,7 +8691,6 @@ brill
 catamite
 cheekbone
 controvertible
-
 coterminous
 decant
 depressive

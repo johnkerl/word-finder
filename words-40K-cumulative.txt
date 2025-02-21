@@ -970,7 +970,6 @@ shot
 lead
 move
 names
-
 stop
 higher
 et
@@ -1945,7 +1944,6 @@ gift
 ruin
 skill
 cattle
-
 equipment
 temple
 calls
@@ -2906,7 +2904,6 @@ tendency
 remote
 finish
 flag
-
 boots
 enabled
 administration
@@ -3859,7 +3856,6 @@ violently
 donation
 steamer
 witnesses
-
 specified
 learnt
 stores
@@ -4788,7 +4784,6 @@ hurriedly
 manhood
 quantities
 interpretation
-
 dressing
 rejoiced
 challenge
@@ -5711,7 +5706,6 @@ bee
 bury
 efficient
 mix
-
 supporting
 actor
 disturbance
@@ -6623,7 +6617,6 @@ soothing
 devised
 singer
 spaces
-
 disguised
 antique
 orthodox
@@ -7527,7 +7520,6 @@ blazed
 transition
 button
 headache
-
 tenant
 burns
 harmonious
@@ -8486,7 +8478,6 @@ sunken
 exasperated
 narrowly
 insulting
-
 deficiency
 operating
 overthrown
@@ -10287,7 +10278,6 @@ blasphemy
 pall
 weal
 rampart
-
 hazy
 loath
 pp
@@ -11195,7 +11185,6 @@ residue
 staunch
 irrelevant
 noisily
-
 urgently
 greenish
 nickname
@@ -12108,7 +12097,6 @@ contrition
 centered
 cognizance
 dismount
-
 dating
 nearby
 poplar
@@ -13049,7 +13037,6 @@ pi
 exhort
 trifled
 bus
-
 bale
 turnpike
 anomalous
@@ -13978,7 +13965,6 @@ possessive
 canonical
 cognition
 culmination
-
 egoism
 garrulous
 rueful
@@ -14895,7 +14881,6 @@ nonchalance
 advocacy
 abed
 middling
-
 mucous
 outdone
 rebound
@@ -15852,7 +15837,6 @@ pristine
 superannuated
 telegraphy
 thousandth
-
 expeditious
 superstructure
 indoor
@@ -16751,7 +16735,6 @@ abler
 correlative
 irruption
 melee
-
 weeding
 whaler
 alfalfa
@@ -17746,7 +17729,6 @@ bakery
 clairvoyant
 ep
 heirloom
-
 herbaceous
 homily
 nostrum
@@ -19568,7 +19550,6 @@ drake
 reconnoiter
 transmute
 clarinet
-
 gramophone
 isinglass
 jabber
@@ -20479,7 +20460,6 @@ native-born
 roommate
 sapient
 seethe
-
 trireme
 varmint
 x-ray
@@ -21435,7 +21415,6 @@ lignite
 nationalist
 overdose
 pratt
-
 premiere
 roach
 sapiens
@@ -22431,7 +22410,6 @@ pottle
 seamless
 stammerer
 teetotaller
-
 theta
 tourniquet
 trope
@@ -23428,7 +23406,6 @@ adoringly
 bailiwick
 buses
 cheesecloth
-
 costive
 defamatory
 ecb
@@ -24422,7 +24399,6 @@ trauma
 trompe
 uncountable
 velocipede
-
 zit
 zounds
 adapter
@@ -25384,7 +25360,6 @@ dewlap
 exploiter
 fecal
 fomentation
-
 fredericton
 homeopathy
 latvian
@@ -26377,7 +26352,6 @@ gittin
 gitting
 indonesian
 kabyle
-
 kudos
 lacteal
 logarithmic
@@ -27370,7 +27344,6 @@ brill
 catamite
 cheekbone
 controvertible
-
 coterminous
 decant
 depressive
@@ -29330,7 +29303,6 @@ stevenage
 stewardesses
 stollen
 theurgy
-
 ticket-collector
 transmutable
 videotape
@@ -30319,7 +30291,6 @@ glume
 grouty
 guimpe
 gullah
-
 hepatitis
 hypostatic
 inc
@@ -31285,7 +31256,6 @@ electromechanical
 embosoming
 enfeoffment
 epididymis
-
 erinys
 facultative
 falciform
@@ -32276,7 +32246,6 @@ formication
 fossilize
 fridge
 fructuous
-
 fundi
 geodesic
 gondwana
@@ -33266,7 +33235,6 @@ armigerous
 aubade
 avoidless
 axolotl
-
 backhander
 baff
 bakelite
@@ -34256,7 +34224,6 @@ which's
 whitesmith
 wic
 widdershins
-
 wimpy
 winker
 wo'n't
