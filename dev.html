@@ -289,6 +289,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <button id="bee-mode-button" class="no-margin"> Loading ... </button>
     <button id="pattern-mode-button" class="no-margin"> Loading ... </button>
     <button id="anagram-mode-button" class="no-margin"> Loading ... </button>
+    <button id="random-word-mode-button" class="no-margin"> Loading ... </button>
   </legend>
   <table>
 
@@ -309,6 +310,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td>&nbsp;</td>
     <td class="smallertext"> Required letter(s) </td>
   </tr>
+
   <!-- Row for bee mode -->
   <tr id="bee-mode-row-2">
     <td> <button class="maroon" id="example-button">Loading ...</button> </td>
@@ -326,6 +328,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td>&nbsp;</td>
     <td class="smallertext"> Other letter(s) </td>
   </tr>
+
   <!-- Row for bee mode -->
   <tr id="bee-mode-row-3">
     <td> <button class="maroon" id="all-others-button">Loading ...</button> </td>
@@ -370,6 +373,16 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td class="smallertext"> Letters </td>
   </tr>
 
+  <!-- Row for random-word mode -->
+  <tr id="random-word-mode-row-1">
+    <td> <button class="maroon" id="random-word-generate-button"> Loading ... </button> </td>
+    <td>
+      <input type="number" id="random-word-count">
+    </td>
+    <td> &nbsp; </td>
+    <td class="smallertext"> Word count </td>
+  </tr>
+
   <!-- Word list used by all modes -->
   <tr>
     <td> &nbsp; </td>
@@ -388,7 +401,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td class="smallertext"> Word list </td>
   </tr>
 
-  <!-- Min/max word lengths used by bee and pattern modes, but not anagram mode -->
+  <!-- Min/max word lengths used by bee and pattern modes, but not anagram mode or random-word -->
   <tr id="match-lengths-row">
     <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
     <td>
@@ -407,6 +420,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         <button id="bee-mode-help-launcher-button"> Help </button>
         <button id="pattern-mode-help-launcher-button"> Help </button>
         <button id="anagram-mode-help-launcher-button"> Help </button>
+        <button id="random-word-mode-help-launcher-button"> Help </button>
       </div>
     </td>
     <td> &nbsp; </td>
@@ -545,6 +559,25 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   </div>
 </div>
 
+<div id="random-word-mode-help-background" class="modal-background">
+  <div id="random-word-mode-help-content" class="modal-content">
+    <div>
+      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p>Help for random-word mode:</p>
+
+    <ul>
+      <li> Select the word list </li>
+      <li> Select how many words to generate at a time </li>
+      <li> Use the Generate button to get a new random sample </li>
+    </ul>
+
+    </div>
+  </div>
+</div>
+
 <!-- ================================================================ -->
 <script type=module>
   'use strict';
@@ -576,10 +609,16 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 
       this.state = {
         "logLevel": 0, // 0,1,2,3
+
         "defaultLowMatchLength": 4,
         "defaultHighMatchLength": 16,
         "minMatchLength": 1,
         "maxMatchLength": 30,
+
+        "defaultRandomWordCount": 5,
+        "minRandomWordCount": 1,
+        "maxRandomWordCount": 100,
+
         "wordListURL": null,
         "wordList": null,
         "wordListForAnagramMode": null, // Letters are sorted within words
@@ -737,6 +776,27 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         },
       )
 
+      // Random-word-mode element
+      this.elements.randomWordGenerateButton = new Button(
+        "random-word-generate-button",
+        "Generate",
+        (event) => {
+          this.logAt1("RANDOM-WORD-GENERATE BUTTON WAS CLICKED")
+          this.generateRandomWords()
+        },
+      )
+
+      // Random-word-mode element
+      this.elements.randomWordCountInput = new IntRangeInput(
+        "random-word-count",
+        this.state.defaultRandomWordCount, // default
+        this.state.minRandomWordCount, // min
+        this.state.maxRandomWordCount, // max
+        (event) => {
+          this.generateRandomWords()
+        },
+      )
+
       this.elements.resetMatchLengthsButton = new Button(
         "reset-match-lengths-button",
         "Reset",
@@ -760,6 +820,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       this.elements.matchLengthsRow = new GenericElement("match-lengths-row")
 
       this.elements.modeButtons = new PersistentNButtonSwitcher( {
+
           "bee-mode-button": {
             "text": "Bee mode",
             "items": [
@@ -774,6 +835,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               this.showMatches()
             },
           },
+
           "pattern-mode-button": {
             "text": "Pattern mode",
             "items": [
@@ -786,6 +848,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               this.showMatches()
             },
           },
+
           "anagram-mode-button": {
             "text": "Anagram mode",
             "items": [
@@ -798,6 +861,21 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               this.showMatches()
             },
           },
+
+          "random-word-mode-button": {
+            "text": "Random-word mode",
+            "items": [
+              new GenericElement("random-word-mode-row-1"),
+              new GenericElement("random-word-mode-help-launcher-button"),
+            ],
+            "callback": () => {
+              // XXX
+              //this.elements.matchLengthsRow.makeInvisible()
+              //this.elements.anagramLettersElement.focus()
+              //this.showMatches()
+            },
+          },
+
         },
         "selected",   // CSS style class
         "deselected", // CSS style class
@@ -868,12 +946,34 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       )
 
       // ----------------------------------------------------------------
+      this.elements.random_word_mode_help_background  = new GenericElement("random-word-mode-help-background")
+      this.elements.random_word_mode_help_content  = new GenericElement("random-word-mode-help-content")
+
+      this.elements.random_word_mode_help_launcherButton = new Button(
+        "random-word-mode-help-launcher-button",
+        null,
+        (event) => {
+          this.elements.random_word_mode_help_background.makeVisible("block")
+          this.elements.random_word_mode_help_background.underlying.style.display = "block"
+        },
+      )
+
+      this.elements.random_word_mode_help_close_button = new Button(
+        "random-word-mode-help-close-button",
+        null,
+        (event) => {
+          this.elements.random_word_mode_help_background.makeInvisible()
+        },
+      )
+
+      // ----------------------------------------------------------------
       // XXX TEMP HACK
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
           window.app.elements.bee_mode_help_background.makeInvisible()
           window.app.elements.pattern_mode_help_background.makeInvisible()
           window.app.elements.anagram_mode_help_background.makeInvisible()
+          window.app.elements.random_word_mode_help_background.makeInvisible()
         }
       });
 
@@ -890,6 +990,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           this.elements.pattern_mode_help_content.underlying.style.color = "black"
           this.elements.anagram_mode_help_content.underlying.style.backgroundColor = "white"
           this.elements.anagram_mode_help_content.underlying.style.color = "black"
+          this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "white"
+          this.elements.random_word_mode_help_content.underlying.style.color = "black"
         },
         (event) => {
           document.body.style.backgroundColor = "black"
@@ -900,6 +1002,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           this.elements.pattern_mode_help_content.underlying.style.color = "white"
           this.elements.anagram_mode_help_content.underlying.style.backgroundColor = "black"
           this.elements.anagram_mode_help_content.underlying.style.color = "white"
+          this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "black"
+          this.elements.random_word_mode_help_content.underlying.style.color = "white"
         },
       )
 
@@ -977,8 +1081,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         this.showBeeModeMatches()
       } else if (this.elements.modeButtons.which() == 'pattern-mode-button') {
         this.showPatternModeMatches()
-      } else {
+      } else if (this.elements.modeButtons.which() == 'anagram-mode-button') {
         this.showAnagramModeMatches()
+      } else if (this.elements.modeButtons.which() == 'random-word-mode-button') {
+        this.generateRandomWords()
       }
     }
 
@@ -1165,6 +1271,25 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         }
       }
       return matches
+    }
+
+    generateRandomWords() {
+      if (!this.checkWordList()) {
+        return
+      }
+
+      let matches = []
+      // XXX without replapcement
+      let k = this.elements.randomWordCountInput.get()
+      let n = this.state.wordList.length
+      for (let i = 0; i < k; i++) {
+          const randomIndex = Math.floor(Math.random() * n);
+          let word = this.state.wordList[randomIndex]
+          matches.push(word)
+      }
+
+      this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
+      this.elements.outputElement.set(matches.join(" "))
     }
 
     // ----------------------------------------------------------------

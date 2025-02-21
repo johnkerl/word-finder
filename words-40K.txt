@@ -202,7 +202,6 @@ inflect
 integers
 intercontinental
 jam.
-Kabbalah
 lase
 lyrically
 meat-eating
@@ -235,7 +234,6 @@ thrawn
 tnt
 tympani
 yegg
--less
 adipocere
 adumbrations
 ahi
@@ -301,7 +299,6 @@ unselfconscious
 vivification
 wallin
 zinnia
--scopy
 abdomens
 abiogenesis
 abstruseness
@@ -379,7 +376,6 @@ unstrap
 warehouseman
 wicket-keeper
 windrow
--est
 abominates
 abruzzo
 adumbrate
@@ -412,7 +408,6 @@ gastronome
 granddad
 grout
 hanoi
-i2
 inapposite
 insecta
 juvenal
@@ -693,8 +688,6 @@ tungstate
 udal
 wahhabis
 winkle
--ium
--ness
 abrading
 acupuncture
 all-weather
@@ -758,7 +751,6 @@ windpipes
 xebec
 yoni
 zwinglian
--looking
 abuser
 activation
 agnate
@@ -837,7 +829,6 @@ vau
 weaponry
 wrasse
 yttrium
--ist
 abit
 achiever
 anaheim
@@ -920,7 +911,6 @@ uniformitarian
 univocal
 viral
 worrisome
--hood
 academia
 acrylic
 allemande
@@ -1005,7 +995,6 @@ videotape
 xe
 yemeni
 zealotry
--dom
 aberdonian
 acclimate
 accomodate
@@ -1080,8 +1069,6 @@ username
 valedictorian
 verser
 zine
-2125
--ster
 abbasid
 aitch
 alewife
@@ -1251,7 +1238,6 @@ usaf
 var
 verboten
 wok
--ship
 ablation
 acharnement
 activists
@@ -1345,7 +1331,6 @@ vomer
 woozy
 yum
 zeolite
-2b
 absolue
 adn
 adnate
@@ -1426,7 +1411,6 @@ vaseline
 watermill
 yellowhammer
 zoster
--th
 abraid
 accordions
 accountableness
@@ -1520,7 +1504,6 @@ uhf
 vojvodina
 zestful
 zoom
--ous
 abstractedness
 acold
 agger
@@ -1611,8 +1594,6 @@ wyvern
 xylene
 y-
 yahoo
-'sblood
--ant
 abjects
 abrasive
 acoustical
@@ -1722,7 +1703,6 @@ why's
 wickiup
 zag
 zoning
--cracy
 abled
 above-cited
 allodium
@@ -1953,8 +1933,6 @@ vee
 vigilante
 xylophone
 zoologically
--plasty
-a4
 aaa
 abscissas
 acuminated
@@ -2165,9 +2143,6 @@ walloper
 woodwind
 zalika
 zap
--archy
--ful
-10-4
 abye
 accredits
 accurse
@@ -2211,7 +2186,6 @@ geothermal
 hoise
 hospitalization
 hyperspace
-i3
 ichthyological
 ideogram
 indo-iranian
@@ -2406,7 +2380,6 @@ xanthin
 year-round
 zaza
 zirconia
--al
 absconder
 abstemiously
 adp
@@ -2480,7 +2453,6 @@ marabou
 maven
 messiah
 microprocessor
-Mikey
 modulo
 mott
 mulligatawny
@@ -2531,8 +2503,6 @@ word-for-word
 woulda
 xenophobia
 zoomed
--ar
--handed
 abominating
 acquiescently
 adat
@@ -2602,7 +2572,6 @@ infibulation
 ingest
 inspissate
 insured
-Kiswahili
 latinas
 lemma
 lifeline
@@ -2614,8 +2583,6 @@ manganous
 mechanize
 mejico
 mensa
-Michener
-Mickey
 mid-autumn
 milligram
 mind-boggling
@@ -2653,7 +2620,6 @@ slithy
 spastic
 staphylococcus
 stopwatch
-Svengali
 tantalum
 thermodynamic
 tinderbox
@@ -2664,15 +2630,12 @@ towboat
 transliterating
 trepanation
 udc
-Ural-Altaic
 uranite
 urartian
 urinated
 yardmaster
 yep
 yill
--ism
-1x
 abetment
 absentia
 acalephs
@@ -2742,7 +2705,6 @@ latria
 leakiness
 machinate
 manmade
-Massimiliano
 masticatory
 meninges
 mercurous
@@ -2799,7 +2761,6 @@ videos
 virgate
 wallah
 washcloth
-Wendy's
 wheelchair
 winy
 yammer
@@ -2814,15 +2775,12 @@ ampersand
 antepenultimate
 apo-
 appositive
-Apr
 arsenide
 aversation
-Azerbaijani
 balalaika
 bluet
 bnp
 bollard
-Bondi
 briquet
 carcharodon
 catenary
@@ -2838,7 +2796,6 @@ decimeter
 disinformation
 docent
 edacious
-EEC
 etiolate
 exponentially
 falt
@@ -2858,12 +2815,9 @@ hospitalisation
 hothead
 hydrodynamics
 hydrus
-ICBM
 illative
 inhume
 kafir
-Kampuchea
-Kazakh
 keck
 lades
 laired
@@ -2872,16 +2826,13 @@ layoff
 leukemia
 lunarian
 macho
-Malayalam
 mansi
 marlin
 mav
 mosh
 nanobot
 nervure
-NNW
 nonacceptance
-NSF
 nubbin
 objurgate
 obtuse-angled
@@ -2927,10 +2878,8 @@ tooter
 triggering
 troglodytic
 tussocky
-Ugandan
 ulaid
 underdog
-Vilnius
 vitalism
 walkway
 whoosh
@@ -2943,7 +2892,6 @@ abime
 abscission
 accreted
 accustomedness
-Adrianna
 affiant
 alr
 alumna
@@ -2952,10 +2900,8 @@ anaglyph
 asterism
 attacher
 atypical
-Avestan
 aweather
 backroom
-BCE
 bire
 birthed
 bissextile
@@ -2965,7 +2911,6 @@ blender
 blindworm
 blowhole
 bongo
-Brasilia
 bris
 buggery
 bushwhacked
@@ -2976,14 +2921,12 @@ canthus
 cartonnage
 cascabel
 cauf
-Caymanian
 chamorro
 chinch
 classifier
 compensator
 compere
 complexional
-Conn
 cooey
 deathtrap
 delphinus
@@ -3096,7 +3039,6 @@ vesica
 vientiane
 weathervane
 wonky
--backed
 abderite
 abeyant
 abhorrently
@@ -3240,7 +3182,6 @@ wagga
 were-
 zirconium
 zonal
--able
 abruption
 acclimatizing
 accorder
@@ -3420,8 +3361,6 @@ wyo.
 xr
 zebu
 zeroth
--age
--ess
 aap
 abnegate
 abstergent
@@ -3757,8 +3696,6 @@ vermiculate
 wildcard
 zimbabwean
 zombie
--ize
--ment
 a-side
 aasvogel
 aborting
@@ -3855,7 +3792,6 @@ masseter
 mid-february
 molly-guard
 moniker
-mp3
 mudguard
 multilingual
 nah.
@@ -3929,9 +3865,6 @@ whitebeam
 widget
 xiphoid
 zombis
-2186
--ac
--morphous
 abdominous
 abecedarian
 abidance
@@ -4128,9 +4061,6 @@ wristwatch
 xanthic
 yttria
 zippy
--ad
--ance
--arch
 abend
 abnegated
 aboveground
@@ -4335,7 +4265,6 @@ webley
 welter-weight
 woodlouse
 woofer
-ww2
 wwii
 xu
 yessir
@@ -4532,7 +4461,6 @@ xylography
 yorker
 zeugma
 zittern
--tion
 abbreviator
 abomasum
 abusiveness
@@ -4745,10 +4673,6 @@ yay
 youngling
 zarzuela
 zigamorph
--derm
--ie
--leafed
--ware
 aberrational
 ablegate
 abscind
@@ -4976,8 +4900,6 @@ wildebeest
 yin-yang
 zestfully
 zoospore
--ide
-3b
 abab
 abas
 abderites
@@ -5230,7 +5152,6 @@ why'd
 wildebeests
 xenophobic
 yy
--free
 a-bomb
 aaronic
 abandonedly
@@ -5452,7 +5373,6 @@ zibeline
 zoe
 zoomorphic
 zyme
--ate
 abdal
 abdications
 abduce
@@ -5730,14 +5650,6 @@ yack
 yt
 yup
 zd
--bearing
--ee
--ible
--id
--ite
--naphthol
--ose
-2000s
 abay
 abo
 aboding
@@ -5935,7 +5847,6 @@ pizz.
 plantae
 plug-in
 posix
-pr0n
 prettify
 privatisation
 punire
@@ -6298,7 +6209,6 @@ vasey
 vasodilator
 ventripotent
 vidin
-w3c
 wacko
 wahnfried
 warm-up
@@ -6307,15 +6217,10 @@ wmd
 womanize
 wunderkind
 xystus
-y2k
 ytterbium
 zak
 zamzummim
 ze
--ation
--ric
-a5
-a8
 abdicant
 aberdonians
 abkhaz
@@ -6562,7 +6467,6 @@ pie-in-the-sky
 pigling
 placeholder
 pleach
-PLO
 polyphyletic
 ponce
 pook
@@ -6595,15 +6499,11 @@ sanguinity
 satanism
 schnapper
 sempiternity
-Sequoyah
 serval
 sesquipedal
 sexism
 shitting
 shola
-Shona
-Shraddha
-Shrek
 shrove
 sideburns
 sidekick
