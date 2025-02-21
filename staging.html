@@ -346,7 +346,6 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         tabindex=1
         placeholder="..."
         size=10
-        autocapitalize="characters"
         id="pattern-mode-letters"
         class="larger-input-text">
       </input>
@@ -364,7 +363,6 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         tabindex=1
         placeholder="..."
         size=10
-        autocapitalize="characters"
         id="anagram-mode-letters"
         class="larger-input-text">
       </input>
@@ -643,8 +641,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       // Bee-mode element
       this.elements.requiredLettersElement = new ConstrainedTextInput(
         "bee-mode-required-letters",
-        //(text) => text.toUpperCase(),
-        (text) => text,
+        (text) => text.toUpperCase(),
+        //(text) => text,
         (event) => {
           this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
@@ -653,8 +651,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       // Bee-mode element
       this.elements.otherLettersElement = new ConstrainedTextInput(
         "bee-mode-other-letters",
-        //(text) => text.toUpperCase(),
-        (text) => text,
+        (text) => text.toUpperCase(),
+        //(text) => text,
         (event) => {
           this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
           this.showBeeModeMatches()
@@ -826,7 +824,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       this.elements.modeButtons = new PersistentNButtonSwitcher( {
 
           "bee-mode-button": {
-            "text": "Bee mode",
+            "text": "Bee",
             "items": [
               new GenericElement("bee-mode-row-1"),
               new GenericElement("bee-mode-row-2"),
@@ -841,7 +839,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           },
 
           "pattern-mode-button": {
-            "text": "Pattern mode",
+            "text": "Pattern",
             "items": [
               new GenericElement("pattern-mode-row-1"),
               new GenericElement("pattern-mode-help-launcher-button"),
@@ -854,7 +852,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           },
 
           "anagram-mode-button": {
-            "text": "Anagram mode",
+            "text": "Anagram",
             "items": [
               new GenericElement("anagram-mode-row-1"),
               new GenericElement("anagram-mode-help-launcher-button"),
@@ -867,7 +865,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           },
 
           "random-word-mode-button": {
-            "text": "Random-word mode",
+            "text": "Random",
             "items": [
               new GenericElement("random-word-mode-row-1"),
               new GenericElement("random-word-mode-help-launcher-button"),
@@ -1099,7 +1097,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       let otherLetters = this.elements.otherLettersElement.get()
 
       let matches = this.getBeeMatchesFromWordList(requiredLetters, otherLetters)
-      // matches = matches.map(match => match.toUpperCase())
+      matches = matches.map(match => match.toUpperCase())
       matches = matches.sort()
       this.logAt2(matches)
 
