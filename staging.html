@@ -247,20 +247,6 @@
 
 </style>
 
-<!-- ================================================================ -->
-<script>
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script>
-  try {
-    var pageTracker = _gat._getTracker("UA-15651652-1");
-    pageTracker._trackPageview();
-  } catch(err) {
-  }
-</script>
-<!-- ================================================================ -->
-
 </head>
 
 <!-- ================================================================ -->
@@ -290,6 +276,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <button id="pattern-mode-button" class="no-margin"> Loading ... </button>
     <button id="anagram-mode-button" class="no-margin"> Loading ... </button>
     <button id="random-word-mode-button" class="no-margin"> Loading ... </button>
+    <button id="ngram-mode-button" class="no-margin"> Loading ... </button>
   </legend>
   <table>
 
@@ -381,11 +368,35 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td class="smallertext"> Word count </td>
   </tr>
 
+  <!-- Row for ngram mode -->
+  <tr id="ngram-mode-row-1">
+    <td> <button class="maroon" id="ngram-generate-button"> Loading ... </button> </td>
+    <td>
+      <input type="number" id="ngram-word-count-input">
+    </td>
+    <td> &nbsp; </td>
+    <td class="smallertext"> Word count </td>
+  </tr>
+
+  <!-- Row for ngram mode -->
+  <tr id="ngram-mode-row-2">
+    <td> &nbsp; </td>
+    <td>
+      <input type="number" id="ngram-n-input">
+    </td>
+    <td> &nbsp; </td>
+    <td class="smallertext"> The <i>n</i> in <i>n</i>-gram </td>
+  </tr>
+
   <!-- Word list used by all modes -->
   <tr>
     <td> &nbsp; </td>
     <td>
       <select tabindex=3 id="word-list-dropdown">
+        <!--
+        <option value="./one-word.txt">One word (TEMP)</option>
+        <option value="./short-list.txt">Short list (TEMP)</option>
+        -->
         <option value="./usual-suspects.txt">Usual suspects</option>
         <option value="./words-2K.txt">2K</option>
         <option value="./words-10K.txt">10K</option>
@@ -400,7 +411,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td class="smallertext"> Word list </td>
   </tr>
 
-  <!-- Min/max word lengths used by bee and pattern modes, but not anagram mode or random-word -->
+  <!-- Min/max word lengths used by bee and pattern modes, but not anagram mode or random-word or ngram -->
   <tr id="match-lengths-row">
     <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
     <td>
@@ -420,6 +431,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         <button id="pattern-mode-help-launcher-button"> Help </button>
         <button id="anagram-mode-help-launcher-button"> Help </button>
         <button id="random-word-mode-help-launcher-button"> Help </button>
+        <button id="ngram-mode-help-launcher-button"> Help </button>
       </div>
     </td>
     <td> &nbsp; </td>
@@ -577,6 +589,28 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   </div>
 </div>
 
+<div id="ngram-mode-help-background" class="modal-background">
+  <div id="ngram-mode-help-content" class="modal-content">
+    <div>
+      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p>Help for Jabberwocky mode:</p>
+
+    <ul>
+      <li> Select the word list </li>
+      <li> Select how many words to generate at a time </li>
+      <li> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram">n-grams</a>:
+        the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list
+      </li>
+      <li> Use the Generate button to get a new random sample </li>
+    </ul>
+
+    </div>
+  </div>
+</div>
+
 <!-- ================================================================ -->
 <script type=module>
   'use strict';
@@ -599,6 +633,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   // } from "https://johnkerl.org/sliver/stable/sliver.js"
   } from "./sliver.js" // local copy
 
+  import {
+    NGramsKeeper,
+  } from "./ngrams.js" // local copy
+
   setErrorWidget("error-container", "error-text")
 
   // ----------------------------------------------------------------
@@ -617,6 +655,16 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         "defaultRandomWordCount": 5,
         "minRandomWordCount": 1,
         "maxRandomWordCount": 100,
+
+        "defaultNGramN": 5,
+        "minNGramN": 2,
+        "maxNGramN": 8,
+
+        "defaultNGramWordCount": 5,
+        "minNGramWordCount": 1,
+        "maxNGramWordCount": 100,
+
+        "ngramsKeeper": null,
 
         "wordListURL": null,
         "wordList": null,
@@ -800,6 +848,44 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         },
       )
 
+      // ngram-mode element
+      this.elements.ngramGenerateButton = new Button(
+        "ngram-generate-button",
+        "Generate",
+        (event) => {
+          this.logAt0("NGRAM-GENERATE BUTTON WAS CLICKED")
+          // XXX no reset
+          this.generateNGramWords()
+        },
+      )
+
+      // ngram-mode element
+      this.elements.ngramWordCountInput = new IntRangeInput(
+        "ngram-word-count-input",
+        this.state.defaultNGramWordCount, // default
+        this.state.minNGramWordCount, // min
+        this.state.maxNGramWordCount, // max
+        (event) => {
+          this.logAt0("NGRAM-WORD-COUNT INPUT WAS SELECTED")
+          this.generateNGramWords()
+        },
+      )
+
+      // ngram-mode element
+      console
+      this.elements.ngramNInput = new IntRangeInput(
+        "ngram-n-input",
+        this.state.defaultNGramN, // default
+        this.state.minNGramN, // min
+        this.state.maxNGramN, // max
+        (event) => {
+          this.logAt0("NGRAM-N INPUT WAS SELECTED")
+          // XXX reset
+          this.ngramsKeeper = null
+          this.generateNGramWords()
+        },
+      )
+
       this.elements.resetMatchLengthsButton = new Button(
         "reset-match-lengths-button",
         "Reset",
@@ -833,6 +919,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("bee-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
               this.elements.requiredLettersElement.focus()
               this.showMatches()
@@ -846,6 +933,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("pattern-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
               this.elements.patternLettersElement.focus()
               this.showMatches()
@@ -859,6 +947,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("anagram-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
               this.elements.anagramLettersElement.focus()
               this.showMatches()
@@ -872,8 +961,24 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("random-word-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
               this.generateRandomWords()
+            },
+          },
+
+          "ngram-mode-button": {
+            "text": "Jabber",
+            "items": [
+              new GenericElement("ngram-mode-row-1"),
+              new GenericElement("ngram-mode-row-2"),
+              new GenericElement("ngram-mode-help-launcher-button"),
+            ],
+            "callback": () => {
+              this.logAt0("SWTICH TO NGRAM MODE")
+              this.elements.matchLengthsRow.makeInvisible()
+              this.ngramsKeeper = null
+              this.generateNGramWords()
             },
           },
 
@@ -968,6 +1073,27 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       )
 
       // ----------------------------------------------------------------
+      this.elements.ngram_mode_help_background  = new GenericElement("ngram-mode-help-background")
+      this.elements.ngram_mode_help_content  = new GenericElement("ngram-mode-help-content")
+
+      this.elements.ngram_mode_help_launcherButton = new Button(
+        "ngram-mode-help-launcher-button",
+        null,
+        (event) => {
+          this.elements.ngram_mode_help_background.makeVisible("block")
+          this.elements.ngram_mode_help_background.underlying.style.display = "block"
+        },
+      )
+
+      this.elements.ngram_mode_help_close_button = new Button(
+        "ngram-mode-help-close-button",
+        null,
+        (event) => {
+          this.elements.ngram_mode_help_background.makeInvisible()
+        },
+      )
+
+      // ----------------------------------------------------------------
       // XXX TEMP HACK
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
@@ -975,6 +1101,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           window.app.elements.pattern_mode_help_background.makeInvisible()
           window.app.elements.anagram_mode_help_background.makeInvisible()
           window.app.elements.random_word_mode_help_background.makeInvisible()
+          window.app.elements.ngram_mode_help_background.makeInvisible()
         }
       });
 
@@ -993,6 +1120,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           this.elements.anagram_mode_help_content.underlying.style.color = "black"
           this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "white"
           this.elements.random_word_mode_help_content.underlying.style.color = "black"
+          this.elements.ngram_mode_help_content.underlying.style.backgroundColor = "white"
+          this.elements.ngram_mode_help_content.underlying.style.color = "black"
         },
         (event) => {
           document.body.style.backgroundColor = "black"
@@ -1005,6 +1134,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
           this.elements.anagram_mode_help_content.underlying.style.color = "white"
           this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "black"
           this.elements.random_word_mode_help_content.underlying.style.color = "white"
+          this.elements.ngram_mode_help_content.underlying.style.backgroundColor = "black"
+          this.elements.ngram_mode_help_content.underlying.style.color = "white"
         },
       )
 
@@ -1023,44 +1154,14 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     }
 
     setWordList(url) {
-      // CORS make us unable to load ./anything when doing local-disk dev
-      if (document.URL.startsWith("file://")) {
-        this.state.wordListURL = "local-in-memory"
-        this.state.wordList = [
-          "abaci", "acacia", "acai", "acetate", "affiant", "aioli", "alfalfa", "alga", "algae", "algal",
-          "allele", "ameba", "amoeba", "amoebae", "amyl", "anneal", "anyhoo", "apian", "apnea", "arancini",
-          "arhat", "aria", "aril", "arnica", "atilt", "atria", "attaboy", "baaed", "baba", "babel", "babka",
-          "bailiff", "banana", "bandana", "bandanna", "barbacoa", "blin", "blini", "boll", "bombe", "bonbon",
-          "bonobo", "booboo", "bootee", "bootie", "bowwow", "cabala", "cabana", "cacao", "cacti", "caddie",
-          "caddied", "caiman", "cairn", "calla", "callaloo", "cami", "cancan", "canid", "canna", "canola",
-          "cantata", "canteen", "captcha", "carioca", "celeb", "celli", "cellule", "cetacean", "chai", "chia",
-          "chic", "chica", "chichi", "ciao", "cirri", "coca", "cocci", "cocoa", "cocoon", "codon", "coho",
-          "coir", "colcannon", "collab", "croon", "deicide", "ditto", "dorado", "dunno", "electee", "emcee",
-          "emceed", "epee", "falafel", "fantail", "froufrou", "galangal", "gavage", "gelee", "gooey",
-          "google", "googol", "gotta", "haka", "hake", "halal", "hamachi", "haram", "hatha", "hoodoo",
-          "iambi", "icemen", "imam", "infill", "innie", "iota", "laic", "laical", "lallygag", "lanai",
-          "lanolin", "lantana", "lavage", "libelee", "llano", "logroll", "lollygag", "lookback", "lookbook",
-          "loonie", "luging", "lunula", "magma", "mahatma", "malic", "mama", "melee", "mentee", "minim",
-          "momma", "muumuu", "naan", "nada", "naiad", "nana", "nankeen", "natant", "nene", "neocon", "niacin",
-          "noncom", "nonillion", "nuncio", "oleo", "olio", "onion", "paean", "paella", "palapa", "pampa",
-          "panini", "papa", "payee", "peahen", "peke", "pica", "pinniped", "pintail", "pipit", "pippin",
-          "pitapat", "pooh", "poplin", "poppa", "powwow", "raffia", "raita", "rapini", "ratatat", "ribbit",
-          "rococo", "tahini", "tali", "tannic", "tannin", "tantara", "tartan", "tartar", "tattoo", "tilth",
-          "tinct", "titmice", "toccata", "tomtit", "toon", "toonie", "tori", "toric", "torii", "tutee",
-          "tutti", "tutu", "undid", "vanilla", "vanillin", "woohoo",
-        ]
+      this.logAt0("FETCHING WORD LIST FROM URL:", url)
+      this.state.wordListURL = url
+      fetch(url).then((response) => response.text().then((text) => {
+        this.state.wordList = text.split("\n")
         this.setWordListForAnagramMode()
+        // Must be called from this callback, since this is all async
         this.showMatches()
-      } else {
-        this.logAt0("FETCHING WORD LIST FROM URL:", url)
-        this.state.wordListURL = url
-        fetch(url).then((response) => response.text().then((text) => {
-          this.state.wordList = text.split("\n")
-          this.setWordListForAnagramMode()
-          // Must be called from this callback, since this is all async
-          this.showMatches()
-        }))
-      }
+      }))
     }
 
     // Requires this.wordList to have already been computed.
@@ -1086,6 +1187,9 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         this.showAnagramModeMatches()
       } else if (this.elements.modeButtons.which() == 'random-word-mode-button') {
         this.generateRandomWords()
+      } else if (this.elements.modeButtons.which() == 'ngram-mode-button') {
+        this.ngramsKeeper = null
+        this.generateNGramWords()
       }
     }
 
@@ -1280,17 +1384,57 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       }
 
       let matches = []
-      // XXX without replapcement
+      // TODO: sample without replapcement.
+      // In practice, dups are super-rare.
       let k = this.elements.randomWordCountInput.get()
       let n = this.state.wordList.length
       for (let i = 0; i < k; i++) {
-          const randomIndex = Math.floor(Math.random() * n);
+          let randomIndex = Math.floor(Math.random() * n);
           let word = this.state.wordList[randomIndex]
           matches.push(word)
       }
 
       this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
       this.elements.outputElement.set(matches.join(" "))
+    }
+
+    setUpNGramsKeeper() {
+      if (this.ngramsKeeper != null) {
+        return true
+      }
+
+      if (!this.checkWordList()) {
+        // Initialization/constructor sequencing
+        return false
+      }
+
+      let n = this.elements.ngramNInput.get()
+      this.ngramsKeeper = new NGramsKeeper(
+        this.state.wordList,
+        n,
+      )
+
+      return true
+    }
+
+    generateNGramWords() {
+      if (!this.setUpNGramsKeeper()) {
+        return
+      }
+
+      let outputs = []
+      let m = this.elements.ngramWordCountInput.get()
+      for (let i = 0; i < m; i++) {
+        let word = this.ngramsKeeper.emit_word()
+        if (word != null) {
+          outputs.push(word)
+        } else {
+          outputs.push('(failed to generate)')
+        }
+      }
+
+      this.elements.outputCountElement.set("(" + String(outputs.length) + " hidden)")
+      this.elements.outputElement.set(outputs.join(" "))
     }
 
     // ----------------------------------------------------------------

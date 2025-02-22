@@ -247,20 +247,6 @@
 
 </style>
 
-<!-- ================================================================ -->
-<script>
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script>
-  try {
-    var pageTracker = _gat._getTracker("UA-15651652-1");
-    pageTracker._trackPageview();
-  } catch(err) {
-  }
-</script>
-<!-- ================================================================ -->
-
 </head>
 
 <!-- ================================================================ -->
@@ -407,6 +393,10 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <td> &nbsp; </td>
     <td>
       <select tabindex=3 id="word-list-dropdown">
+        <!--
+        <option value="./one-word.txt">One word (TEMP)</option>
+        <option value="./short-list.txt">Short list (TEMP)</option>
+        -->
         <option value="./usual-suspects.txt">Usual suspects</option>
         <option value="./words-2K.txt">2K</option>
         <option value="./words-10K.txt">10K</option>
@@ -611,8 +601,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     <ul>
       <li> Select the word list </li>
       <li> Select how many words to generate at a time </li>
-      <li> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram">n-grams</a>
-        --- the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list
+      <li> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram">n-grams</a>:
+        the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list
       </li>
       <li> Use the Generate button to get a new random sample </li>
     </ul>
@@ -644,7 +634,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
   } from "./sliver.js" // local copy
 
   import {
-    NGrams,
+    NGramsKeeper,
   } from "./ngrams.js" // local copy
 
   setErrorWidget("error-container", "error-text")
@@ -666,13 +656,15 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         "minRandomWordCount": 1,
         "maxRandomWordCount": 100,
 
-        "defaultNgramN": 4,
-        "minNgramN": 1,
-        "maxNgramN": 7,
+        "defaultNGramN": 5,
+        "minNGramN": 2,
+        "maxNGramN": 8,
 
-        "defaultNgramWordCount": 5,
-        "minNgramWordCount": 1,
-        "maxNgramWordCount": 100,
+        "defaultNGramWordCount": 5,
+        "minNGramWordCount": 1,
+        "maxNGramWordCount": 100,
+
+        "ngramsKeeper": null,
 
         "wordListURL": null,
         "wordList": null,
@@ -861,7 +853,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         "ngram-generate-button",
         "Generate",
         (event) => {
-          this.logAt1("NGRAM-GENERATE BUTTON WAS CLICKED")
+          this.logAt0("NGRAM-GENERATE BUTTON WAS CLICKED")
           // XXX no reset
           this.generateNGramWords()
         },
@@ -874,24 +866,25 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
         this.state.minNGramWordCount, // min
         this.state.maxNGramWordCount, // max
         (event) => {
-          // XXX just update its n
+          this.logAt0("NGRAM-WORD-COUNT INPUT WAS SELECTED")
           this.generateNGramWords()
         },
       )
 
       // ngram-mode element
+      console
       this.elements.ngramNInput = new IntRangeInput(
         "ngram-n-input",
-        this.state.defaultNGramWordCount, // default
-        this.state.minNGramWordCount, // min
-        this.state.maxNGramWordCount, // max
+        this.state.defaultNGramN, // default
+        this.state.minNGramN, // min
+        this.state.maxNGramN, // max
         (event) => {
+          this.logAt0("NGRAM-N INPUT WAS SELECTED")
           // XXX reset
+          this.ngramsKeeper = null
           this.generateNGramWords()
         },
       )
-
-      // XXX n-in-ngram input
 
       this.elements.resetMatchLengthsButton = new Button(
         "reset-match-lengths-button",
@@ -926,6 +919,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("bee-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
               this.elements.requiredLettersElement.focus()
               this.showMatches()
@@ -939,6 +933,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("pattern-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
               this.elements.patternLettersElement.focus()
               this.showMatches()
@@ -952,6 +947,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("anagram-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
               this.elements.anagramLettersElement.focus()
               this.showMatches()
@@ -965,21 +961,23 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
               new GenericElement("random-word-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
               this.generateRandomWords()
             },
           },
 
           "ngram-mode-button": {
-            "text": "Jabberwocky",
+            "text": "Jabber",
             "items": [
               new GenericElement("ngram-mode-row-1"),
               new GenericElement("ngram-mode-row-2"),
               new GenericElement("ngram-mode-help-launcher-button"),
             ],
             "callback": () => {
+              this.logAt0("SWTICH TO NGRAM MODE")
               this.elements.matchLengthsRow.makeInvisible()
-              // XXX set up the NGrams object
+              this.ngramsKeeper = null
               this.generateNGramWords()
             },
           },
@@ -1156,7 +1154,6 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
     }
 
     setWordList(url) {
-      // CORS make us unable to load ./anything when doing local-disk dev
       this.logAt0("FETCHING WORD LIST FROM URL:", url)
       this.state.wordListURL = url
       fetch(url).then((response) => response.text().then((text) => {
@@ -1191,6 +1188,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       } else if (this.elements.modeButtons.which() == 'random-word-mode-button') {
         this.generateRandomWords()
       } else if (this.elements.modeButtons.which() == 'ngram-mode-button') {
+        this.ngramsKeeper = null
         this.generateNGramWords()
       }
     }
@@ -1391,7 +1389,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       let k = this.elements.randomWordCountInput.get()
       let n = this.state.wordList.length
       for (let i = 0; i < k; i++) {
-          const randomIndex = Math.floor(Math.random() * n);
+          let randomIndex = Math.floor(Math.random() * n);
           let word = this.state.wordList[randomIndex]
           matches.push(word)
       }
@@ -1400,16 +1398,43 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
       this.elements.outputElement.set(matches.join(" "))
     }
 
-    generateNGramWords() {
+    setUpNGramsKeeper() {
+      if (this.ngramsKeeper != null) {
+        return true
+      }
+
       if (!this.checkWordList()) {
+        // Initialization/constructor sequencing
+        return false
+      }
+
+      let n = this.elements.ngramNInput.get()
+      this.ngramsKeeper = new NGramsKeeper(
+        this.state.wordList,
+        n,
+      )
+
+      return true
+    }
+
+    generateNGramWords() {
+      if (!this.setUpNGramsKeeper()) {
         return
       }
 
-      let matches = []
-      matches.push('manxome')
+      let outputs = []
+      let m = this.elements.ngramWordCountInput.get()
+      for (let i = 0; i < m; i++) {
+        let word = this.ngramsKeeper.emit_word()
+        if (word != null) {
+          outputs.push(word)
+        } else {
+          outputs.push('(failed to generate)')
+        }
+      }
 
-      this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
-      this.elements.outputElement.set(matches.join(" "))
+      this.elements.outputCountElement.set("(" + String(outputs.length) + " hidden)")
+      this.elements.outputElement.set(outputs.join(" "))
     }
 
     // ----------------------------------------------------------------
