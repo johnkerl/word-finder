@@ -1,6 +1,6 @@
 # Word Finder
 
-This little app lets you play around with word lists in various ways:
+This app lets you play around with word lists in various ways:
 
 * Random mode lets you pick words at random from a word list. It uses
   <a href="https://en.wikipedia.org/wiki/Sampling_(statistics)">uniform-random sampling witt replacement"</a>.
@@ -24,6 +24,17 @@ This little app lets you play around with word lists in various ways:
 
 * Bee mode is a tool of last resort for the New York Times Spelling Bee (see below
   for philosophy).
+
+## About the word lists
+
+* The Usual Suspects list is a hand-curated collection of words I often miss in the NYT Spelling Bee (see below).
+* The <a href="https://en.wikipedia.org/wiki/Swadesh_list">Swadesh list</a> is about two hundred
+  core English words, originally developed for linguistic research.
+* The 2K list is the <a href="https://en.wikipedia.org/wiki/General_Service_List">General Service List</a>
+  published by Michael West in 1953.
+* The 10K through 40K lists were found on a web search.
+* The 300K list is one I&rsquo;ve accumulated over the years, from multiple sources I&rsquo;ve lost track of.
+* The Finnegan list is taken from an online corpus of <i>Finnegans Wake</i>.
 
 ## On-line help
 
