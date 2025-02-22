@@ -605,6 +605,8 @@
         the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list
       </li>
       <li> Use the Generate button to get a new random sample </li>
+      <li> The words produced will be created by splicing together parts of real words in word list.
+      </li>
     </ul>
 
     </div>
@@ -623,7 +625,7 @@
     LightDarkThemeSlider,
     OneButtonSwitcher,
     PersistentDropdown,
-    PersistentNButtonSwitcher,
+    URLAndPersistentNButtonSwitcher,
     TextSpan,
     isInteger,
     setErrorWidget,
@@ -908,7 +910,7 @@
 
       this.elements.matchLengthsRow = new GenericElement("match-lengths-row")
 
-      this.elements.modeButtons = new PersistentNButtonSwitcher( {
+      this.elements.modeButtons = new URLAndPersistentNButtonSwitcher( {
 
           "bee-mode-button": {
             "text": "Bee",
@@ -924,6 +926,7 @@
               this.elements.requiredLettersElement.focus()
               this.showMatches()
             },
+            "urlShorthand": "bee",
           },
 
           "pattern-mode-button": {
@@ -938,6 +941,7 @@
               this.elements.patternLettersElement.focus()
               this.showMatches()
             },
+            "urlShorthand": "pattern",
           },
 
           "anagram-mode-button": {
@@ -952,6 +956,7 @@
               this.elements.anagramLettersElement.focus()
               this.showMatches()
             },
+            "urlShorthand": "anagram",
           },
 
           "random-word-mode-button": {
@@ -965,6 +970,7 @@
               this.elements.matchLengthsRow.makeInvisible()
               this.generateRandomWords()
             },
+            "urlShorthand": "random",
           },
 
           "ngram-mode-button": {
@@ -980,6 +986,7 @@
               this.ngramsKeeper = null
               this.generateNGramWords()
             },
+            "urlShorthand": "jabber",
           },
 
         },
