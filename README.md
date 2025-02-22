@@ -3,7 +3,8 @@
 This app lets you play around with word lists in various ways:
 
 * Random mode lets you pick words at random from a word list. It uses
-  <a href="https://en.wikipedia.org/wiki/Sampling_(statistics)">uniform-random sampling witt replacement"</a>.
+  <a href="https://en.wikipedia.org/wiki/Sampling_(statistics)">uniform-random sampling without replacement"</a>.
+  This means that with a short word list, you are more likely to see repeats.
 
 * Jabber mode (for <a href="https://en.wikipedia.org/wiki/Jabberwocky"><i>Jabberwocky</i></a>)
   lets you see new words spliced together from existing words: for example, like the way we combine
@@ -35,6 +36,8 @@ This app lets you play around with word lists in various ways:
 * The 10K through 40K lists were found on a web search.
 * The 300K list is one I&rsquo;ve accumulated over the years, from multiple sources I&rsquo;ve lost track of.
 * The Finnegan list is taken from an online corpus of <i>Finnegans Wake</i>.
+* There are some non-English lists I found on the web. There is a skew toward languages I have
+  some personal familiarity with.
 
 ## On-line help
 
