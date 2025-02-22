@@ -937,7 +937,17 @@
             "callback": () => {
               this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
-              this.elements.randomWordGenerateButton.focus()
+
+              // The tab button being clicked gets the focus.
+              // So we have to delay.
+              // this.elements.randomWordGenerateButton.focus()
+              setTimeout(
+                () => {
+                  this.elements.randomWordGenerateButton.focus()
+                },
+                200,
+              )
+
               this.generateRandomWords()
             },
             "urlShorthand": "random",
@@ -953,7 +963,17 @@
             "callback": () => {
               this.logAt0("SWTICH TO NGRAM MODE")
               this.elements.matchLengthsRow.makeInvisible()
-              this.elements.ngramGenerateButton.focus()
+
+              // The tab button being clicked gets the focus.
+              // So we have to delay.
+              // this.elements.ngramGenerateButton.focus()
+              setTimeout(
+                () => {
+                  this.elements.ngramGenerateButton.focus()
+                },
+                200,
+              )
+
               this.ngramsKeeper = null
               this.generateNGramWords()
             },
@@ -969,7 +989,17 @@
             "callback": () => {
               this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
-              this.elements.patternLettersElement.focus()
+
+              // The tab button being clicked gets the focus.
+              // So we have to delay.
+              // this.elements.patternLettersElement.focus()
+              setTimeout(
+                () => {
+                  this.elements.patternLettersElement.focus()
+                },
+                200,
+              )
+
               this.showMatches()
             },
             "urlShorthand": "pattern",
@@ -984,7 +1014,17 @@
             "callback": () => {
               this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
-              this.elements.anagramLettersElement.focus()
+
+              // The tab button being clicked gets the focus.
+              // So we have to delay.
+              // this.elements.anagramLettersElement.focus()
+              setTimeout(
+                () => {
+                  this.elements.anagramLettersElement.focus()
+                },
+                200,
+              )
+
               this.showMatches()
             },
             "urlShorthand": "anagram",
@@ -1001,7 +1041,17 @@
             "callback": () => {
               this.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
-              this.elements.requiredLettersElement.focus()
+
+              // The tab button being clicked gets the focus.
+              // So we have to delay.
+              // this.elements.requiredLettersElement.focus()
+              setTimeout(
+                () => {
+                  this.elements.requiredLettersElement.focus()
+                },
+                200,
+              )
+
               this.showMatches()
             },
             "urlShorthand": "bee",
