@@ -1,19 +1,19 @@
 {
-  "name": "jsbee",
+  "name": "word-finder",
   "version": "1.0.0",
-  "description": "https://github.com/johnkerl/jsbee",
-  "main": "jsbee.js",
+  "description": "https://github.com/johnkerl/word-finder",
+  "main": "word-finder.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johnkerl/jsbee.git"
+    "url": "git+https://github.com/johnkerl/word-finder.git"
   },
   "author": "John Kerl",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/johnkerl/jsbee/issues"
+    "url": "https://github.com/johnkerl/word-finder/issues"
   },
-  "homepage": "https://github.com/johnkerl/jsbee#readme"
+  "homepage": "https://github.com/johnkerl/word-finder#readme"
 }

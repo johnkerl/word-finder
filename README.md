@@ -1,4 +1,4 @@
-# jsbee
+# Word Finder
 
 This is a quick little JavaScript app for (last-hope-desperation!!) peeking into anagram and constrained-anagram puzzles including the NYT Spelling Bee.
 
@@ -12,10 +12,10 @@ This is a word-list app -- a tool of last resort for the NYT Spelling Bee, and o
 * Second: I generally get around half the words before looking at the Grid. I consider this effectively a part of the game itself.
 * Also second: The Buddy's Grid and Two-Letter List portions have all the same information as the Grid, while removing the need for scratch paper.
 * Third, the Stats: these aren't hints by any means, but, they help me prioritize: if I'm missing, say, a six-letter word starting with a P, then if 80% of readers have found it, I do know the word, and I just need to search. But if only 20% of readers have found it, in my experience, that's a word I do _not_ know (yet).
-* My partner and I have developed a list of the "usual suspects" -- words that seem to appear only in the Spelling Bee, including _aril_, _natant_, _tilth_, and _tinct_. These are encoded in the JSBee app. The usual-suspects list also includes our oh-I-cannot-believe-I-keep-forgetting that words.
+* My partner and I have developed a list of the "usual suspects" -- words that seem to appear only in the Spelling Bee, including _aril_, _natant_, _tilth_, and _tinct_. These are encoded in the Word Finder app. The usual-suspects list also includes our oh-I-cannot-believe-I-keep-forgetting that words.
 * I try to complete the puzzle using these four. About half the time, I can Queen Bee on this basis: without hints.
 * Fifth: the reader hints. On those days I've got a few words left, I end up taking 1, 2, 3, 5 hints; worst case, 10 or so. And looking at a hint almost always results in success.
-* Sixth: even with reader hints there is occasionally a stumper. This rarely happens for me -- less than one day in ten -- in large part due to the quality of the reader hints.  The fork in the road is to shrug and say _I don't know what this word is_, and call it a loss for the day -- or, to find a way to learn what may be a new word.  Here is where word lists come into play -- and JSBee is a word-list app designed for that purpose.
+* Sixth: even with reader hints there is occasionally a stumper. This rarely happens for me -- less than one day in ten -- in large part due to the quality of the reader hints.  The fork in the road is to shrug and say _I don't know what this word is_, and call it a loss for the day -- or, to find a way to learn what may be a new word.  Here is where word lists come into play -- and Word Finder is a word-list app designed for that purpose.
 
 ## Features
 
@@ -43,7 +43,7 @@ Pattern mode:
 
 ## Hosted app
 
-[https://johnkerl.org/jsbee](https://johnkerl.org/jsbee).
+[https://johnkerl.org/word-finder](https://johnkerl.org/word-finder).
 
 ## JavaScript tooling
 
