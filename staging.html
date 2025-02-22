@@ -157,7 +157,7 @@
     font-weight: normal;
   }
   button.no-margin {
-    margin: none;
+    margin: 0px;
   }
   button.transparent {
     font-weight: normal;
@@ -292,7 +292,7 @@
         autocapitalize="characters"
         id="bee-mode-required-letters"
         class="larger-input-text"
-      ></input>
+      >
     </td>
     <td>&nbsp;</td>
     <td class="smallertext"> Required letter(s) </td>
@@ -310,7 +310,7 @@
         autocapitalize="characters"
         id="bee-mode-other-letters"
         class="larger-input-text"
-      ></input>
+      >
     </td>
     <td>&nbsp;</td>
     <td class="smallertext"> Other letter(s) </td>
@@ -334,8 +334,8 @@
         placeholder="..."
         size=10
         id="pattern-mode-letters"
-        class="larger-input-text">
-      </input>
+        class="larger-input-text"
+      >
     </td>
     <td> &nbsp; </td>
     <td class="smallertext"> Letters, including <code>.</code> and <code>*</code> </td>
@@ -351,8 +351,8 @@
         placeholder="..."
         size=10
         id="anagram-mode-letters"
-        class="larger-input-text">
-      </input>
+        class="larger-input-text"
+      >
     </td>
     <td> &nbsp; </td>
     <td class="smallertext"> Letters </td>
@@ -361,8 +361,8 @@
   <!-- Row for random-word mode -->
   <tr id="random-word-mode-row-1">
     <td> <button class="maroon" id="random-word-generate-button"> Loading ... </button> </td>
-    <td>
-      <input type="number" id="random-word-count">
+    <td style="width:3em">
+      <input type="number" id="random-word-count" style="width:5ch">
     </td>
     <td> &nbsp; </td>
     <td class="smallertext"> Word count </td>
@@ -371,8 +371,8 @@
   <!-- Row for ngram mode -->
   <tr id="ngram-mode-row-1">
     <td> <button class="maroon" id="ngram-generate-button"> Loading ... </button> </td>
-    <td>
-      <input type="number" id="ngram-word-count-input">
+    <td style="width:3em">
+      <input type="number" id="ngram-word-count-input" style="width:5ch">
     </td>
     <td> &nbsp; </td>
     <td class="smallertext"> Word count </td>
@@ -381,8 +381,8 @@
   <!-- Row for ngram mode -->
   <tr id="ngram-mode-row-2">
     <td> &nbsp; </td>
-    <td>
-      <input type="number" id="ngram-n-input">
+    <td style="width:3em">
+      <input type="number" id="ngram-n-input" style="width:3ch">
     </td>
     <td> &nbsp; </td>
     <td class="smallertext"> The <i>n</i> in <i>n</i>-gram </td>
@@ -398,7 +398,7 @@
         <option value="./short-list.txt">Short list (TEMP)</option>
         -->
         <option value="./usual-suspects.txt">Usual suspects</option>
-        <option value="./words-200-swadesh.txt">200 (Swadesh list)</option>
+        <option value="./words-200-swadesh.txt">200 (Swadesh)</option>
         <option value="./words-2K.txt">2K</option>
         <option value="./words-10K.txt">10K</option>
         <option value="./words-20K-cumulative.txt">20K</option>
@@ -417,12 +417,12 @@
     <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
     <td>
       <span>
-        <input tabindex=4 type="number" id="min-match-length" name="min-match-length" min="1" max="30"/>
-        <input tabindex=5 type="number" id="max-match-length" name="max-match-length" min="1" max="30"/>
+        <input tabindex=4 type="number" id="min-match-length" name="min-match-length">
+        <input tabindex=5 type="number" id="max-match-length" name="max-match-length">
       </span>
     </td>
     <td>&nbsp;</td>
-    <td class="smallertext"> <label for="min-max-match-length-label">Min/max word lengths</label> </td>
+    <td class="smallertext"> <label>Min/max word lengths</label> </td>
   </tr>
 
   <tr>
@@ -442,7 +442,7 @@
   </table>
 </fieldset>
 
-<p/>
+<br>
 <div>
   <button class="maroon" id="output-show-hide-button"> Loading ... </button>
 </div>
@@ -454,12 +454,12 @@
 </div>
 
 <!-- ================================================================ -->
-<hr/>
+<hr>
 
 <div class=smallertext>
   Source and documentation: <a href="https://github.com/johnkerl/word-finder">https://github.com/johnkerl/word-finder</a>
 </div>
-<p/>
+<br>
 
 <div class=smallertext>
   <label class="switch">
@@ -468,7 +468,7 @@
   </label>
   <span id="light-theme-dark-theme-label">Loading ...</span>
 </div>
-<p/>
+<br>
 
 <!-- ================================================================ -->
 
@@ -581,9 +581,9 @@
     <p>Help for random-word mode:</p>
 
     <ul>
-      <li> Select the word list </li>
-      <li> Select how many words to generate at a time </li>
-      <li> Use the Generate button to get a new random sample </li>
+      <li> Select the word list.</li>
+      <li> Select how many words to generate at a time.</li>
+      <li> Use the Generate button to get a new random sample.</li>
     </ul>
 
     </div>
@@ -600,12 +600,12 @@
     <p>Help for Jabberwocky mode:</p>
 
     <ul>
-      <li> Select the word list </li>
-      <li> Select how many words to generate at a time </li>
+      <li> Select the word list.</li>
+      <li> Select how many words to generate at a time.</li>
       <li> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram">n-grams</a>:
-        the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list
+        the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
       </li>
-      <li> Use the Generate button to get a new random sample </li>
+      <li> Use the Generate button to get a new random sample.</li>
       <li> The words produced will be created by splicing together parts of real words in word list.
       </li>
     </ul>
