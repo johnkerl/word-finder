@@ -25,14 +25,8 @@
 
   /* BODY */
   body {
-    /* Light theme */
     color: black;
     background-color: white;
-    /* Dark theme */
-    /*
-    color: white;
-    background-color: black;
-    */
     font-family: Verdana, sans-serif;
     font-size: 150%;
     letter-spacing: 0.25px;
@@ -70,9 +64,7 @@
   }
 
   .larger-input-text {
-    /*
-    font-size: 100%;
-    */
+    /* font-size: 100%; */
     font-size: 0.8em;
   }
   .boxed-text {
@@ -256,7 +248,8 @@
 
 <!--
   This is a self-contained widget for error-text and cancel/X button.
-  We use Sliver's setErrorWidget to route top-level errors here.
+  We use Sliver's setErrorWidget to route top-level errors here where
+  they can be seen on the page.
 -->
 <span id="error-container" class="error">
   <button
@@ -394,6 +387,7 @@
     <td>
       <select tabindex=3 id="word-list-dropdown">
         <!--
+        These are helpful for testing out the ngram code in verbose mode:
         <option value="./one-word.txt">One word (TEMP)</option>
         <option value="./short-list.txt">Short list (TEMP)</option>
         -->
@@ -414,10 +408,6 @@
         <option value="./latin.txt">Latin</option>
         <option value="./russian.txt">Russian</option>
         <option value="./spanish.txt">Spanish</option>
-
-	french-10k.txt
-	latin.txt
-	spanish.txt
       </select>
     </td>
     <td>&nbsp;</td>
@@ -657,6 +647,7 @@
     NGramsKeeper,
   } from "./ngrams.js" // local copy
 
+  // ----------------------------------------------------------------
   setErrorWidget("error-container", "error-text")
 
   // ----------------------------------------------------------------
@@ -693,10 +684,17 @@
 
       this.setElementsAndCallbacks()
       this.setWordList(this.elements.wordListDropdown.get())
+
       if (this.elements.modeButtons.which() == 'bee-mode-button') {
         this.elements.requiredLettersElement.focus()
-      } else {
+      } else if (this.elements.modeButtons.which() == 'anagram-mode-button') {
+        this.elements.anagramLettersElement.focus()
+      } else if (this.elements.modeButtons.which() == 'pattern-mode-button') {
         this.elements.patternLettersElement.focus()
+      } else if (this.elements.modeButtons.which() == 'random-word-mode-button') {
+        this.elements.randomWordGenerateButton.focus()
+      } else if (this.elements.modeButtons.which() == 'ngram-mode-button') {
+        this.elements.ngramGenerateButton.focus()
       }
 
     }
@@ -874,7 +872,7 @@
         "Generate",
         (event) => {
           this.logAt0("NGRAM-GENERATE BUTTON WAS CLICKED")
-          // XXX no reset
+          // Do not recompute the NGramsKeeper -- re-use it
           this.generateNGramWords()
         },
       )
@@ -900,7 +898,7 @@
         this.state.maxNGramN, // max
         (event) => {
           this.logAt0("NGRAM-N INPUT WAS SELECTED")
-          // XXX reset
+          // Recompute the NGramsKeeper
           this.ngramsKeeper = null
           this.generateNGramWords()
         },
@@ -930,21 +928,36 @@
 
       this.elements.modeButtons = new URLAndPersistentNButtonSwitcher( {
 
-          "bee-mode-button": {
-            "text": "Bee",
+          "random-word-mode-button": {
+            "text": "Random",
             "items": [
-              new GenericElement("bee-mode-row-1"),
-              new GenericElement("bee-mode-row-2"),
-              new GenericElement("bee-mode-row-3"),
-              new GenericElement("bee-mode-help-launcher-button"),
+              new GenericElement("random-word-mode-row-1"),
+              new GenericElement("random-word-mode-help-launcher-button"),
             ],
             "callback": () => {
               this.ngramsKeeper = null
-              this.elements.matchLengthsRow.makeVisible()
-              this.elements.requiredLettersElement.focus()
-              this.showMatches()
+              this.elements.matchLengthsRow.makeInvisible()
+              this.elements.randomWordGenerateButton.focus()
+              this.generateRandomWords()
             },
-            "urlShorthand": "bee",
+            "urlShorthand": "random",
+          },
+
+          "ngram-mode-button": {
+            "text": "Jabber",
+            "items": [
+              new GenericElement("ngram-mode-row-1"),
+              new GenericElement("ngram-mode-row-2"),
+              new GenericElement("ngram-mode-help-launcher-button"),
+            ],
+            "callback": () => {
+              this.logAt0("SWTICH TO NGRAM MODE")
+              this.elements.matchLengthsRow.makeInvisible()
+              this.elements.ngramGenerateButton.focus()
+              this.ngramsKeeper = null
+              this.generateNGramWords()
+            },
+            "urlShorthand": "jabber",
           },
 
           "pattern-mode-button": {
@@ -977,40 +990,28 @@
             "urlShorthand": "anagram",
           },
 
-          "random-word-mode-button": {
-            "text": "Random",
+          "bee-mode-button": {
+            "text": "Bee",
             "items": [
-              new GenericElement("random-word-mode-row-1"),
-              new GenericElement("random-word-mode-help-launcher-button"),
+              new GenericElement("bee-mode-row-1"),
+              new GenericElement("bee-mode-row-2"),
+              new GenericElement("bee-mode-row-3"),
+              new GenericElement("bee-mode-help-launcher-button"),
             ],
             "callback": () => {
               this.ngramsKeeper = null
-              this.elements.matchLengthsRow.makeInvisible()
-              this.generateRandomWords()
+              this.elements.matchLengthsRow.makeVisible()
+              this.elements.requiredLettersElement.focus()
+              this.showMatches()
             },
-            "urlShorthand": "random",
-          },
-
-          "ngram-mode-button": {
-            "text": "Jabber",
-            "items": [
-              new GenericElement("ngram-mode-row-1"),
-              new GenericElement("ngram-mode-row-2"),
-              new GenericElement("ngram-mode-help-launcher-button"),
-            ],
-            "callback": () => {
-              this.logAt0("SWTICH TO NGRAM MODE")
-              this.elements.matchLengthsRow.makeInvisible()
-              this.ngramsKeeper = null
-              this.generateNGramWords()
-            },
-            "urlShorthand": "jabber",
+            "urlShorthand": "bee",
           },
 
         },
         "selected",   // CSS style class
         "deselected", // CSS style class
       )
+
 
       // ----------------------------------------------------------------
 
@@ -1119,7 +1120,7 @@
       )
 
       // ----------------------------------------------------------------
-      // XXX TEMP HACK
+      // This is a hack to get the escape key to close the help modal on desktop.
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
           window.app.elements.bee_mode_help_background.makeInvisible()
@@ -1131,36 +1132,37 @@
       });
 
       // ----------------------------------------------------------------
+      // This is a hack. I need to research CSS theming.
       this.elements.lightDarkThemeElement = new LightDarkThemeSlider(
         "light-theme-dark-theme-toggle",
         "light-theme-dark-theme-label",
         (event) => {
           document.body.style.backgroundColor = "white"
           document.body.style.color = "black"
-          this.elements.bee_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.bee_mode_help_content.underlying.style.color = "black"
-          this.elements.pattern_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.pattern_mode_help_content.underlying.style.color = "black"
-          this.elements.anagram_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.anagram_mode_help_content.underlying.style.color = "black"
+          this.elements.bee_mode_help_content.underlying.style.backgroundColor         = "white"
+          this.elements.bee_mode_help_content.underlying.style.color                   = "black"
+          this.elements.pattern_mode_help_content.underlying.style.backgroundColor     = "white"
+          this.elements.pattern_mode_help_content.underlying.style.color               = "black"
+          this.elements.anagram_mode_help_content.underlying.style.backgroundColor     = "white"
+          this.elements.anagram_mode_help_content.underlying.style.color               = "black"
           this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.random_word_mode_help_content.underlying.style.color = "black"
-          this.elements.ngram_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.ngram_mode_help_content.underlying.style.color = "black"
+          this.elements.random_word_mode_help_content.underlying.style.color           = "black"
+          this.elements.ngram_mode_help_content.underlying.style.backgroundColor       = "white"
+          this.elements.ngram_mode_help_content.underlying.style.color                 = "black"
         },
         (event) => {
           document.body.style.backgroundColor = "black"
           document.body.style.color = "white"
-          this.elements.bee_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.bee_mode_help_content.underlying.style.color = "white"
-          this.elements.pattern_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.pattern_mode_help_content.underlying.style.color = "white"
-          this.elements.anagram_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.anagram_mode_help_content.underlying.style.color = "white"
+          this.elements.bee_mode_help_content.underlying.style.backgroundColor         = "black"
+          this.elements.bee_mode_help_content.underlying.style.color                   = "white"
+          this.elements.pattern_mode_help_content.underlying.style.backgroundColor     = "black"
+          this.elements.pattern_mode_help_content.underlying.style.color               = "white"
+          this.elements.anagram_mode_help_content.underlying.style.backgroundColor     = "black"
+          this.elements.anagram_mode_help_content.underlying.style.color               = "white"
           this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.random_word_mode_help_content.underlying.style.color = "white"
-          this.elements.ngram_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.ngram_mode_help_content.underlying.style.color = "white"
+          this.elements.random_word_mode_help_content.underlying.style.color           = "white"
+          this.elements.ngram_mode_help_content.underlying.style.backgroundColor       = "black"
+          this.elements.ngram_mode_help_content.underlying.style.color                 = "white"
         },
       )
 
