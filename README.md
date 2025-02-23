@@ -3,24 +3,24 @@
 This app lets you play around with word lists in various ways:
 
 * Random mode lets you pick words at random from a word list. It uses
-  <a href="https://en.wikipedia.org/wiki/Sampling_(statistics)">uniform-random sampling without replacement</a>.
+  [uniform-random sampling with replacement](https://en.wikipedia.org/wiki/Sampling_(statistics)).
   This means that with a short word list, you are more likely to see repeats.
 
-* Jabber mode (for <a href="https://en.wikipedia.org/wiki/Jabberwocky"><i>Jabberwocky</i></a>)
+* Jabber mode (for [_Jabberwocky_](https://en.wikipedia.org/wiki/Jabberwocky))
   lets you see new words spliced together from existing words: for example, like the way we combine
-  <i>spoon</i> and <i>fork</i> to make <i>spork</i>. This uses <a
-  href="https://en.wikipedia.org/wiki/N-gram">n-grams</a> using the method detailed in <a
-  href="https://johnkerl.org/randspell/randspell-slides-ts.pdf">this write-up</a> from 2012. My
+  _spoon_ and _fork_ to make _spork_. This uses
+  [n-grams](https://en.wikipedia.org/wiki/N-gram) with the method detailed in
+  [this write-up](https://johnkerl.org/randspell/randspell-slides-ts.pdf) from 2012. My
   implementation then was a command-line version written in Python; the implementation here is the
   same algorithm, but in JavaScript, usable on desktop or mobile.
 
-* Pattern mode is a dictionary lookup. If you type in only letters, such as <code>example</code>,
+* Pattern mode is a dictionary lookup. If you type in only letters, such as `example`,
   you'll the word at the bottom if it's in the dictionary, or nothing if it isn't.  You can also use
-  a <i>.</i> to match a single letter, and/or <i>*</i> to match zero or more letters. For example,
-  <i>t..th</i> will match <i>teeth</i>, <i>tooth</i>, and <i>tenth</i>; <i>th*st</i> will show you
-  all words starting with <i>th</i> and ending with <i>st</i>.
+  a `.` to match a single letter, and/or `*` to match zero or more letters. For example,
+  `t..th` will match `teeth`, `tooth`, and `tenth`; `th*st` will show you
+  all words starting with `th` and ending with `st`.
 
-* <a href="https://en.wikipedia.org/wiki/Anagram">Anagram</a> mode lets you see all the ways the
+* [Anagram](https://en.wikipedia.org/wiki/Anagram) mode lets you see all the ways the
   letters of a given word can be permuted to make another existing word.
 
 * Bee mode is a tool of last resort for the New York Times Spelling Bee (see below
@@ -29,13 +29,13 @@ This app lets you play around with word lists in various ways:
 ## About the word lists
 
 * The Usual Suspects list is a hand-curated collection of words I often miss in the NYT Spelling Bee (see below).
-* The <a href="https://en.wikipedia.org/wiki/Swadesh_list">Swadesh list</a> is about two hundred
+* The [Swadesh list](https://en.wikipedia.org/wiki/Swadesh_list) is about two hundred
   core English words, originally developed for linguistic research.
-* The 2K list is the <a href="https://en.wikipedia.org/wiki/General_Service_List">General Service List</a>
+* The 2K list is the [General Service List](https://en.wikipedia.org/wiki/General_Service_List)
   published by Michael West in 1953.
 * The 10K through 40K lists were found on a web search.
 * The 300K list is one I&rsquo;ve accumulated over the years, from multiple sources I&rsquo;ve lost track of.
-* The Finnegan list is taken from an online corpus of <i>Finnegans Wake</i>.
+* The Finnegan list is taken from an online corpus of _Finnegans Wake_.
 * There are some non-English lists I found on the web. There is a skew toward languages I have
   some personal familiarity with.
 
@@ -43,7 +43,7 @@ This app lets you play around with word lists in various ways:
 
 Please see the hosted app, at either of the following locations, for on-line help:
 
-* [https://johnkerl.org/word-finder](https://johnkerl.org/word-finder).
+* [https://johnkerl.org/word-finder](https://johnkerl.org/word-finder)
 * [https://johnkerl.github.io/word-finder](https://johnkerl.github.io/word-finder)
 
 ## JavaScript tooling
