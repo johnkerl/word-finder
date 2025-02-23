@@ -383,8 +383,7 @@
 
   <!-- Word list used by all modes -->
   <tr>
-    <td> &nbsp; </td>
-    <td>
+    <td colspan=2 style="text-align:right">
       <select tabindex=3 id="word-list-dropdown">
         <!--
         These are helpful for testing out the ngram code in verbose mode:
@@ -419,8 +418,8 @@
     <td> <button class="maroon" id="reset-match-lengths-button"> Reset </button> </td>
     <td>
       <span>
-        <input tabindex=4 type="number" id="min-match-length" name="min-match-length">
-        <input tabindex=5 type="number" id="max-match-length" name="max-match-length">
+        <input tabindex=4 type="number" id="min-match-length" name="min-match-length" style="width:4ch">
+        <input tabindex=5 type="number" id="max-match-length" name="max-match-length" style="width:4ch">
       </span>
     </td>
     <td>&nbsp;</td>
@@ -564,14 +563,16 @@
 
     <p class="maroon">Help for anagram mode:</p>
 
-    <p> Enter your desired letters in the <code>Letters</code> field.</p>
+    <p> Enter your desired letters in the Letters field.</p>
 
     <p> Select the word list you want to search in.</p>
 
-    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram" target="_blank">anagrams</a> of the
-    letters you provide. For example, ELATES will match SEALET but not ELATE or SEALETS.  </p>
+    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram"
+    target="_blank">anagrams</a> of the letters you provide. For example, <code>ELATES</code> will
+    match <code>SEALET</code> but not <code>ELATE</code> or <code>SEALETS</code>.  </p>
 
-    <p> Some words with many anagrams include STOP, SLATE, PEARS, and TRIANGLE.</p>
+    <p> Some words with many anagrams include <code>STOP</code>, <code>SLATE</code>,
+    <code>PEARS</code>, and <code>TRIANGLE</code>.</p>
 
     </div>
   </div>

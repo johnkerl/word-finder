@@ -3,7 +3,7 @@
 This app lets you play around with word lists in various ways:
 
 * Random mode lets you pick words at random from a word list. It uses
-  <a href="https://en.wikipedia.org/wiki/Sampling_(statistics)">uniform-random sampling without replacement"</a>.
+  <a href="https://en.wikipedia.org/wiki/Sampling_(statistics)">uniform-random sampling without replacement</a>.
   This means that with a short word list, you are more likely to see repeats.
 
 * Jabber mode (for <a href="https://en.wikipedia.org/wiki/Jabberwocky"><i>Jabberwocky</i></a>)
