@@ -2215,7 +2215,6 @@ azuma
 azumi
 azura
 azusa
-b
 b-boy
 b-dawg
 b-rabbit
@@ -6277,7 +6276,6 @@ byung
 byung-doo
 byung-man
 byzantium
-c
 c.
 c.d.c.
 c.e.o.
@@ -8292,7 +8290,6 @@ cyprus
 cyril
 cyrus
 czech
-d
 d-day
 d-dia
 d-link
@@ -11626,7 +11623,6 @@ dyson
 dzb
 dzhokhar
 dōmyaku
-e
 é
 e-mail
 e-mailku
@@ -12443,7 +12439,6 @@ eyrie
 eywa
 ezekiel
 ezra
-f
 f.
 f.b.i
 f.b.i.
@@ -13366,7 +13361,6 @@ fuzzy
 fyers
 fyi
 fyodor
-g
 g-force
 g-one
 g-string
@@ -14847,7 +14841,6 @@ gypsy
 gyu
 gyun
 gyung
-h
 h-hei
 h.
 h.o.t.
@@ -16424,7 +16417,6 @@ hyung
 hyung-nim
 hyungnim
 hyunsung
-i
 i-gyeong
 i-i
 i-ini
@@ -17326,7 +17318,6 @@ izzi
 izzie
 izzy
 îþi
-j
 j-hope
 j.
 j.b.
@@ -18378,7 +18369,6 @@ juvenile
 jv
 jw
 jyn
-k
 k-a
 k-crew
 k-drama
@@ -22771,7 +22761,6 @@ kyuubi
 kyōgaku
 kū-zen-zetsu-go
 kōfun
-l
 l.
 l.a
 l.a.
@@ -24369,7 +24358,6 @@ lyuda
 lyudmila
 lz
 lzna
-m
 m.
 m.b.
 m.c.
@@ -31402,7 +31390,6 @@ mystique
 myung
 myung-hyo
 myungwoo
-n
 n-a
 n-tidak
 n-woo
@@ -32450,7 +32437,6 @@ nyuk
 nyuruh
 nyx
 nzt
-o
 o-oh
 o-oke
 o.
@@ -33075,7 +33061,6 @@ ozawa
 ozon
 ozzie
 ozzy
-p
 p.
 p.a.
 p.aul
@@ -37626,7 +37611,6 @@ pythagoras
 python
 pyung
 pyunsoo
-q
 q-tip
 q.
 qadir
@@ -37721,7 +37705,6 @@ quran
 qureshi
 qwali
 qwark
-r
 r.
 r.s.
 ra
@@ -39390,7 +39373,6 @@ ryuu
 ryuumyaku
 ryuuzetsu
 ryuzaki
-s
 s-
 s.
 s.h.
@@ -43939,7 +43921,6 @@ szalinski
 sze
 szell
 szeto
-t
 t-bag
 t-bone
 t-dog
@@ -47091,7 +47072,6 @@ tyson
 tyto
 tywin
 tzu
-u
 u-boat
 u-turn
 u.
@@ -47551,7 +47531,6 @@ uzbekistan
 uzi
 uziek
 uzumaki
-v
 v-o
 v.
 v.i.p.
@@ -48031,7 +48010,6 @@ vulture
 vurginia
 vvip
 vw
-w
 w-apa
 w-kita
 w-to-kill
@@ -48825,7 +48803,6 @@ wylie
 wyman
 wynn
 wyoming
-x
 x-file
 x-files
 x-men
@@ -48876,7 +48853,6 @@ xue
 xuehu
 xx
 xxx
-y
 y-anda
 y-kau
 y-ya
@@ -49264,7 +49240,6 @@ yuzuki
 yves
 yvette
 yvonne
-z
 z.
 za
 zaara
