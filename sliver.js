@@ -1136,6 +1136,26 @@ export function isInteger(text) {
   return !isNaN(parseInt(text))
 }
 
+export function isMobile() {
+  if (navigator.userAgent == null) {
+    return false
+  }
+
+  const patterns = [
+      /Android/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /webOS/i,
+      /Windows Phone/i,
+      /BlackBerry/i,
+  ]
+
+  return patterns.some((pattern) => {
+      return navigator.userAgent.match(pattern);
+  })
+}
+
 // ----------------------------------------------------------------
 // INTERNALS
 

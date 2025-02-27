@@ -10474,8 +10474,6 @@ ft
 ft.
 fu
 fuchsia
-fuck
-fucking
 fudge
 fuegian
 fuel
@@ -16886,8 +16884,6 @@ niger
 nigerian
 niggard
 niggardly
-nigger
-niggers
 nigh
 night
 nightcap

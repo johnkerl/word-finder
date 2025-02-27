@@ -13287,12 +13287,6 @@ fu
 fu-sheng
 fubar
 fuchsbau
-fuck
-fucked
-fucker
-fuckin
-fucking
-fucks
 fudge
 fuego
 fuel
@@ -31003,9 +30997,6 @@ moster
 motel
 motelnya
 mother
-motherfucker
-motherfuckers
-motherfucking
 moti
 motif
 motifmu
@@ -32028,7 +32019,6 @@ niflheim
 nigel
 nigeria
 nigga
-nigger
 night
 nightclub
 nightingale
