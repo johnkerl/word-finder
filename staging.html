@@ -476,50 +476,46 @@
 <!-- ================================================================ -->
 
 <!-- Modal content -->
-<div id="bee-mode-help-background" class="modal-background">
-  <div id="bee-mode-help-content" class="modal-content">
+
+<div id="random-word-mode-help-background" class="modal-background">
+  <div id="random-word-mode-help-content" class="modal-content">
     <div>
-      <button id="bee-mode-help-close-button" class="general white-on-green" > Close </button>
+      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
     </div>
     <div>
 
-    <p class="maroon">Help for bee mode:</p>
+    <p class="maroon">Help for random-word mode:</p>
 
-      <p>Enter your required letters and your other letters. (For the NYT Spelling Bee,
-      this will be the center letter and the surrounding letters, respectively.)
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Use the Generate button to get a new random sample.</p>
 
-      <p>Choose the word list from the dropdown.</p>
-      <ul>
+    </div>
+  </div>
+</div>
 
-        <li><i>Usual suspects</i> is my own short, curated list of once-bitten-twice-shy values from
-        previous Bees.</li>
+<div id="ngram-mode-help-background" class="modal-background">
+  <div id="ngram-mode-help-content" class="modal-content">
+    <div>
+      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
 
-        <li><i>Long list</i> contains over 300,000 words, not all of which are in the NYT Spelling
-        Bee. (That is, this app can show words that the NYT Spelling Bee doesn&rsquo;t accept.)</li>
+    <p class="maroon">Help for Jabberwocky mode:</p>
 
-        <li>You can use the 2K through 40K lists to adjust whether or not to see less-common words.</li>
-
-      </ul>
-
-      <p>The output shown will include all words from the selected word list which contain only your
-      required letters and your other letters:</p>
-      <ul>
-
-        <li>If the required letter is <code>P</code> and the other letters are <code>AELM</code>,
-        then you&rsquo;ll see <code>PALM</code> and <code>PALE</code> but not
-        <code>MEAL</code>.</li>
-
-        <li>If the required letter is <code>M</code> and the other letters are <code>AELP</code>,
-        then you&rsquo;ll see <code>MALL</code> and <code>MEAL</code> but not
-        <code>PALE</code>.</li>
-
-        <li>If the required letters are left empty and the other letters are <code>AELPM</code>,
-        then you&rsquo;ll see words including <code>MALL</code>, <code>MEAL</code>,
-        <code>PALE</code>, <code>MAPLE</code>, and <code>EEL</code>.  </li>
-
-      </ul>
-
-      <p> You can further restrict your results by setting minimum and maximum word lengths.
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
+      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
+      The words produced will be created by splicing together parts of real words in word list.
+    </p>
+    <p> Use the Generate button to get a new random sample.</p>
+    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
+      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
+      See also
+      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
+      for a work that uses many more spliced words.)
+    </p>
 
     </div>
   </div>
@@ -580,45 +576,50 @@
   </div>
 </div>
 
-<div id="random-word-mode-help-background" class="modal-background">
-  <div id="random-word-mode-help-content" class="modal-content">
+<div id="bee-mode-help-background" class="modal-background">
+  <div id="bee-mode-help-content" class="modal-content">
     <div>
-      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
+      <button id="bee-mode-help-close-button" class="general white-on-green" > Close </button>
     </div>
     <div>
 
-    <p class="maroon">Help for random-word mode:</p>
+    <p class="maroon">Help for bee mode:</p>
 
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Use the Generate button to get a new random sample.</p>
+      <p>Enter your required letters and your other letters. (For the NYT Spelling Bee,
+      this will be the center letter and the surrounding letters, respectively.)
 
-    </div>
-  </div>
-</div>
+      <p>Choose the word list from the dropdown.</p>
+      <ul>
 
-<div id="ngram-mode-help-background" class="modal-background">
-  <div id="ngram-mode-help-content" class="modal-content">
-    <div>
-      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
+        <li><i>Usual suspects</i> is my own short, curated list of once-bitten-twice-shy values from
+        previous Bees.</li>
 
-    <p class="maroon">Help for Jabberwocky mode:</p>
+        <li><i>Long list</i> contains over 300,000 words, not all of which are in the NYT Spelling
+        Bee. (That is, this app can show words that the NYT Spelling Bee doesn&rsquo;t accept.)</li>
 
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
-      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
-      The words produced will be created by splicing together parts of real words in word list.
-    </p>
-    <p> Use the Generate button to get a new random sample.</p>
-    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
-      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
-      See also
-      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
-      for a work that uses many more spliced words.)
-    </p>
+        <li>You can use the 2K through 40K lists to adjust whether or not to see less-common words.</li>
+
+      </ul>
+
+      <p>The output shown will include all words from the selected word list which contain only your
+      required letters and your other letters:</p>
+      <ul>
+
+        <li>If the required letter is <code>P</code> and the other letters are <code>AELM</code>,
+        then you&rsquo;ll see <code>PALM</code> and <code>PALE</code> but not
+        <code>MEAL</code>.</li>
+
+        <li>If the required letter is <code>M</code> and the other letters are <code>AELP</code>,
+        then you&rsquo;ll see <code>MALL</code> and <code>MEAL</code> but not
+        <code>PALE</code>.</li>
+
+        <li>If the required letters are left empty and the other letters are <code>AELPM</code>,
+        then you&rsquo;ll see words including <code>MALL</code>, <code>MEAL</code>,
+        <code>PALE</code>, <code>MAPLE</code>, and <code>EEL</code>.  </li>
+
+      </ul>
+
+      <p> You can further restrict your results by setting minimum and maximum word lengths.
 
     </div>
   </div>

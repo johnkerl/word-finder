@@ -28,6 +28,11 @@ export class GenericElement {
   focus() {
     this.underlying.focus()
   }
+
+  setColors(color, backgroundColor) {
+    this.underlying.style.color = color
+    this.underlying.style.backgroundColor = backgroundColor
+  }
 }
 
 // This is a standard slider, nominally for light-theme/dark-theme selector.
@@ -1083,6 +1088,49 @@ export class RangeFloatSlider extends GenericElement {
       this.valueDisplayElement.set(this.valueDisplayFormatter(this.get()))
     }
   }
+}
+
+// ----------------------------------------------------------------
+export class HelpWidgets {
+  constructor(
+    modalBackgroundElementID,
+    modalContentElementID,
+    launcherButtonElementID,
+    closeButtonElementID,
+  ) {
+
+    this.elements = {}
+    this.elements.background  = new GenericElement(modalBackgroundElementID)
+    this.elements.content  = new GenericElement(modalContentElementID)
+
+    this.elements.launcherButton = new Button(
+      launcherButtonElementID,
+      null,
+      (event) => {
+        this.background.makeVisible("block")
+        this.background.underlying.style.display = "block"
+      },
+    )
+
+    this.elements.close_button = new Button(
+      closeButtonElementID,
+      null,
+      (event) => {
+        this.background.makeInvisible()
+      },
+    )
+  }
+
+  makeBackgroundInvisible(color, backgroundColor) {
+    this.elements.background.makeInvisible()
+  }
+
+  setColors(color, backgroundColor) {
+    Object.keys(this.elements).forEach((id) => {
+      this.elements[id].setColors(color, backgroundColor)
+    })
+  }
+
 }
 
 // ----------------------------------------------------------------

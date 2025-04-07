@@ -431,11 +431,11 @@
   <tr>
     <td>
       <div>
-        <button id="bee-mode-help-launcher-button"> Help </button>
-        <button id="pattern-mode-help-launcher-button"> Help </button>
-        <button id="anagram-mode-help-launcher-button"> Help </button>
         <button id="random-word-mode-help-launcher-button"> Help </button>
         <button id="ngram-mode-help-launcher-button"> Help </button>
+        <button id="pattern-mode-help-launcher-button"> Help </button>
+        <button id="anagram-mode-help-launcher-button"> Help </button>
+        <button id="bee-mode-help-launcher-button"> Help </button>
       </div>
     </td>
     <td> &nbsp; </td>
@@ -478,50 +478,46 @@
 <!-- ================================================================ -->
 
 <!-- Modal content -->
-<div id="bee-mode-help-background" class="modal-background">
-  <div id="bee-mode-help-content" class="modal-content">
+
+<div id="random-word-mode-help-background" class="modal-background">
+  <div id="random-word-mode-help-content" class="modal-content">
     <div>
-      <button id="bee-mode-help-close-button" class="general white-on-green" > Close </button>
+      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
     </div>
     <div>
 
-    <p class="maroon">Help for bee mode:</p>
+    <p class="maroon">Help for random-word mode:</p>
 
-      <p>Enter your required letters and your other letters. (For the NYT Spelling Bee,
-      this will be the center letter and the surrounding letters, respectively.)
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Use the Generate button to get a new random sample.</p>
 
-      <p>Choose the word list from the dropdown.</p>
-      <ul>
+    </div>
+  </div>
+</div>
 
-        <li><i>Usual suspects</i> is my own short, curated list of once-bitten-twice-shy values from
-        previous Bees.</li>
+<div id="ngram-mode-help-background" class="modal-background">
+  <div id="ngram-mode-help-content" class="modal-content">
+    <div>
+      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
 
-        <li><i>Long list</i> contains over 300,000 words, not all of which are in the NYT Spelling
-        Bee. (That is, this app can show words that the NYT Spelling Bee doesn&rsquo;t accept.)</li>
+    <p class="maroon">Help for Jabberwocky mode:</p>
 
-        <li>You can use the 2K through 40K lists to adjust whether or not to see less-common words.</li>
-
-      </ul>
-
-      <p>The output shown will include all words from the selected word list which contain only your
-      required letters and your other letters:</p>
-      <ul>
-
-        <li>If the required letter is <code>P</code> and the other letters are <code>AELM</code>,
-        then you&rsquo;ll see <code>PALM</code> and <code>PALE</code> but not
-        <code>MEAL</code>.</li>
-
-        <li>If the required letter is <code>M</code> and the other letters are <code>AELP</code>,
-        then you&rsquo;ll see <code>MALL</code> and <code>MEAL</code> but not
-        <code>PALE</code>.</li>
-
-        <li>If the required letters are left empty and the other letters are <code>AELPM</code>,
-        then you&rsquo;ll see words including <code>MALL</code>, <code>MEAL</code>,
-        <code>PALE</code>, <code>MAPLE</code>, and <code>EEL</code>.  </li>
-
-      </ul>
-
-      <p> You can further restrict your results by setting minimum and maximum word lengths.
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
+      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
+      The words produced will be created by splicing together parts of real words in word list.
+    </p>
+    <p> Use the Generate button to get a new random sample.</p>
+    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
+      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
+      See also
+      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
+      for a work that uses many more spliced words.)
+    </p>
 
     </div>
   </div>
@@ -582,45 +578,50 @@
   </div>
 </div>
 
-<div id="random-word-mode-help-background" class="modal-background">
-  <div id="random-word-mode-help-content" class="modal-content">
+<div id="bee-mode-help-background" class="modal-background">
+  <div id="bee-mode-help-content" class="modal-content">
     <div>
-      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
+      <button id="bee-mode-help-close-button" class="general white-on-green" > Close </button>
     </div>
     <div>
 
-    <p class="maroon">Help for random-word mode:</p>
+    <p class="maroon">Help for bee mode:</p>
 
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Use the Generate button to get a new random sample.</p>
+      <p>Enter your required letters and your other letters. (For the NYT Spelling Bee,
+      this will be the center letter and the surrounding letters, respectively.)
 
-    </div>
-  </div>
-</div>
+      <p>Choose the word list from the dropdown.</p>
+      <ul>
 
-<div id="ngram-mode-help-background" class="modal-background">
-  <div id="ngram-mode-help-content" class="modal-content">
-    <div>
-      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
+        <li><i>Usual suspects</i> is my own short, curated list of once-bitten-twice-shy values from
+        previous Bees.</li>
 
-    <p class="maroon">Help for Jabberwocky mode:</p>
+        <li><i>Long list</i> contains over 300,000 words, not all of which are in the NYT Spelling
+        Bee. (That is, this app can show words that the NYT Spelling Bee doesn&rsquo;t accept.)</li>
 
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
-      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
-      The words produced will be created by splicing together parts of real words in word list.
-    </p>
-    <p> Use the Generate button to get a new random sample.</p>
-    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
-      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
-      See also
-      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
-      for a work that uses many more spliced words.)
-    </p>
+        <li>You can use the 2K through 40K lists to adjust whether or not to see less-common words.</li>
+
+      </ul>
+
+      <p>The output shown will include all words from the selected word list which contain only your
+      required letters and your other letters:</p>
+      <ul>
+
+        <li>If the required letter is <code>P</code> and the other letters are <code>AELM</code>,
+        then you&rsquo;ll see <code>PALM</code> and <code>PALE</code> but not
+        <code>MEAL</code>.</li>
+
+        <li>If the required letter is <code>M</code> and the other letters are <code>AELP</code>,
+        then you&rsquo;ll see <code>MALL</code> and <code>MEAL</code> but not
+        <code>PALE</code>.</li>
+
+        <li>If the required letters are left empty and the other letters are <code>AELPM</code>,
+        then you&rsquo;ll see words including <code>MALL</code>, <code>MEAL</code>,
+        <code>PALE</code>, <code>MAPLE</code>, and <code>EEL</code>.  </li>
+
+      </ul>
+
+      <p> You can further restrict your results by setting minimum and maximum word lengths.
 
     </div>
   </div>
@@ -634,6 +635,7 @@
     Button,
     ConstrainedTextInput,
     GenericElement,
+    HelpWidgets,
     IntRangeInput,
     LightDarkThemeSlider,
     OneButtonSwitcher,
@@ -1086,120 +1088,49 @@
 
 
       // ----------------------------------------------------------------
-
-      this.elements.bee_mode_help_background  = new GenericElement("bee-mode-help-background")
-      this.elements.bee_mode_help_content  = new GenericElement("bee-mode-help-content")
-
-      this.elements.bee_mode_help_launcherButton = new Button(
-        "bee-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.bee_mode_help_background.makeVisible("block")
-          this.elements.bee_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.bee_mode_help_close_button = new Button(
-        "bee-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.bee_mode_help_background.makeInvisible()
-        },
-      )
-
-      // ----------------------------------------------------------------
-      this.elements.pattern_mode_help_background  = new GenericElement("pattern-mode-help-background")
-      this.elements.pattern_mode_help_content  = new GenericElement("pattern-mode-help-content")
-
-      this.elements.pattern_mode_help_launcherButton = new Button(
-        "pattern-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.pattern_mode_help_background.makeVisible("block")
-          this.elements.pattern_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.pattern_mode_help_close_button = new Button(
-        "pattern-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.pattern_mode_help_background.makeInvisible()
-        },
-      )
-
-      // ----------------------------------------------------------------
-      this.elements.anagram_mode_help_background  = new GenericElement("anagram-mode-help-background")
-      this.elements.anagram_mode_help_content  = new GenericElement("anagram-mode-help-content")
-
-      this.elements.anagram_mode_help_launcherButton = new Button(
-        "anagram-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.anagram_mode_help_background.makeVisible("block")
-          this.elements.anagram_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.anagram_mode_help_close_button = new Button(
-        "anagram-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.anagram_mode_help_background.makeInvisible()
-        },
-      )
-
-      // ----------------------------------------------------------------
-      this.elements.random_word_mode_help_background  = new GenericElement("random-word-mode-help-background")
-      this.elements.random_word_mode_help_content  = new GenericElement("random-word-mode-help-content")
-
-      this.elements.random_word_mode_help_launcherButton = new Button(
+      this.elements.help = {}
+      this.elements.help.random = new HelpWidgets(
+        "random-word-mode-help-background",
+        "random-word-mode-help-content",
         "random-word-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.random_word_mode_help_background.makeVisible("block")
-          this.elements.random_word_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.random_word_mode_help_close_button = new Button(
         "random-word-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.random_word_mode_help_background.makeInvisible()
-        },
       )
 
-      // ----------------------------------------------------------------
-      this.elements.ngram_mode_help_background  = new GenericElement("ngram-mode-help-background")
-      this.elements.ngram_mode_help_content  = new GenericElement("ngram-mode-help-content")
-
-      this.elements.ngram_mode_help_launcherButton = new Button(
+      this.elements.help.ngram = new HelpWidgets(
+        "ngram-mode-help-background",
+        "ngram-mode-help-content",
         "ngram-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.ngram_mode_help_background.makeVisible("block")
-          this.elements.ngram_mode_help_background.underlying.style.display = "block"
-        },
+        "ngram-mode-help-close-button",
       )
 
-      this.elements.ngram_mode_help_close_button = new Button(
-        "ngram-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.ngram_mode_help_background.makeInvisible()
-        },
+      this.elements.help.pattern = new HelpWidgets(
+        "pattern-mode-help-background",
+        "pattern-mode-help-content",
+        "pattern-mode-help-launcher-button",
+        "pattern-mode-help-close-button",
+      )
+
+      this.elements.help.anagram = new HelpWidgets(
+        "anagram-mode-help-background",
+        "anagram-mode-help-content",
+        "anagram-mode-help-launcher-button",
+        "anagram-mode-help-close-button",
+      )
+
+      this.elements.help.bee = new HelpWidgets(
+        "bee-mode-help-background",
+        "bee-mode-help-content",
+        "bee-mode-help-launcher-button",
+        "bee-mode-help-close-button",
       )
 
       // ----------------------------------------------------------------
       // This is a hack to get the escape key to close the help modal on desktop.
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-          window.app.elements.bee_mode_help_background.makeInvisible()
-          window.app.elements.pattern_mode_help_background.makeInvisible()
-          window.app.elements.anagram_mode_help_background.makeInvisible()
-          window.app.elements.random_word_mode_help_background.makeInvisible()
-          window.app.elements.ngram_mode_help_background.makeInvisible()
+          Object.keys(this.elements.help).forEach((id) => {
+            window.app.elements.help[id].makeBackgroundInvisible()
+          })
         }
       });
 
@@ -1209,38 +1140,15 @@
         "light-theme-dark-theme-toggle",
         "light-theme-dark-theme-label",
         (event) => {
-
           document.body.style.color = "black"
-          this.elements.bee_mode_help_content.underlying.style.color                   = "black"
-          this.elements.pattern_mode_help_content.underlying.style.color               = "black"
-          this.elements.anagram_mode_help_content.underlying.style.color               = "black"
-          this.elements.random_word_mode_help_content.underlying.style.color           = "black"
-          this.elements.ngram_mode_help_content.underlying.style.color                 = "black"
-
           document.body.style.backgroundColor = "white"
-          this.elements.bee_mode_help_content.underlying.style.backgroundColor         = "white"
-          this.elements.pattern_mode_help_content.underlying.style.backgroundColor     = "white"
-          this.elements.anagram_mode_help_content.underlying.style.backgroundColor     = "white"
-          this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.ngram_mode_help_content.underlying.style.backgroundColor       = "white"
-
+          //this.help_widget_IDs.forEach((id) => this.elements[id].setColors("black", "white"))
         },
+
         (event) => {
-
           document.body.style.color = "white"
-          this.elements.bee_mode_help_content.underlying.style.color                   = "white"
-          this.elements.pattern_mode_help_content.underlying.style.color               = "white"
-          this.elements.anagram_mode_help_content.underlying.style.color               = "white"
-          this.elements.random_word_mode_help_content.underlying.style.color           = "white"
-          this.elements.ngram_mode_help_content.underlying.style.color                 = "white"
-
           document.body.style.backgroundColor = "black"
-          this.elements.bee_mode_help_content.underlying.style.backgroundColor         = "black"
-          this.elements.pattern_mode_help_content.underlying.style.backgroundColor     = "black"
-          this.elements.anagram_mode_help_content.underlying.style.backgroundColor     = "black"
-          this.elements.random_word_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.ngram_mode_help_content.underlying.style.backgroundColor       = "black"
-
+          //this.help_widget_IDs.forEach((id) => this.elements[id].setColors("white", "black"))
         },
       )
 
