@@ -1121,6 +1121,7 @@ export class HelpWidgets {
     )
   }
 
+  // This is for the escape key / exit-out from the help modal
   makeBackgroundInvisible(color, backgroundColor) {
     this.elements.background.makeInvisible()
   }
