@@ -429,11 +429,11 @@
   <tr>
     <td>
       <div>
-        <button id="bee-mode-help-launcher-button"> Help </button>
-        <button id="pattern-mode-help-launcher-button"> Help </button>
-        <button id="anagram-mode-help-launcher-button"> Help </button>
         <button id="random-word-mode-help-launcher-button"> Help </button>
         <button id="ngram-mode-help-launcher-button"> Help </button>
+        <button id="pattern-mode-help-launcher-button"> Help </button>
+        <button id="anagram-mode-help-launcher-button"> Help </button>
+        <button id="bee-mode-help-launcher-button"> Help </button>
       </div>
     </td>
     <td> &nbsp; </td>
@@ -476,6 +476,106 @@
 <!-- ================================================================ -->
 
 <!-- Modal content -->
+
+<div id="random-word-mode-help-background" class="modal-background">
+  <div id="random-word-mode-help-content" class="modal-content">
+    <div>
+      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for random-word mode:</p>
+
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Use the Generate button to get a new random sample.</p>
+
+    </div>
+  </div>
+</div>
+
+<div id="ngram-mode-help-background" class="modal-background">
+  <div id="ngram-mode-help-content" class="modal-content">
+    <div>
+      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for Jabberwocky mode:</p>
+
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
+      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
+      The words produced will be created by splicing together parts of real words in word list.
+    </p>
+    <p> Use the Generate button to get a new random sample.</p>
+    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
+      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
+      See also
+      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
+      for a work that uses many more spliced words.)
+    </p>
+
+    </div>
+  </div>
+</div>
+
+<div id="pattern-mode-help-background" class="modal-background">
+  <div id="pattern-mode-help-content" class="modal-content">
+    <div>
+      <button id="pattern-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for pattern mode:</p>
+
+    <p> Enter your desired letters in the <code>Letters</code> field.</p>
+
+    <p> Select the word list you want to search in.</p>
+
+    <p> You can use a <code>.</code> as a wildcard to match any single letter. For example, <code>LE.T</code>
+    matches <code>LEFT</code>, <code>LENT</code>, <code>LEST</code>, etc.</p>
+
+    <p> You can use a <code>*</code> as a wildcard to match zero or more of any letter. For example:</p>
+    <ul>
+      <li><code>OBOLUS</code> shows the one word <code>OBOLUS</code>, as a dictionary lookup</li>
+      <li><code>THR*</code> shows all words that begin with <code>THR</code></li>
+      <li><code>*EST</code> shows all words that end with <code>EST</code></li>
+      <li><code>TH*TH</code> shows all words that begin and end with <code>TH</code> and</li>
+      <li><code>*NIMB*</code> shows all words that have the sequence <code>NIMB</code> anywhere within.</li>
+    </ul>
+
+    <p> You can further restrict your results by setting minimum and maximum word lengths. </p>
+
+  </div>
+  </div>
+</div>
+
+<div id="anagram-mode-help-background" class="modal-background">
+  <div id="anagram-mode-help-content" class="modal-content">
+    <div>
+      <button id="anagram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for anagram mode:</p>
+
+    <p> Enter your desired letters in the Letters field.</p>
+
+    <p> Select the word list you want to search in.</p>
+
+    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram"
+    target="_blank">anagrams</a> of the letters you provide. For example, <code>ELATES</code> will
+    match <code>SEALET</code> but not <code>ELATE</code> or <code>SEALETS</code>.  </p>
+
+    <p> Some words with many anagrams include <code>STOP</code>, <code>SLATE</code>,
+    <code>PEARS</code>, and <code>TRIANGLE</code>.</p>
+
+    </div>
+  </div>
+</div>
+
 <div id="bee-mode-help-background" class="modal-background">
   <div id="bee-mode-help-content" class="modal-content">
     <div>
@@ -520,105 +620,6 @@
       </ul>
 
       <p> You can further restrict your results by setting minimum and maximum word lengths.
-
-    </div>
-  </div>
-</div>
-
-<div id="pattern-mode-help-background" class="modal-background">
-  <div id="pattern-mode-help-content" class="modal-content">
-    <div>
-      <button id="pattern-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for pattern mode:</p>
-
-    <p> Enter your desired letters in the <code>Letters</code> field.</p>
-
-    <p> Select the word list you want to search in.</p>
-
-    <p> You can use a <code>.</code> as a wildcard to match any single letter. For example, <code>LE.T</code>
-    matches <code>LEFT</code>, <code>LENT</code>, <code>LEST</code>, etc.</p>
-
-    <p> You can use a <code>*</code> as a wildcard to match zero or more of any letter. For example:</p>
-    <ul>
-      <li><code>OBOLUS</code> shows the one word <code>OBOLUS</code>, as a dictionary lookup</li>
-      <li><code>THR*</code> shows all words that begin with <code>THR</code></li>
-      <li><code>*EST</code> shows all words that end with <code>EST</code></li>
-      <li><code>TH*TH</code> shows all words that begin and end with <code>TH</code> and</li>
-      <li><code>*NIMB*</code> shows all words that have the sequence <code>NIMB</code> anywhere within.</li>
-    </ul>
-
-    <p> You can further restrict your results by setting minimum and maximum word lengths. </p>
-
-    </div>
-  </div>
-</div>
-
-<div id="anagram-mode-help-background" class="modal-background">
-  <div id="anagram-mode-help-content" class="modal-content">
-    <div>
-      <button id="anagram-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for anagram mode:</p>
-
-    <p> Enter your desired letters in the Letters field.</p>
-
-    <p> Select the word list you want to search in.</p>
-
-    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram"
-    target="_blank">anagrams</a> of the letters you provide. For example, <code>ELATES</code> will
-    match <code>SEALET</code> but not <code>ELATE</code> or <code>SEALETS</code>.  </p>
-
-    <p> Some words with many anagrams include <code>STOP</code>, <code>SLATE</code>,
-    <code>PEARS</code>, and <code>TRIANGLE</code>.</p>
-
-    </div>
-  </div>
-</div>
-
-<div id="random-word-mode-help-background" class="modal-background">
-  <div id="random-word-mode-help-content" class="modal-content">
-    <div>
-      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for random-word mode:</p>
-
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Use the Generate button to get a new random sample.</p>
-
-    </div>
-  </div>
-</div>
-
-<div id="ngram-mode-help-background" class="modal-background">
-  <div id="ngram-mode-help-content" class="modal-content">
-    <div>
-      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for Jabberwocky mode:</p>
-
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
-      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
-      The words produced will be created by splicing together parts of real words in word list.
-    </p>
-    <p> Use the Generate button to get a new random sample.</p>
-    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
-      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
-      See also
-      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
-      for a work that uses many more spliced words.)
-    </p>
 
     </div>
   </div>
@@ -714,7 +715,7 @@
         (text) => text.toUpperCase(),
         //(text) => text,
         (event) => {
-          this.logAt1("REQUIRED-LETTERS INPUT: <<", event.target.value, ">>")
+          this.logAt1("required-letters input: <<", event.target.value, ">>")
           this.showBeeModeMatches()
       })
 
@@ -724,7 +725,7 @@
         (text) => text.toUpperCase(),
         //(text) => text,
         (event) => {
-          this.logAt1("OTHER-LETTERS INPUT: <<", event.target.value, ">>")
+          this.logAt1("other-letters input: <<", event.target.value, ">>")
           this.showBeeModeMatches()
       })
 
@@ -734,7 +735,7 @@
         //(text) => text.toUpperCase(),
         (text) => text,
         (event) => {
-          this.logAt1("PATTERN-LETTERS INPUT: <<", event.target.value, ">>")
+          this.logAt1("pattern-letters input: <<", event.target.value, ">>")
           this.showPatternModeMatches()
       })
 
@@ -744,7 +745,7 @@
         //(text) => text.toUpperCase(),
         (text) => text,
         (event) => {
-          this.logAt1("ANAGRAM-LETTERS INPUT: <<", event.target.value, ">>")
+          this.logAt1("anagram-letters input: <<", event.target.value, ">>")
           this.showAnagramModeMatches()
       })
 
@@ -752,7 +753,7 @@
         "word-list-dropdown",
         (event) => {
           let url = event.target.value
-          this.logAt1("SELECTED WORD LIST: <<", url, ">>")
+          this.logAt1("selected word list: <<", url, ">>")
           this.setWordList(url)
           this.showMatches()
       })
@@ -789,7 +790,7 @@
         "clear-letters-button",
         "Clear",
         (event) => {
-          this.logAt1("CLEAR-LETTERS BUTTON WAS CLICKED")
+          this.logAt1("clear-letters button was clicked")
           this.elements.requiredLettersElement.set("")
           this.elements.otherLettersElement.set("")
           this.showBeeModeMatches()
@@ -801,7 +802,7 @@
         "example-button",
         "Example",
         (event) => {
-          this.logAt1("EXAMPLE BUTTON WAS CLICKED")
+          this.logAt1("example button was clicked")
 
           this.elements.requiredLettersElement.set("E")
           this.elements.otherLettersElement.set("XAMPLS")
@@ -816,7 +817,7 @@
         "all-others-button",
         "A-Z",
         (event) => {
-          this.logAt1("A-Z BUTTON WAS CLICKED")
+          this.logAt1("A-Z button was clicked")
 
           this.elements.requiredLettersElement.set("")
           this.elements.otherLettersElement.set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -831,7 +832,7 @@
         "pattern-clear-letters-button",
         "Clear",
         (event) => {
-          this.logAt1("PATTERN-CLEAR-LETTERS BUTTON WAS CLICKED")
+          this.logAt1("pattern-clear-letters button was clicked")
           this.elements.patternLettersElement.set("")
           this.showPatternModeMatches()
         },
@@ -842,7 +843,7 @@
         "anagram-clear-letters-button",
         "Clear",
         (event) => {
-          this.logAt1("ANAGRAM-CLEAR-LETTERS BUTTON WAS CLICKED")
+          this.logAt1("anagram-clear-letters button was clicked")
           this.elements.anagramLettersElement.set("")
           this.showAnagramModeMatches()
         },
@@ -853,7 +854,7 @@
         "random-word-generate-button",
         "Generate",
         (event) => {
-          this.logAt1("RANDOM-WORD-GENERATE BUTTON WAS CLICKED")
+          this.logAt1("random-word-generate button was clicked")
           this.generateRandomWords()
         },
       )
@@ -874,7 +875,7 @@
         "ngram-generate-button",
         "Generate",
         (event) => {
-          this.logAt0("NGRAM-GENERATE BUTTON WAS CLICKED")
+          this.logAt0("ngram-generate button was clicked")
           // Do not recompute the NGramsKeeper -- re-use it
           this.generateNGramWords()
         },
@@ -887,7 +888,7 @@
         this.state.minNGramWordCount, // min
         this.state.maxNGramWordCount, // max
         (event) => {
-          this.logAt0("NGRAM-WORD-COUNT INPUT WAS SELECTED")
+          this.logAt0("ngram-word-count input was selected")
           this.generateNGramWords()
         },
       )
@@ -900,7 +901,7 @@
         this.state.minNGramN, // min
         this.state.maxNGramN, // max
         (event) => {
-          this.logAt0("NGRAM-N INPUT WAS SELECTED")
+          this.logAt0("ngram-n input was selected")
           // Recompute the NGramsKeeper
           this.ngramsKeeper = null
           this.generateNGramWords()
@@ -911,7 +912,7 @@
         "reset-match-lengths-button",
         "Reset",
         (event) => {
-          this.logAt1("RESET-MATCH-LENGTHS BUTTON WAS CLICKED")
+          this.logAt1("reset-match-lengths button was clicked")
           this.elements.minMatchLengthElement.resetToDefault(),
           this.elements.maxMatchLengthElement.resetToDefault(),
           this.showMatches()
@@ -964,7 +965,7 @@
               new GenericElement("ngram-mode-help-launcher-button"),
             ],
             "callback": () => {
-              this.logAt0("SWTICH TO NGRAM MODE")
+              this.logAt0("swtich to ngram mode")
               this.elements.matchLengthsRow.makeInvisible()
 
               // The tab button being clicked gets the focus.
@@ -1234,7 +1235,7 @@
     }
 
     setWordList(url) {
-      this.logAt0("FETCHING WORD LIST FROM URL:", url)
+      this.logAt0("fetching word list from URL:", url)
       this.state.wordListURL = url
       fetch(url).then((response) => response.text().then((text) => {
         this.state.wordList = text.split("\n")
@@ -1298,7 +1299,7 @@
     }
 
     getBeeMatchesFromWordList(requiredLetters, optionalLetters) {
-      this.logAt1("MATCHER ENTER")
+      this.logAt1("matcher enter")
       this.logAt1("requiredLetters ", requiredLetters)
       this.logAt1("optionalLetters", optionalLetters)
       this.logAt1("wordList.length", this.state.wordList.length)
@@ -1311,9 +1312,9 @@
       let matches = []
 
       this.state.wordList.forEach((word) => {
-        this.logAt3("WORD <<", word, ">>")
+        this.logAt3("word <<", word, ">>")
         if (this.wordBeeMatches(requiredLetters, optionalLetters, minMatchLength, maxMatchLength, word)) {
-          this.logAt2("MATCH", word)
+          this.logAt2("match", word)
           matches.push(word)
         }
       })
@@ -1356,12 +1357,12 @@
       // o * -> .*
       // o Wrap in ^ and $
 
-      this.logAt1("REGEX IN ", patternLetters)
+      this.logAt1("regex in ", patternLetters)
       let regexString = "^"
       let azre = new RegExp("^[A-Za-z]$")
       for (let i = 0; i < patternLetters.length; i++) {
         let patternLetter = patternLetters[i]
-        this.logAt1("  REQLT", patternLetter)
+        this.logAt1("  reqlt", patternLetter)
         if (patternLetter == ".")  {
           regexString += "."
         } else if (patternLetter == "*")  {
@@ -1371,7 +1372,7 @@
         }
       }
       regexString += "$"
-      this.logAt1("REGEX OUT", regexString)
+      this.logAt1("regex out", regexString)
 
       return new RegExp(regexString)
     }
@@ -1398,7 +1399,7 @@
     }
 
     getPatternMatchesFromWordList(patternLetters) {
-      this.logAt1("MATCHER ENTER")
+      this.logAt1("matcher enter")
       this.logAt1("patternLetters ", patternLetters)
       this.logAt1("wordList.length", this.state.wordList.length)
       this.logAt3("wordList", this.state.wordList)
@@ -1441,7 +1442,7 @@
     }
 
     getAnagramMatchesFromWordList(anagramLetters) {
-      this.logAt1("MATCHER ENTER")
+      this.logAt1("matcher enter")
       this.logAt1("anagramLetters ", anagramLetters)
       this.logAt1("wordList.length", this.state.wordList.length)
       this.logAt3("wordList", this.state.wordList)
@@ -1464,7 +1465,7 @@
       }
 
       let matches = []
-      // TODO: sample without replapcement.
+      // TODO: sample without replacement.
       // In practice, dups are super-rare.
       let k = this.elements.randomWordCountInput.get()
       let n = this.state.wordList.length

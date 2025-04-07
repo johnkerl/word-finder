@@ -641,7 +641,6 @@
     URLAndPersistentNButtonSwitcher,
     TextSpan,
     isInteger,
-    isMobile,
     setErrorWidget,
   // } from "http://127.0.1:9999/sliver/dev/sliver.js"
   // npx http-server ~/pub_http_internet -o -p 9999
@@ -692,18 +691,11 @@
       this.setWordList(this.elements.wordListDropdown.get())
 
       if (this.elements.modeButtons.which() == 'bee-mode-button') {
-        if (!isMobile()) {
-          // Don't pop up the half-screen-filling keyboard on mobile.
-          this.elements.requiredLettersElement.focus()
-        }
+        this.elements.requiredLettersElement.focus()
       } else if (this.elements.modeButtons.which() == 'anagram-mode-button') {
-        if (!isMobile()) {
-          this.elements.anagramLettersElement.focus()
-        }
+        this.elements.anagramLettersElement.focus()
       } else if (this.elements.modeButtons.which() == 'pattern-mode-button') {
-        if (!isMobile()) {
-          this.elements.patternLettersElement.focus()
-        }
+        this.elements.patternLettersElement.focus()
       } else if (this.elements.modeButtons.which() == 'random-word-mode-button') {
         this.elements.randomWordGenerateButton.focus()
       } else if (this.elements.modeButtons.which() == 'ngram-mode-button') {
@@ -910,7 +902,7 @@
         this.state.minNGramN, // min
         this.state.maxNGramN, // max
         (event) => {
-          this.logAt0("NGRAM-N INPUT WAS SELECTED")
+          this.logAt0("ngram-n input was selected")
           // Recompute the NGramsKeeper
           this.ngramsKeeper = null
           this.generateNGramWords()
@@ -1005,16 +997,12 @@
 
               // The tab button being clicked gets the focus.
               // So we have to delay.
-              // But don't pop up the half-screen-filling keyboard on mobile.
-              // this.elements.patternLettersElement.focus()
-              if (!isMobile()) {
-                setTimeout(
-                  () => {
-                    this.elements.patternLettersElement.focus()
-                  },
-                  200,
-                )
-              }
+              setTimeout(
+                () => {
+                  this.elements.patternLettersElement.focus()
+                },
+                200,
+              )
 
               this.showMatches()
             },
@@ -1033,16 +1021,13 @@
 
               // The tab button being clicked gets the focus.
               // So we have to delay.
-              // this.elements.anagramLettersElement.focus()
-              // But don't pop up the half-screen-filling keyboard on mobile.
-              if (!isMobile()) {
-                setTimeout(
-                  () => {
-                    this.elements.anagramLettersElement.focus()
-                  },
-                  200,
-                )
-              }
+            if (!isMobile()) {
+              setTimeout(
+                () => {
+                  this.elements.anagramLettersElement.focus()
+                },
+                200,
+              )
 
               this.showMatches()
             },
@@ -1063,16 +1048,12 @@
 
               // The tab button being clicked gets the focus.
               // So we have to delay.
-              // this.elements.requiredLettersElement.focus()
-              // But don't pop up the half-screen-filling keyboard on mobile.
-              if (!isMobile()) {
-                setTimeout(
-                  () => {
-                    this.elements.requiredLettersElement.focus()
-                  },
-                  200,
-                )
-              }
+              setTimeout(
+                () => {
+                  this.elements.requiredLettersElement.focus()
+                },
+                200,
+              )
 
               this.showMatches()
             },
