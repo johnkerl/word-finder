@@ -429,11 +429,11 @@
   <tr>
     <td>
       <div>
-        <button id="bee-mode-help-launcher-button"> Help </button>
-        <button id="pattern-mode-help-launcher-button"> Help </button>
-        <button id="anagram-mode-help-launcher-button"> Help </button>
         <button id="random-word-mode-help-launcher-button"> Help </button>
         <button id="ngram-mode-help-launcher-button"> Help </button>
+        <button id="pattern-mode-help-launcher-button"> Help </button>
+        <button id="anagram-mode-help-launcher-button"> Help </button>
+        <button id="bee-mode-help-launcher-button"> Help </button>
       </div>
     </td>
     <td> &nbsp; </td>
@@ -476,6 +476,106 @@
 <!-- ================================================================ -->
 
 <!-- Modal content -->
+
+<div id="random-word-mode-help-background" class="modal-background">
+  <div id="random-word-mode-help-content" class="modal-content">
+    <div>
+      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for random-word mode:</p>
+
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Use the Generate button to get a new random sample.</p>
+
+    </div>
+  </div>
+</div>
+
+<div id="ngram-mode-help-background" class="modal-background">
+  <div id="ngram-mode-help-content" class="modal-content">
+    <div>
+      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for Jabberwocky mode:</p>
+
+    <p> Select the word list.</p>
+    <p> Select how many words to generate at a time.</p>
+    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
+      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
+      The words produced will be created by splicing together parts of real words in word list.
+    </p>
+    <p> Use the Generate button to get a new random sample.</p>
+    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
+      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
+      See also
+      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
+      for a work that uses many more spliced words.)
+    </p>
+
+    </div>
+  </div>
+</div>
+
+<div id="pattern-mode-help-background" class="modal-background">
+  <div id="pattern-mode-help-content" class="modal-content">
+    <div>
+      <button id="pattern-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for pattern mode:</p>
+
+    <p> Enter your desired letters in the <code>Letters</code> field.</p>
+
+    <p> Select the word list you want to search in.</p>
+
+    <p> You can use a <code>.</code> as a wildcard to match any single letter. For example, <code>LE.T</code>
+    matches <code>LEFT</code>, <code>LENT</code>, <code>LEST</code>, etc.</p>
+
+    <p> You can use a <code>*</code> as a wildcard to match zero or more of any letter. For example:</p>
+    <ul>
+      <li><code>OBOLUS</code> shows the one word <code>OBOLUS</code>, as a dictionary lookup</li>
+      <li><code>THR*</code> shows all words that begin with <code>THR</code></li>
+      <li><code>*EST</code> shows all words that end with <code>EST</code></li>
+      <li><code>TH*TH</code> shows all words that begin and end with <code>TH</code> and</li>
+      <li><code>*NIMB*</code> shows all words that have the sequence <code>NIMB</code> anywhere within.</li>
+    </ul>
+
+    <p> You can further restrict your results by setting minimum and maximum word lengths. </p>
+
+  </div>
+  </div>
+</div>
+
+<div id="anagram-mode-help-background" class="modal-background">
+  <div id="anagram-mode-help-content" class="modal-content">
+    <div>
+      <button id="anagram-mode-help-close-button" class="general white-on-green" > Close </button>
+    </div>
+    <div>
+
+    <p class="maroon">Help for anagram mode:</p>
+
+    <p> Enter your desired letters in the Letters field.</p>
+
+    <p> Select the word list you want to search in.</p>
+
+    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram"
+    target="_blank">anagrams</a> of the letters you provide. For example, <code>ELATES</code> will
+    match <code>SEALET</code> but not <code>ELATE</code> or <code>SEALETS</code>.  </p>
+
+    <p> Some words with many anagrams include <code>STOP</code>, <code>SLATE</code>,
+    <code>PEARS</code>, and <code>TRIANGLE</code>.</p>
+
+    </div>
+  </div>
+</div>
+
 <div id="bee-mode-help-background" class="modal-background">
   <div id="bee-mode-help-content" class="modal-content">
     <div>
@@ -520,105 +620,6 @@
       </ul>
 
       <p> You can further restrict your results by setting minimum and maximum word lengths.
-
-    </div>
-  </div>
-</div>
-
-<div id="pattern-mode-help-background" class="modal-background">
-  <div id="pattern-mode-help-content" class="modal-content">
-    <div>
-      <button id="pattern-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for pattern mode:</p>
-
-    <p> Enter your desired letters in the <code>Letters</code> field.</p>
-
-    <p> Select the word list you want to search in.</p>
-
-    <p> You can use a <code>.</code> as a wildcard to match any single letter. For example, <code>LE.T</code>
-    matches <code>LEFT</code>, <code>LENT</code>, <code>LEST</code>, etc.</p>
-
-    <p> You can use a <code>*</code> as a wildcard to match zero or more of any letter. For example:</p>
-    <ul>
-      <li><code>OBOLUS</code> shows the one word <code>OBOLUS</code>, as a dictionary lookup</li>
-      <li><code>THR*</code> shows all words that begin with <code>THR</code></li>
-      <li><code>*EST</code> shows all words that end with <code>EST</code></li>
-      <li><code>TH*TH</code> shows all words that begin and end with <code>TH</code> and</li>
-      <li><code>*NIMB*</code> shows all words that have the sequence <code>NIMB</code> anywhere within.</li>
-    </ul>
-
-    <p> You can further restrict your results by setting minimum and maximum word lengths. </p>
-
-    </div>
-  </div>
-</div>
-
-<div id="anagram-mode-help-background" class="modal-background">
-  <div id="anagram-mode-help-content" class="modal-content">
-    <div>
-      <button id="anagram-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for anagram mode:</p>
-
-    <p> Enter your desired letters in the Letters field.</p>
-
-    <p> Select the word list you want to search in.</p>
-
-    <p> Results shown will be <a href="https://en.wikipedia.org/wiki/Anagram"
-    target="_blank">anagrams</a> of the letters you provide. For example, <code>ELATES</code> will
-    match <code>SEALET</code> but not <code>ELATE</code> or <code>SEALETS</code>.  </p>
-
-    <p> Some words with many anagrams include <code>STOP</code>, <code>SLATE</code>,
-    <code>PEARS</code>, and <code>TRIANGLE</code>.</p>
-
-    </div>
-  </div>
-</div>
-
-<div id="random-word-mode-help-background" class="modal-background">
-  <div id="random-word-mode-help-content" class="modal-content">
-    <div>
-      <button id="random-word-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for random-word mode:</p>
-
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Use the Generate button to get a new random sample.</p>
-
-    </div>
-  </div>
-</div>
-
-<div id="ngram-mode-help-background" class="modal-background">
-  <div id="ngram-mode-help-content" class="modal-content">
-    <div>
-      <button id="ngram-mode-help-close-button" class="general white-on-green" > Close </button>
-    </div>
-    <div>
-
-    <p class="maroon">Help for Jabberwocky mode:</p>
-
-    <p> Select the word list.</p>
-    <p> Select how many words to generate at a time.</p>
-    <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
-      the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
-      The words produced will be created by splicing together parts of real words in word list.
-    </p>
-    <p> Use the Generate button to get a new random sample.</p>
-    <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
-      <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
-      See also
-      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
-      for a work that uses many more spliced words.)
-    </p>
 
     </div>
   </div>
