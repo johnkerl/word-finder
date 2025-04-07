@@ -1107,8 +1107,8 @@ export class HelpWidgets {
       launcherButtonElementID,
       null,
       (event) => {
-        this.background.makeVisible("block")
-        this.background.underlying.style.display = "block"
+        this.elements.background.makeVisible("block")
+        this.elements.background.underlying.style.display = "block"
       },
     )
 
@@ -1116,7 +1116,7 @@ export class HelpWidgets {
       closeButtonElementID,
       null,
       (event) => {
-        this.background.makeInvisible()
+        this.elements.background.makeInvisible()
       },
     )
   }
@@ -1126,10 +1126,9 @@ export class HelpWidgets {
     this.elements.background.makeInvisible()
   }
 
+  // This is for theming. It's a hack; I need to learn more about CSS theming.
   setColors(color, backgroundColor) {
-    Object.keys(this.elements).forEach((id) => {
-      this.elements[id].setColors(color, backgroundColor)
-    })
+    this.elements.content.setColors(color, backgroundColor)
   }
 
 }

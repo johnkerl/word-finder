@@ -1071,119 +1071,48 @@
       // ----------------------------------------------------------------
       this.elements.help = {}
 
-      this.elements.help.random_word_mode_help_background  = new GenericElement("random-word-mode-help-background")
-      this.elements.help.random_word_mode_help_content  = new GenericElement("random-word-mode-help-content")
-
-      this.elements.help.random_word_mode_help_launcherButton = new Button(
+      this.elements.help.random = new HelpWidgets(
+        "random-word-mode-help-background",
+        "random-word-mode-help-content",
         "random-word-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.help.random_word_mode_help_background.makeVisible("block")
-          this.elements.help.random_word_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.help.random_word_mode_help_close_button = new Button(
         "random-word-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.help.random_word_mode_help_background.makeInvisible()
-        },
       )
 
-      // ----------------------------------------------------------------
-      this.elements.help.ngram_mode_help_background  = new GenericElement("ngram-mode-help-background")
-      this.elements.help.ngram_mode_help_content  = new GenericElement("ngram-mode-help-content")
-
-      this.elements.help.ngram_mode_help_launcherButton = new Button(
+      this.elements.help.ngram = new HelpWidgets(
+        "ngram-mode-help-background",
+        "ngram-mode-help-content",
         "ngram-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.help.ngram_mode_help_background.makeVisible("block")
-          this.elements.help.ngram_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.help.ngram_mode_help_close_button = new Button(
         "ngram-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.help.ngram_mode_help_background.makeInvisible()
-        },
       )
 
-      // ----------------------------------------------------------------
-      this.elements.help.pattern_mode_help_background  = new GenericElement("pattern-mode-help-background")
-      this.elements.help.pattern_mode_help_content  = new GenericElement("pattern-mode-help-content")
-
-      this.elements.help.pattern_mode_help_launcherButton = new Button(
+      this.elements.help.pattern = new HelpWidgets(
+        "pattern-mode-help-background",
+        "pattern-mode-help-content",
         "pattern-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.help.pattern_mode_help_background.makeVisible("block")
-          this.elements.help.pattern_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.help.pattern_mode_help_close_button = new Button(
         "pattern-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.help.pattern_mode_help_background.makeInvisible()
-        },
       )
 
-      // ----------------------------------------------------------------
-      this.elements.help.anagram_mode_help_background  = new GenericElement("anagram-mode-help-background")
-      this.elements.help.anagram_mode_help_content  = new GenericElement("anagram-mode-help-content")
-
-      this.elements.help.anagram_mode_help_launcherButton = new Button(
+      this.elements.help.anagram = new HelpWidgets(
+        "anagram-mode-help-background",
+        "anagram-mode-help-content",
         "anagram-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.help.anagram_mode_help_background.makeVisible("block")
-          this.elements.help.anagram_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.help.anagram_mode_help_close_button = new Button(
         "anagram-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.help.anagram_mode_help_background.makeInvisible()
-        },
       )
 
-      // ----------------------------------------------------------------
-      this.elements.help.bee_mode_help_background  = new GenericElement("bee-mode-help-background")
-      this.elements.help.bee_mode_help_content  = new GenericElement("bee-mode-help-content")
-
-      this.elements.help.bee_mode_help_launcherButton = new Button(
+      this.elements.help.bee = new HelpWidgets(
+        "bee-mode-help-background",
+        "bee-mode-help-content",
         "bee-mode-help-launcher-button",
-        null,
-        (event) => {
-          this.elements.help.bee_mode_help_background.makeVisible("block")
-          this.elements.help.bee_mode_help_background.underlying.style.display = "block"
-        },
-      )
-
-      this.elements.help.bee_mode_help_close_button = new Button(
         "bee-mode-help-close-button",
-        null,
-        (event) => {
-          this.elements.help.bee_mode_help_background.makeInvisible()
-        },
       )
 
       // ----------------------------------------------------------------
       // This is a hack to get the escape key to close the help modal on desktop.
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-          window.app.elements.help.bee_mode_help_background.makeInvisible()
-          window.app.elements.help.pattern_mode_help_background.makeInvisible()
-          window.app.elements.help.anagram_mode_help_background.makeInvisible()
-          window.app.elements.help.random_word_mode_help_background.makeInvisible()
-          window.app.elements.help.ngram_mode_help_background.makeInvisible()
+          Object.keys(window.app.elements.help).forEach((id) => {
+            window.app.elements.help[id].makeBackgroundInvisible()
+          })
         }
       });
 
@@ -1196,34 +1125,18 @@
           document.body.style.backgroundColor = "white"
           document.body.style.color = "black"
 
-          this.elements.help.random_word_mode_help_content.underlying.style.color           = "black"
-          this.elements.help.ngram_mode_help_content.underlying.style.color                 = "black"
-          this.elements.help.pattern_mode_help_content.underlying.style.color               = "black"
-          this.elements.help.anagram_mode_help_content.underlying.style.color               = "black"
-          this.elements.help.bee_mode_help_content.underlying.style.color                   = "black"
-
-          this.elements.help.random_word_mode_help_content.underlying.style.backgroundColor = "white"
-          this.elements.help.ngram_mode_help_content.underlying.style.backgroundColor       = "white"
-          this.elements.help.pattern_mode_help_content.underlying.style.backgroundColor     = "white"
-          this.elements.help.anagram_mode_help_content.underlying.style.backgroundColor     = "white"
-          this.elements.help.bee_mode_help_content.underlying.style.backgroundColor         = "white"
+          Object.keys(this.elements.help).forEach((id) => {
+            this.elements.help[id].setColors("black", "white")
+          })
 
         },
         (event) => {
           document.body.style.backgroundColor = "black"
           document.body.style.color = "white"
 
-          this.elements.help.random_word_mode_help_content.underlying.style.color           = "white"
-          this.elements.help.ngram_mode_help_content.underlying.style.color                 = "white"
-          this.elements.help.pattern_mode_help_content.underlying.style.color               = "white"
-          this.elements.help.anagram_mode_help_content.underlying.style.color               = "white"
-          this.elements.help.bee_mode_help_content.underlying.style.color                   = "white"
-
-          this.elements.help.random_word_mode_help_content.underlying.style.backgroundColor = "black"
-          this.elements.help.ngram_mode_help_content.underlying.style.backgroundColor       = "black"
-          this.elements.help.pattern_mode_help_content.underlying.style.backgroundColor     = "black"
-          this.elements.help.anagram_mode_help_content.underlying.style.backgroundColor     = "black"
-          this.elements.help.bee_mode_help_content.underlying.style.backgroundColor         = "black"
+          Object.keys(this.elements.help).forEach((id) => {
+            this.elements.help[id].setColors("white", "black")
+          })
 
         },
       )
