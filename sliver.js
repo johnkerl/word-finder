@@ -1091,6 +1091,30 @@ export class RangeFloatSlider extends GenericElement {
 }
 
 // ----------------------------------------------------------------
+// export class RadioButtons {
+//   constructor(
+//     elementIDs,
+//   ) {
+//     this.elements = {}
+//
+//     elementIDs.forEach((elementID) => {
+//       this.elements[elementID] = new GenericElement(elementID)
+//     })
+//
+//     get() {
+//       Object.keys.forEach((elementID) => {
+//         if (this.elements[elementID].checked) {
+//           console.log("YEAH", elementID)
+//           return elementID
+//         }
+//       })
+//       console.log("NOPE")
+//       return null
+//     }
+//   }
+// }
+
+// ----------------------------------------------------------------
 export class HelpWidgets {
   constructor(
     modalBackgroundElementID,
