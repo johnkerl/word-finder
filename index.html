@@ -634,19 +634,19 @@
     ConstrainedTextInput,
     GenericElement,
     HelpWidgets,
-    IntRangeInput,
     LightDarkThemeSlider,
     OneButtonSwitcher,
     PersistentDropdown,
+    PersistentIntRangeInput,
     URLAndPersistentNButtonSwitcher,
     TextSpan,
     isInteger,
     setErrorWidget,
   // } from "http://127.0.1:9999/sliver/dev/sliver.js"
-  // noup npx http-server ~/pub_http_internet -o -p 9999 &
+  // nohup npx http-server ~/pub_http_internet -o -p 9999 &
   // } from "https://johnkerl.org/sliver/staging/sliver.js"
   // } from "https://johnkerl.org/sliver/stable/sliver.js"
-  } from "./sliver.js" // local copy
+  } from "./sliver-2025-07-24.js" // local copy
 
   import {
     NGramsKeeper,
@@ -759,7 +759,7 @@
           this.showMatches()
       })
 
-      let minMatchLengthElement = new IntRangeInput(
+      let minMatchLengthElement = new PersistentIntRangeInput(
         "min-match-length",
         this.state.defaultLowMatchLength, // default
         this.state.minMatchLength, // min
@@ -769,7 +769,7 @@
         },
       )
 
-      let maxMatchLengthElement = new IntRangeInput(
+      let maxMatchLengthElement = new PersistentIntRangeInput(
         "max-match-length",
         this.state.defaultHighMatchLength, // default
         this.state.minMatchLength, // min
@@ -861,7 +861,7 @@
       )
 
       // Random-word-mode element
-      this.elements.randomWordCountInput = new IntRangeInput(
+      this.elements.randomWordCountInput = new PersistentIntRangeInput(
         "random-word-count",
         this.state.defaultRandomWordCount, // default
         this.state.minRandomWordCount, // min
@@ -883,7 +883,7 @@
       )
 
       // ngram-mode element
-      this.elements.ngramWordCountInput = new IntRangeInput(
+      this.elements.ngramWordCountInput = new PersistentIntRangeInput(
         "ngram-word-count-input",
         this.state.defaultNGramWordCount, // default
         this.state.minNGramWordCount, // min
@@ -896,7 +896,7 @@
 
       // ngram-mode element
       console
-      this.elements.ngramNInput = new IntRangeInput(
+      this.elements.ngramNInput = new PersistentIntRangeInput(
         "ngram-n-input",
         this.state.defaultNGramN, // default
         this.state.minNGramN, // min
