@@ -160,9 +160,8 @@
   /* MODALS */
   /*
     There's a trick here (found on the web).
-    * The modal background covers the *entire screen*.
-    * The modal content is a little box within that.
-    *
+    o The modal background covers the *entire screen*.
+    o The modal content is a little box within that.
   */
   .modal-background {
     display: none; /* Hidden by default */
@@ -507,14 +506,14 @@
     <p> Select how many words to generate at a time.</p>
     <p> Select the <i>n</i> for <a href="https://en.wikipedia.org/wiki/N-gram" target="_blank">n-grams</a>:
       the higher the <i>n</i>, the more closely the emitted words will resemble those in the word list.
+    </p>
+    <p> Use the Generate button to get a new random sample.
       The words produced will be created by splicing together parts of real words in word list.
     </p>
-    <p> Use the Generate button to get a new random sample.</p>
     <p>(The name is taken from Lewis Carroll&rsquo;s famous poem
       <a href="https://en.wikipedia.org/wiki/Jabberwocky" target="_blank"><i>Jabberwocky</i></a>.
-      See also
-      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>
-      for a work that uses many more spliced words.)
+      If <i>Jabberwocky</i>&rsquo;s 71 words leave you wanting more, see also
+      <a href="https://en.wikipedia.org/wiki/Finnegans_Wake" target="_blank"><i>Finnegans Wake</i></a>.)
     </p>
 
     </div>
@@ -679,6 +678,8 @@
         "defaultNGramWordCount": 5,
         "minNGramWordCount": 1,
         "maxNGramWordCount": 100,
+
+        "mode": null,
 
         "ngramsKeeper": null,
 
@@ -904,7 +905,7 @@
         (event) => {
           this.logAt0("ngram-n input was selected")
           // Recompute the NGramsKeeper
-          this.ngramsKeeper = null
+          this.state.ngramsKeeper = null
           this.generateNGramWords()
         },
       )
@@ -940,7 +941,12 @@
               new GenericElement("random-word-mode-help-launcher-button"),
             ],
             "callback": () => {
-              this.ngramsKeeper = null
+              if (this.state.mode == "random-word-mode") {
+                return
+              }
+              this.state.mode = "random-word-mode";
+
+              this.state.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
 
               // The tab button being clicked gets the focus.
@@ -966,6 +972,11 @@
               new GenericElement("ngram-mode-help-launcher-button"),
             ],
             "callback": () => {
+              if (this.state.mode == "ngram-mode") {
+                return
+              }
+              this.state.mode = "ngram-mode";
+
               this.logAt0("swtich to ngram mode")
               this.elements.matchLengthsRow.makeInvisible()
 
@@ -979,7 +990,7 @@
                 200,
               )
 
-              this.ngramsKeeper = null
+              this.state.ngramsKeeper = null
               this.generateNGramWords()
             },
             "urlShorthand": "jabber",
@@ -992,7 +1003,12 @@
               new GenericElement("pattern-mode-help-launcher-button"),
             ],
             "callback": () => {
-              this.ngramsKeeper = null
+              if (this.state.mode == "pattern-mode") {
+                return
+              }
+              this.state.mode = "pattern-mode";
+
+              this.state.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
 
               // The tab button being clicked gets the focus.
@@ -1017,7 +1033,12 @@
               new GenericElement("anagram-mode-help-launcher-button"),
             ],
             "callback": () => {
-              this.ngramsKeeper = null
+              if (this.state.mode == "anagram-mode") {
+                return
+              }
+              this.state.mode = "anagram-mode";
+
+              this.state.ngramsKeeper = null
               this.elements.matchLengthsRow.makeInvisible()
 
               // The tab button being clicked gets the focus.
@@ -1044,7 +1065,12 @@
               new GenericElement("bee-mode-help-launcher-button"),
             ],
             "callback": () => {
-              this.ngramsKeeper = null
+              if (this.state.mode == "bee-mode") {
+                return
+              }
+              this.state.mode = "bee-mode";
+
+              this.state.ngramsKeeper = null
               this.elements.matchLengthsRow.makeVisible()
 
               // The tab button being clicked gets the focus.
@@ -1190,7 +1216,7 @@
       } else if (this.elements.modeButtons.which() == 'random-word-mode-button') {
         this.generateRandomWords()
       } else if (this.elements.modeButtons.which() == 'ngram-mode-button') {
-        this.ngramsKeeper = null
+        this.state.ngramsKeeper = null
         this.generateNGramWords()
       }
     }
@@ -1401,7 +1427,7 @@
     }
 
     setUpNGramsKeeper() {
-      if (this.ngramsKeeper != null) {
+      if (this.state.ngramsKeeper != null) {
         return true
       }
 
@@ -1411,7 +1437,7 @@
       }
 
       let n = this.elements.ngramNInput.get()
-      this.ngramsKeeper = new NGramsKeeper(
+      this.state.ngramsKeeper = new NGramsKeeper(
         this.state.wordList,
         n,
       )
@@ -1427,7 +1453,7 @@
       let outputs = []
       let m = this.elements.ngramWordCountInput.get()
       for (let i = 0; i < m; i++) {
-        let word = this.ngramsKeeper.emit_word()
+        let word = this.state.ngramsKeeper.emit_word()
         if (word != null) {
           outputs.push(word)
         } else {
