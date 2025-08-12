@@ -1175,7 +1175,7 @@
         return false
       }
       if (this.state.wordList == null) {
-        this.elements.outputElement.set('Failed to fetch word list from "' + url + '"')
+        this.elements.outputElement.set('Failed to fetch word list from "' + this.state.wordListURL + '"')
         return false
       }
       return true
