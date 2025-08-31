@@ -1,4 +1,6 @@
 abaci
+coho
+morocco
 acacia
 acai
 acetate
@@ -79,7 +81,6 @@ cocci
 cocoa
 cocoon
 codon
-coho
 coir
 colcannon
 collab
