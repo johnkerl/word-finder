@@ -1,6 +1,4 @@
 abaci
-coho
-morocco
 acacia
 acai
 acetate
@@ -81,10 +79,12 @@ cocci
 cocoa
 cocoon
 codon
+coho
 coir
 colcannon
 collab
 colleen
+croci
 croon
 deicide
 ditto
@@ -142,6 +142,7 @@ melee
 mentee
 minim
 momma
+morocco
 muumuu
 naan
 nada
