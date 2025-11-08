@@ -13,6 +13,7 @@ ameba
 amoeba
 amoebae
 amyl
+annatto
 anneal
 anyhoo
 apian
