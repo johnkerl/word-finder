@@ -34,6 +34,7 @@ This app lets you play around with word lists in various ways:
 * The 2K list is the [General Service List](https://en.wikipedia.org/wiki/General_Service_List)
   published by Michael West in 1953.
 * The 10K through 40K lists were found on a web search.
+* The `popular.txt` and `enable1.txt` word lists are from [github.com/dolph/dictionary](https://github.com/dolph/dictionary).
 * The 300K list is one I&rsquo;ve accumulated over the years, from multiple sources I&rsquo;ve lost track of.
 * The Finnegan list is taken from an online corpus of _Finnegans Wake_.
 * There are some non-English lists I found on the web. There is a skew toward languages I have
