@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/johnkerl/word-finder/issues"
   },
-  "homepage": "https://github.com/johnkerl/word-finder#readme"
+  "homepage": "https://github.com/johnkerl/word-finder#readme",
+  "dependencies": {
+    "@grafana/faro-web-sdk": "^2.8.0",
+    "@grafana/faro-web-tracing": "^2.8.0"
+  }
 }
