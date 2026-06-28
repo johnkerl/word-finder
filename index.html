@@ -641,6 +641,19 @@
 
     experimental: { trackNavigation: true },
 
+    ignoreUrls: [
+      /googletagmanager\.com/,
+      /google-analytics\.com/,
+    ],
+
+    ignoreErrors: [
+      /^ResizeObserver loop limit exceeded$/,
+      /^ResizeObserver loop completed with undelivered notifications$/,
+      /^Script error\.$/,
+      /chrome-extension:\/\//,
+      /moz-extension:\/\//,
+    ],
+
     instrumentations: [
       // Mandatory, omits default instrumentations otherwise.
       ...getWebInstrumentations(),
