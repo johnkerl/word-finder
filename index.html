@@ -628,6 +628,28 @@
 <script type=module>
   'use strict';
 
+  import { getWebInstrumentations, initializeFaro } from 'https://esm.sh/@grafana/faro-web-sdk@2.8.0';
+  import { TracingInstrumentation } from 'https://esm.sh/@grafana/faro-web-tracing@2.8.0';
+
+  const faro = initializeFaro({
+    url: 'https://faro-collector-prod-us-east-3.grafana.net/collect/5a322a8a02b13a3c06b8884cc4b52076',
+    app: {
+      name: 'johnkerl-org-word-finder-1',
+      version: '1.0.0',
+      environment: 'production'
+    },
+
+    experimental: { trackNavigation: true },
+
+    instrumentations: [
+      // Mandatory, omits default instrumentations otherwise.
+      ...getWebInstrumentations(),
+
+      // Tracing package to get end-to-end visibility for HTTP requests.
+      new TracingInstrumentation(),
+    ],
+  });
+
   import {
     Button,
     ConstrainedTextInput,
@@ -1184,6 +1206,7 @@
     setWordList(url) {
       this.logAt0("fetching word list from URL:", url)
       this.state.wordListURL = url
+      faro.api?.pushEvent('word_list_selected', { list: url.split('/').pop().replace('.txt', '') })
       fetch(url).then((response) => response.text().then((text) => {
         this.state.wordList = text.split("\n")
         this.setWordListForAnagramMode()
@@ -1235,6 +1258,10 @@
       this.logAt2(matches)
 
       this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
+
+      if (requiredLetters.length > 0 || otherLetters.length > 0) {
+        faro.api?.pushEvent('search', { mode: 'bee', results: String(matches.length) })
+      }
 
       if (requiredLetters.length == 0 && otherLetters.length == 0) {
         this.elements.outputElement.set("")
@@ -1336,6 +1363,9 @@
       this.logAt2(matches)
 
       this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
+      if (patternLetters.length > 0) {
+        faro.api?.pushEvent('search', { mode: 'pattern', results: String(matches.length) })
+      }
       if (patternLetters.length == 0) {
         this.elements.outputElement.set("")
       } else if (matches.length == 0) {
@@ -1379,6 +1409,9 @@
       this.logAt2(matches)
 
       this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
+      if (anagramLetters.length > 0) {
+        faro.api?.pushEvent('search', { mode: 'anagram', results: String(matches.length) })
+      }
       if (anagramLetters.length == 0) {
         this.elements.outputElement.set("")
       } else if (matches.length == 0) {
@@ -1424,6 +1457,7 @@
 
       this.elements.outputCountElement.set("(" + String(matches.length) + " hidden)")
       this.elements.outputElement.set(matches.join(" "))
+      faro.api?.pushEvent('generate', { mode: 'random' })
     }
 
     setUpNGramsKeeper() {
@@ -1463,6 +1497,7 @@
 
       this.elements.outputCountElement.set("(" + String(outputs.length) + " hidden)")
       this.elements.outputElement.set(outputs.join(" "))
+      faro.api?.pushEvent('generate', { mode: 'ngram' })
     }
 
     // ----------------------------------------------------------------
